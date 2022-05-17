@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,5 +25,11 @@ public class MainActivity extends AppCompatActivity {
         games.add("Conjugation Game");
 
         gamesRecyclerView.setAdapter(new GamesRecyclerView(this, games));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_appbar, menu);
+        return true;
     }
 }

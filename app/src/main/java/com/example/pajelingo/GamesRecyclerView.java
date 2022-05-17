@@ -9,13 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.GameViewHolder> {
 
     private Context context;
-    private List<String> games = new ArrayList<>();
+    private List<String> games;
 
     public GamesRecyclerView(Context context, List<String> games){
         this.context = context;
