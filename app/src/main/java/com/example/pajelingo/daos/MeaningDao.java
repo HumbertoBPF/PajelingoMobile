@@ -5,5 +5,5 @@ import androidx.room.Dao;
 import com.example.pajelingo.models.Meaning;
 
 @Dao
-public interface MeaningDao extends BaseDao<Meaning>{
+public abstract class MeaningDao extends BaseDao<Meaning>{
 }

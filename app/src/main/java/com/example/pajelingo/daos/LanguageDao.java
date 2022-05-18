@@ -5,5 +5,5 @@ import androidx.room.Dao;
 import com.example.pajelingo.models.Language;
 
 @Dao
-public interface LanguageDao extends BaseDao<Language>{
+public abstract class LanguageDao extends BaseDao<Language>{
 }

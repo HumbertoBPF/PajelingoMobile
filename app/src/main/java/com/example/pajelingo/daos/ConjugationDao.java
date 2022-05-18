@@ -5,5 +5,5 @@ import androidx.room.Dao;
 import com.example.pajelingo.models.Conjugation;
 
 @Dao
-public interface ConjugationDao extends BaseDao<Conjugation>{
+public abstract class ConjugationDao extends BaseDao<Conjugation>{
 }
