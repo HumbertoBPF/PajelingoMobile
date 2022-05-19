@@ -3,11 +3,14 @@ package com.example.pajelingo.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class Meaning {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
+    @SerializedName(value = "word")
     private Long idWord;
     private String meaning;
 

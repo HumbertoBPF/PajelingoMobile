@@ -1,7 +1,5 @@
 package com.example.pajelingo.AsyncTasks;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -15,17 +13,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public abstract class ResourcesTask<E> extends AsyncTask {
+public abstract class ResourcesSynchro<E> {
 
     private final String resourceName;
     private final BaseDao<E> dao;
     private final ResourcesInterface<E> resourcesInterface;
-    private final ResourcesTask nextTask;
+    private final ResourcesSynchro nextTask;
     private AlertDialog downloadDialog;
     private Handler handler =  new Handler();
 
-    public ResourcesTask(String resourceName, BaseDao<E> dao, ResourcesInterface<E> resourcesInterface,
-                         ResourcesTask nextTask, AlertDialog downloadDialog){
+    public ResourcesSynchro(String resourceName, BaseDao<E> dao, ResourcesInterface<E> resourcesInterface,
+                            ResourcesSynchro nextTask, AlertDialog downloadDialog){
         this.resourceName = resourceName;
         this.dao = dao;
         this.resourcesInterface = resourcesInterface;
@@ -33,8 +31,7 @@ public abstract class ResourcesTask<E> extends AsyncTask {
         this.downloadDialog = downloadDialog;
     }
 
-    @Override
-    protected Object doInBackground(Object[] objects) {
+    public void execute() {
         Call<List<E>> callObject = this.resourcesInterface.getCallForResources();
         callObject.enqueue(new Callback<List<E>>() {
             @Override
@@ -43,26 +40,26 @@ public abstract class ResourcesTask<E> extends AsyncTask {
                     List<E> entities = response.body();
                     downloadDialog.setMessage("Downloading "+resourceName+" table");
                     if (entities != null){
-                        Log.i("ResourcesTask","Number of elements of "+resourceName+" table: " + entities.size());
+                        Log.i("ResourcesSynchro","Number of elements of "+resourceName+" table: " + entities.size());
                     }
-                    dao.getSaveAsyncTask(entities);
+                    dao.getSaveAsyncTask(entities).execute();
                 }else{
-                    Log.e("ResourcesTask", "doInBackground:onResponse not successful");
+                    Log.e("ResourcesSynchro", "doInBackground:onResponse not successful");
+                    downloadDialog.setMessage("Fail to download "+resourceName+" table");
                 }
+                nextStep();
             }
 
             @Override
             public void onFailure(Call<List<E>> call, Throwable t) {
-                Log.e("ResourcesTask", "doInBackground:onFailure");
+                Log.e("ResourcesSynchro", "doInBackground:onFailure");
+                downloadDialog.setMessage("Fail to download "+resourceName+" table");
+                nextStep();
             }
         });
-
-        return null;
     }
 
-    @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
+    protected void nextStep() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -74,7 +71,6 @@ public abstract class ResourcesTask<E> extends AsyncTask {
             }
         },2000);
     }
-
 
     public interface ResourcesInterface<E> {
         Call<List<E>> getCallForResources();

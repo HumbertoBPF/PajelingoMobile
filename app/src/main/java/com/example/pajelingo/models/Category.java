@@ -3,15 +3,18 @@ package com.example.pajelingo.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class Category {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
-    private String nameCategory;
+    @SerializedName(value = "category_name")
+    private String categoryName;
 
-    public Category(String nameCategory) {
-        this.nameCategory = nameCategory;
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -22,11 +25,11 @@ public class Category {
         this.id = id;
     }
 
-    public String getNameCategory() {
-        return nameCategory;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setNameCategory(String nameCategory) {
-        this.nameCategory = nameCategory;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

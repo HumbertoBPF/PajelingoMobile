@@ -12,7 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class ConjugationTask extends ResourcesTask<Conjugation>{
+public class ConjugationTask extends ResourcesSynchro<Conjugation> {
     public ConjugationTask(Context context, AlertDialog downloadDialog) {
         super("conjugation", AppDatabase.getInstance(context).getConjugationDao(), new ResourcesInterface<Conjugation>() {
             @Override

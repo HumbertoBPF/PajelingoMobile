@@ -12,7 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class CategoryTask extends ResourcesTask<Category>{
+public class CategoryTask extends ResourcesSynchro<Category> {
     public CategoryTask(Context context, AlertDialog downloadDialog) {
         super("category", AppDatabase.getInstance(context).getCategoryDao(), new ResourcesInterface<Category>() {
             @Override

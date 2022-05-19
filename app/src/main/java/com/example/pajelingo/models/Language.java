@@ -3,17 +3,26 @@ package com.example.pajelingo.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class Language {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
+    @SerializedName(value = "language_name")
     private String languageName;
+    @SerializedName(value = "personal_pronoun_1")
     private String personalPronoun1;
+    @SerializedName(value = "personal_pronoun_2")
     private String personalPronoun2;
+    @SerializedName(value = "personal_pronoun_3")
     private String personalPronoun3;
+    @SerializedName(value = "personal_pronoun_4")
     private String personalPronoun4;
+    @SerializedName(value = "personal_pronoun_5")
     private String personalPronoun5;
+    @SerializedName(value = "personal_pronoun_6")
     private String personalPronoun6;
 
     public Language(String languageName, String personalPronoun1, String personalPronoun2, String personalPronoun3,

@@ -12,7 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class MeaningTask extends ResourcesTask<Meaning>{
+public class MeaningTask extends ResourcesSynchro<Meaning> {
     public MeaningTask(Context context, AlertDialog downloadDialog) {
         super("meaning", AppDatabase.getInstance(context).getMeaningDao(), new ResourcesInterface<Meaning>() {
             @Override

@@ -12,7 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class WordTask extends ResourcesTask<Word>{
+public class WordTask extends ResourcesSynchro<Word> {
     public WordTask(Context context, AlertDialog downloadDialog) {
         super("word", AppDatabase.getInstance(context).getWordDao(), new ResourcesInterface<Word>() {
             @Override

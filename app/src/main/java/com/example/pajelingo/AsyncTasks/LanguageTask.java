@@ -12,7 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class LanguageTask extends ResourcesTask<Language>{
+public class LanguageTask extends ResourcesSynchro<Language> {
     public LanguageTask(Context context, AlertDialog downloadDialog) {
         super("language", AppDatabase.getInstance(context).getLanguageDao(), new ResourcesInterface<Language>() {
             @Override

@@ -20,6 +20,9 @@ public class SynonymsConverter {
 
         @TypeConverter
         public static String fromList(List<Long> idsSynonyms) {
+            if (idsSynonyms == null){
+                return null;
+            }
             return idsSynonyms.toString();
         }
 }

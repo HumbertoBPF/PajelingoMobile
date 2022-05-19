@@ -42,19 +42,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_synchro) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.dialog_download_resources)
+            builder.setTitle(R.string.dialog_download_resources_title)
+                    .setMessage(R.string.dialog_download_resources_message)
                     .setPositiveButton(R.string.dialog_download_resources_confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg).create();
+                            downloadDialog.show();
+                            new CategoryTask(getApplicationContext(), downloadDialog).execute();
                             dialog.dismiss();
                         }
                     })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    .setNegativeButton(R.string.dialog_download_resources_decline, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
-                                    .setMessage("Preparing your download").create();
-                            downloadDialog.show();
-                            new CategoryTask(getApplicationContext(), downloadDialog).execute();
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     });
             AlertDialog confirmationDialog = builder.create();

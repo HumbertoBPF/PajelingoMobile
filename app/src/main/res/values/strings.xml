@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Pajelingo</string>
-    <string name="dialog_download_resources">You are going to download the resources from the server. Please, make sure to have an internet connexion.</string>
+    <string name="dialog_download_resources_title">Download resources</string>
+    <string name="dialog_download_resources_message">You are going to download the resources from the server. Please, make sure to have an internet connexion.</string>
     <string name="dialog_download_resources_confirm">Launch</string>
     <string name="dialog_download_resources_decline">Cancel</string>
+
+    <string name="progress_download_title">Download in progress</string>
+    <string name="progress_download_initial_msg">Preparing your download</string>
 </resources>

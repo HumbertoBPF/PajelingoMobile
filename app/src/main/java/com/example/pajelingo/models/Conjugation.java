@@ -3,16 +3,25 @@ package com.example.pajelingo.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity
 public class Conjugation {
     @PrimaryKey(autoGenerate = true)
     private Long id;
+    @SerializedName(value = "word")
     private Long wordId;
+    @SerializedName(value = "conjugation_1")
     private String conjugation1;
+    @SerializedName(value = "conjugation_2")
     private String conjugation2;
+    @SerializedName(value = "conjugation_3")
     private String conjugation3;
+    @SerializedName(value = "conjugation_4")
     private String conjugation4;
+    @SerializedName(value = "conjugation_5")
     private String conjugation5;
+    @SerializedName(value = "conjugation_6")
     private String conjugation6;
     private String tense;
 

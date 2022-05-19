@@ -6,4 +6,7 @@ import com.example.pajelingo.models.Conjugation;
 
 @Dao
 public abstract class ConjugationDao extends BaseDao<Conjugation>{
+    public ConjugationDao() {
+        super("Conjugation");
+    }
 }

@@ -3,16 +3,23 @@ package com.example.pajelingo.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 @Entity
 public class Word {
     @PrimaryKey(autoGenerate = true)
     private Long id;
+    @SerializedName(value = "word_name")
     private String wordName;
+    @SerializedName(value = "language")
     private Long idLanguage;
+    @SerializedName(value = "article")
     private Long idArticle;
+    @SerializedName(value = "category")
     private Long idCategory;
+    @SerializedName(value = "synonyms")
     private List<Long> idsSynonyms;
 
     public Word(String wordName, Long idLanguage, Long idArticle, Long idCategory, List<Long> idsSynonyms) {
