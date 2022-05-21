@@ -10,6 +10,8 @@ import androidx.room.RawQuery;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
+import com.example.pajelingo.interfaces.OnResultListener;
+
 import java.util.List;
 
 @Dao
@@ -35,20 +37,30 @@ public abstract class BaseDao<E> {
         return getAllRecords(new SimpleSQLiteQuery("SELECT * FROM "+tableName));
     }
 
-    @Insert(onConflict = REPLACE)
-    public abstract void save(List<E> entity);
-
-    public AsyncTask getSaveAsyncTask(List<E> entities){
-        return new AsyncTask() {
+    public AsyncTask<Void, Void, List<E>> getAllRecordsTask(OnResultListener<List<E>> onResultListener){
+        return new AsyncTask<Void, Void, List<E>>() {
             @Override
-            protected Object doInBackground(Object[] objects) {
-                save(entities);
-                return null;
+            protected List<E> doInBackground(Void... voids) {
+                return getAllRecords();
             }
 
             @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
+            protected void onPostExecute(List<E> result) {
+                super.onPostExecute(result);
+                onResultListener.onResult(result);
+            }
+        };
+    }
+
+    @Insert(onConflict = REPLACE)
+    public abstract void save(List<E> entity);
+
+    public AsyncTask<Void, Void, Void> getSaveAsyncTask(List<E> entities){
+        return new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                save(entities);
+                return null;
             }
         };
     }

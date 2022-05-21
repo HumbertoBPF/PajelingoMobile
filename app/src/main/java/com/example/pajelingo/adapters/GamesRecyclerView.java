@@ -1,6 +1,7 @@
-package com.example.pajelingo;
+package com.example.pajelingo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pajelingo.R;
 
 import java.util.List;
 
@@ -24,15 +27,13 @@ public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.Ga
     @NonNull
     @Override
     public GamesRecyclerView.GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.game_item_layout, parent, false);
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_item_layout, parent, false);
         return new GameViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GamesRecyclerView.GameViewHolder holder, int position) {
-        holder.bind(games.get(position));
+        holder.bind(context, games.get(position));
     }
 
     @Override
@@ -48,8 +49,19 @@ public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.Ga
             this.gameNameTextView = itemView.findViewById(R.id.game_name_text_view);
         }
 
-        public void bind(String gameName){
+        public void bind(Context context, String gameName){
             this.gameNameTextView.setText(gameName);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Class destinyClass = Class.forName("com.example.pajelingo.activities."+gameName.replace(" ","")+"Activity");
+                        context.startActivity(new Intent(context, destinyClass));
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
     }

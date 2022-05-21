@@ -1,4 +1,4 @@
-package com.example.pajelingo.AsyncTasks;
+package com.example.pajelingo.synchronization;
 
 import android.os.Handler;
 import android.util.Log;

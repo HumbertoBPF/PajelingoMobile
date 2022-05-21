@@ -8,4 +8,6 @@
     <color name="base_gray">#2e2e2e</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wrong_answer_color">#FF6666</color>
+    <color name="correct_answer_color">#66FF66</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.pajelingo;
+package com.example.pajelingo.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pajelingo.AsyncTasks.CategoryTask;
+import com.example.pajelingo.adapters.GamesRecyclerView;
+import com.example.pajelingo.R;
+import com.example.pajelingo.synchronization.CategorySynchro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                             AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
                                     .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg).create();
                             downloadDialog.show();
-                            new CategoryTask(getApplicationContext(), downloadDialog).execute();
+                            new CategorySynchro(getApplicationContext(), downloadDialog).execute();
                             dialog.dismiss();
                         }
                     })
