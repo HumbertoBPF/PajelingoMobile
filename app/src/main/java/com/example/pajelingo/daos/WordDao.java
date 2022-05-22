@@ -19,9 +19,6 @@ public abstract class WordDao extends BaseDao<Word>{
     @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage")
     protected abstract List<Word> findWordsByLanguage(long idLanguage);
 
-    @Query("SELECT * FROM Word WHERE id = :id")
-    public abstract Word findWordsById(long id);
-
     public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(long idLanguage,
                                                                          OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
@@ -34,21 +31,6 @@ public abstract class WordDao extends BaseDao<Word>{
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words);
                 onResultListener.onResult(words);
-            }
-        };
-    }
-
-    public AsyncTask<Void, Void, Word> getWordsByIdTask(long id, OnResultListener<Word> onResultListener){
-        return new AsyncTask<Void, Void, Word>() {
-            @Override
-            protected Word doInBackground(Void... voids) {
-                return findWordsById(id);
-            }
-
-            @Override
-            protected void onPostExecute(Word word) {
-                super.onPostExecute(word);
-                onResultListener.onResult(word);
             }
         };
     }

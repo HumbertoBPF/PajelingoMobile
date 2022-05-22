@@ -15,6 +15,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
+        setup();
     }
 
     protected abstract void setup();

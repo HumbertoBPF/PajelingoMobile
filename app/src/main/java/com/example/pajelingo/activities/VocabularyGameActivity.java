@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities;
 
-import android.graphics.Color;
-import android.os.Bundle;
+import static com.example.pajelingo.util.Tools.getRandomItemFromList;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,11 +20,9 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.util.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class VocabularyGameActivity extends GameActivity {
 
@@ -33,14 +31,9 @@ public class VocabularyGameActivity extends GameActivity {
     private Word wordToTranslate;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vocabulary_game_setup);
-        setup();
-    }
-
-    @Override
     protected void setup() {
+        setContentView(R.layout.activity_dual_language_choice);
+
         Spinner baseLanguageSpinner = findViewById(R.id.base_language_spinner);
         Spinner targetLanguageSpinner = findViewById(R.id.target_language_spinner);
         Button playButton = findViewById(R.id.play_button);
@@ -48,7 +41,6 @@ public class VocabularyGameActivity extends GameActivity {
         languageDao.getAllRecordsTask(new OnResultListener<List<Language>>() {
             @Override
             public void onResult(List<Language> result) {
-                Log.i("VocabularyGameActivity", result.size()+"");
                 List<String> languageNames = new ArrayList<>();
                 for (Language language : result){
                     languageNames.add(language.getLanguageName());
@@ -68,8 +60,8 @@ public class VocabularyGameActivity extends GameActivity {
                         String targetLanguageName = targetLanguageSpinner.getSelectedItem().toString();
                         // The base and target languages must be different
                         if (baseLanguageName.equals(targetLanguageName)){
-                            Toast.makeText(VocabularyGameActivity.this, "Base language and target language must not be " +
-                                    "the same", Toast.LENGTH_LONG).show();
+                            Toast.makeText(VocabularyGameActivity.this, R.string.warning_base_target_len_eq,
+                                    Toast.LENGTH_LONG).show();
                         }else{
                             playButton.setOnClickListener(null);
                             // Set base and target languages attributes according to the user's choices and start game
@@ -97,17 +89,17 @@ public class VocabularyGameActivity extends GameActivity {
     protected void startGame() {
         setContentView(R.layout.activity_vocabulary_game);
 
-        TextView wordToTranslateTextView = findViewById(R.id.word_to_translate);
+        TextView wordToTranslateTextView = findViewById(R.id.word_text_view);
         EditText answerInputEditText = findViewById(R.id.answer_input);
         Button checkButton = findViewById(R.id.check_button);
 
-        answerInputEditText.setHint("Provide a translation in "+baseLanguage.getLanguageName());
+        answerInputEditText.setHint(getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName());
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
         wordDao.getWordsByLanguageAsyncTask(targetLanguage.getId(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
-                wordToTranslate = Tools.getRandomItemFromList(result);
+                wordToTranslate = getRandomItemFromList(result);
                 Log.i("VocabularyGameActivity", wordToTranslate.getWordName());
                 wordToTranslateTextView.setText(wordToTranslate.getWordName());
                 checkButton.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +117,7 @@ public class VocabularyGameActivity extends GameActivity {
 
     @Override
     protected void verifyAnswer(Object answer) {
-        setContentView(R.layout.activity_vocabulary_game_feedback);
+        setContentView(R.layout.activity_feedback);
 
         TextView feedbackTextView = findViewById(R.id.feedback_text_view);
         CardView feedbackCardView = findViewById(R.id.feedback_rounded_background);

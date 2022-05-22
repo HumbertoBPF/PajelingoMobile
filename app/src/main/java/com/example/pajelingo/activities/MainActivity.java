@@ -9,9 +9,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pajelingo.adapters.GamesRecyclerView;
 import com.example.pajelingo.R;
-import com.example.pajelingo.synchronization.CategorySynchro;
+import com.example.pajelingo.adapters.GamesRecyclerView;
+import com.example.pajelingo.synchronization.ArticleSynchro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.dialog_download_resources_confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
-                                    .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg).create();
+                                    .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
+                                    .setCancelable(false).create();
                             downloadDialog.show();
-                            new CategorySynchro(getApplicationContext(), downloadDialog).execute();
+                            new ArticleSynchro(MainActivity.this, downloadDialog).execute();
                             dialog.dismiss();
                         }
                     })

@@ -2,7 +2,6 @@ package com.example.pajelingo.async_tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -29,14 +28,11 @@ public class SynonymsByLanguageTask extends AsyncTask<Void, Void, List<String>> 
     @Override
     protected List<String> doInBackground(Void... voids) {
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        Log.i("SynonymsByLanguageTask", "Word = "+this.word.getWordName());
 
         List<String> synonyms = new ArrayList<>();
 
         for (Long synonymId : word.getIdsSynonyms()){
-            Word synonym = wordDao.findWordsById(synonymId);
-            Log.i("SynonymsByLanguageTask", synonymId+"");
-            Log.i("SynonymsByLanguageTask", synonym.getWordName());
+            Word synonym = wordDao.findRecordById(synonymId);
             // Return only the synonyms whose language matches with the specified one
             if (synonym.getIdLanguage().equals(language.getId())){
                 synonyms.add(synonym.getWordName());

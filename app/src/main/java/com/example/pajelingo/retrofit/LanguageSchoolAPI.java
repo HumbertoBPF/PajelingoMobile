@@ -1,5 +1,6 @@
 package com.example.pajelingo.retrofit;
 
+import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Category;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
@@ -12,6 +13,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface LanguageSchoolAPI {
+
+    @GET("articles")
+    Call<List<Article>> getArticles();
 
     @GET("categories")
     Call<List<Category>> getCategories();

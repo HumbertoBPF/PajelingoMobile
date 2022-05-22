@@ -31,7 +31,7 @@ public abstract class BaseDao<E> {
 
     /**
      * Executes the query to get the list of all the records of the entity <b>E</b>.
-     * @return
+     * @return All the records of the concerned table.
      */
     public List<E> getAllRecords(){
         return getAllRecords(new SimpleSQLiteQuery("SELECT * FROM "+tableName));
@@ -65,6 +65,31 @@ public abstract class BaseDao<E> {
         };
     }
 
+    @RawQuery
+    protected abstract E findRecordById(SupportSQLiteQuery sqLiteQuery);
 
+    /**
+     * Executes the query to get the element among all the records that match with the specified id.
+     * @return The entity corresponded to the specified id.
+     */
+    public E findRecordById(long id) {
+        return findRecordById(new SimpleSQLiteQuery("SELECT * FROM "+tableName+" WHERE id = "+id));
+    }
+
+    public AsyncTask<Void, Void, E> findRecordByIdTask(long id, OnResultListener<E> onResultListener){
+        return new AsyncTask<Void, Void, E>(){
+
+            @Override
+            protected E doInBackground(Void... voids) {
+                return findRecordById(id);
+            }
+
+            @Override
+            protected void onPostExecute(E e) {
+                super.onPostExecute(e);
+                onResultListener.onResult(e);
+            }
+        };
+    }
 
 }

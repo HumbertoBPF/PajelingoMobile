@@ -12,4 +12,6 @@
     <string name="base_language_label">Base language:</string>
     <string name="play_button">Play!</string>
     <string name="check_button">Check</string>
+    <string name="instruction_vocabulary_game">\"Provide a translation in \"</string>
+    <string name="warning_base_target_len_eq">Base language and target language must not be the same</string>
 </resources>

@@ -8,8 +8,6 @@ import androidx.room.Query;
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Language;
 
-import java.util.List;
-
 @Dao
 public abstract class LanguageDao extends BaseDao<Language>{
     public LanguageDao() {
