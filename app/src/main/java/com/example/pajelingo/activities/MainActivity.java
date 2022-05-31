@@ -42,12 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Launch synchronization
         if (item.getItemId() == R.id.action_synchro) {
+            // Ask user's confirmation before launching a synchro
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.dialog_download_resources_title)
                     .setMessage(R.string.dialog_download_resources_message)
                     .setPositiveButton(R.string.dialog_download_resources_confirm, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            // When the user confirms, launches the synchro steps by using a chain of responsibility design pattern
                             AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
                                     .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
                                     .setCancelable(false).create();

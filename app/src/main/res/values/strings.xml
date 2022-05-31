@@ -7,11 +7,15 @@
 
     <string name="progress_download_title">Download in progress</string>
     <string name="progress_download_initial_msg">Preparing your download</string>
+
+    <string name="play_button">Play!</string>
+    <string name="check_button">Check</string>
+
     <string name="new_word_button">New word</string>
     <string name="target_language_label">Target language:</string>
     <string name="base_language_label">Base language:</string>
-    <string name="play_button">Play!</string>
-    <string name="check_button">Check</string>
     <string name="instruction_vocabulary_game">\"Provide a translation in \"</string>
     <string name="warning_base_target_len_eq">Base language and target language must not be the same</string>
+
+    <string name="article_game_hint_input_text">Article</string>
 </resources>

@@ -129,7 +129,7 @@ public class VocabularyGameActivity extends GameActivity {
                 String userTranslation = (String) answer;
                 int numberOfSynonyms = synonyms.size();
                 boolean isAnswerCorrect = false;
-                String feedback = "";
+                String feedback;
                 String correctAnswer = wordToTranslate.getWordName()+": ";
 
                 for (int i = 0;i < numberOfSynonyms;i++){

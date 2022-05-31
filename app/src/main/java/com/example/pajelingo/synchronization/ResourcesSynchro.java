@@ -13,6 +13,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Object responsible for the synchronization step(i.e. resources download) of the entity <b>E</b>.
+ * A chain of responsibility design pattern is used to call the different steps in the correct order.
+ * @param <E> Model entity representing the resource concerned.
+ */
 public abstract class ResourcesSynchro<E> {
 
     private final String resourceName;
@@ -59,6 +64,9 @@ public abstract class ResourcesSynchro<E> {
         });
     }
 
+    /**
+     * Calls the object responsible for the next synchronization step.
+     */
     protected void nextStep() {
         handler.postDelayed(new Runnable() {
             @Override

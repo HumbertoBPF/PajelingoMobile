@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,31 +16,27 @@
 
         <EditText
             android:id="@+id/answer_input"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/vertical_guide_line"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/word_text_view"
+            android:maxLines="1"
+            android:maxLength="7"
+            android:gravity="center"
             tools:hint="Article"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/vertical_guide_line"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25"/>
-
         <TextView
             android:id="@+id/word_text_view"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/vertical_guide_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/answer_input"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
             tools:text="Word to translate"

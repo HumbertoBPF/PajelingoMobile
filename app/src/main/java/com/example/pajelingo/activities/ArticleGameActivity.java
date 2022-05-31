@@ -46,7 +46,9 @@ public class ArticleGameActivity extends GameActivity{
             public void onResult(List<Language> result) {
                 List<String> languageNames = new ArrayList<>();
                 for (Language language : result){
-                    languageNames.add(language.getLanguageName());
+                    if (!language.getLanguageName().equals("English")){
+                        languageNames.add(language.getLanguageName());
+                    }
                 }
                 // Fill the adapter with the name of all the languages available
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
@@ -81,7 +83,7 @@ public class ArticleGameActivity extends GameActivity{
         TextView wordTextView = findViewById(R.id.word_text_view);
         Button checkButton = findViewById(R.id.check_button);
 
-        answerInputEditText.setHint("Article");
+        answerInputEditText.setHint(R.string.article_game_hint_input_text);
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
         wordDao.getWordsByLanguageAsyncTask(language.getId(), new OnResultListener<List<Word>>() {
@@ -112,6 +114,7 @@ public class ArticleGameActivity extends GameActivity{
         Button newWordButton = findViewById(R.id.new_word_button);
 
         ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
+        // Gets the article related to the word and verifies user's answer
         articleDao.findRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
             @Override
             public void onResult(Article result) {
