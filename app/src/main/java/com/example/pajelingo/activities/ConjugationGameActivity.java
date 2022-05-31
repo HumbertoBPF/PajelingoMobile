@@ -180,10 +180,10 @@ public class ConjugationGameActivity extends GameActivity {
         if (conjugation.getConjugation1().equals(answerConjugation1) && conjugation.getConjugation2().equals(answerConjugation2) &&
         conjugation.getConjugation3().equals(answerConjugation3) && conjugation.getConjugation4().equals(answerConjugation4) &&
         conjugation.getConjugation5().equals(answerConjugation5) && conjugation.getConjugation6().equals(answerConjugation6)){
-            feedback = "Correct :)\n";
+            feedback = getString(R.string.correct_answer_message);
             feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
         }else{
-            feedback = "Wrong answer\n";
+            feedback = getString(R.string.wrong_answer_message);
             feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.wrong_answer_color));
         }
 

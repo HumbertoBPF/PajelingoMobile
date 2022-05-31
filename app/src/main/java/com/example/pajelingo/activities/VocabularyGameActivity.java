@@ -157,10 +157,10 @@ public class VocabularyGameActivity extends GameActivity {
                 }
 
                 if (isAnswerCorrect){
-                    feedback = "Correct :)\n\n";
+                    feedback = getString(R.string.correct_answer_message);
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
                 }else{
-                    feedback = "Wrong answer\n\n";
+                    feedback = getString(R.string.wrong_answer_message);
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.wrong_answer_color));
                 }
                 feedback += correctAnswer;

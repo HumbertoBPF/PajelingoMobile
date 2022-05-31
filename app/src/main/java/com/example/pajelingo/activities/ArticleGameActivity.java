@@ -138,10 +138,10 @@ public class ArticleGameActivity extends GameActivity{
 
                 String feedback;
                 if (answerString.equals(result.getArticleName())){
-                    feedback = "Correct :)\n\n"+result.getArticleName()+" "+word.getWordName();
+                    feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
                 }else{
-                    feedback = "Wrong answer\n\n"+result.getArticleName()+" "+word.getWordName();
+                    feedback = getString(R.string.wrong_answer_message) +result.getArticleName()+" "+word.getWordName();
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.wrong_answer_color));
                 }
                 feedbackTextView.setText(feedback);

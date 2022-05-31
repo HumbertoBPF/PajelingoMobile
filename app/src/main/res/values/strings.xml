@@ -18,4 +18,7 @@
     <string name="warning_base_target_len_eq">Base language and target language must not be the same</string>
 
     <string name="article_game_hint_input_text">Article</string>
+    <string name="warning_no_resources">There are not enough resources to launch this game. Please, launch a synchro and then try again.</string>
+    <string name="correct_answer_message">Correct :)\n\n</string>
+    <string name="wrong_answer_message">Wrong answer\n\n</string>
 </resources>
