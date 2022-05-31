@@ -50,6 +50,7 @@ public class ArticleGameActivity extends GameActivity{
                         languageNames.add(language.getLanguageName());
                     }
                 }
+                // TODO verify if there are at least one languages
                 // Fill the adapter with the name of all the languages available
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
                         android.R.layout.simple_spinner_item, languageNames);
@@ -86,9 +87,10 @@ public class ArticleGameActivity extends GameActivity{
         answerInputEditText.setHint(R.string.article_game_hint_input_text);
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getWordsByLanguageAsyncTask(language.getId(), new OnResultListener<List<Word>>() {
+        wordDao.getNounsByLanguageAsyncTask(language.getId(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
+                // TODO verify if there are at least one word
                 word = getRandomItemFromList(result);
                 wordTextView.setText(word.getWordName());
 
@@ -118,6 +120,7 @@ public class ArticleGameActivity extends GameActivity{
         articleDao.findRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
             @Override
             public void onResult(Article result) {
+                // TODO verify if an article is returned
                 String answerString = (String) answer;
 
                 String feedback;

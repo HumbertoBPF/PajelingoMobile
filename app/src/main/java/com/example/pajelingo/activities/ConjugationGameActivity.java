@@ -44,6 +44,7 @@ public class ConjugationGameActivity extends GameActivity {
                 for (Language language : result){
                     languageNames.add(language.getLanguageName());
                 }
+                // TODO verify if there are at least one languages
                 // Fill the adapter with the name of all the languages available
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ConjugationGameActivity.this,
                         android.R.layout.simple_spinner_item, languageNames);
@@ -100,16 +101,19 @@ public class ConjugationGameActivity extends GameActivity {
         categoryDao.getCategoryByNameTask("verbs", new OnResultListener<Category>() {
             @Override
             public void onResult(Category result) {
+                // TODO verify if one category is returned
                 WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
                 wordDao.getWordsByCategoryAndByLanguageTask(result.getId(), language.getId(), new OnResultListener<List<Word>>() {
                     @Override
                     public void onResult(List<Word> result) {
+                        // TODO verify if at least one word is returned
                         // Pick a word that is in the category "verb" and whose language corresponds to the selected language
                         Word word = getRandomItemFromList(result);
                         ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
                         conjugationDao.getConjugationsFromVerbTask(word.getId(), new OnResultListener<List<Conjugation>>() {
                             @Override
                             public void onResult(List<Conjugation> result) {
+                                // TODO verify if there are at least one conjugation is returned
                                 // Pick a random conjugation of the chosen verb
                                 conjugation = getRandomItemFromList(result);
                                 verb.setText(word.getWordName() + " - " + conjugation.getTense());
