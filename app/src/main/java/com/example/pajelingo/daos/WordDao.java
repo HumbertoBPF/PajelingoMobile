@@ -19,7 +19,7 @@ public abstract class WordDao extends BaseDao<Word>{
     @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage")
     protected abstract List<Word> findWordsByLanguage(long idLanguage);
 
-    @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage AND idArticle != null")
+    @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage AND idArticle IS NOT NULL")
     protected abstract List<Word> findNounsByLanguage(long idLanguage);
 
     @Query("SELECT * FROM Word WHERE idCategory = :idCategory AND idLanguage = :idLanguage")

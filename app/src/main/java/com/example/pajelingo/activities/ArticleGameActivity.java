@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -50,7 +51,11 @@ public class ArticleGameActivity extends GameActivity{
                         languageNames.add(language.getLanguageName());
                     }
                 }
-                // TODO verify if there are at least one languages
+                // Verify if there are at least one language
+                if (result.isEmpty()){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
                 // Fill the adapter with the name of all the languages available
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
                         android.R.layout.simple_spinner_item, languageNames);
@@ -90,7 +95,11 @@ public class ArticleGameActivity extends GameActivity{
         wordDao.getNounsByLanguageAsyncTask(language.getId(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
-                // TODO verify if there are at least one word
+                // Verify if there are at least one word
+                if (result.isEmpty()){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
                 word = getRandomItemFromList(result);
                 wordTextView.setText(word.getWordName());
 
@@ -120,7 +129,11 @@ public class ArticleGameActivity extends GameActivity{
         articleDao.findRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
             @Override
             public void onResult(Article result) {
-                // TODO verify if an article is returned
+                // Verify if an article is returned
+                if (result == null){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
                 String answerString = (String) answer;
 
                 String feedback;

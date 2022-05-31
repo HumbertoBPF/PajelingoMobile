@@ -45,7 +45,11 @@ public class VocabularyGameActivity extends GameActivity {
                 for (Language language : result){
                     languageNames.add(language.getLanguageName());
                 }
-                // TODO verify if there are at least two languages
+                // Verifying if there are at least two languages
+                if (result.size() < 2){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
                 // Fill the adapter with the name of all the languages available
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(VocabularyGameActivity.this,
                         android.R.layout.simple_spinner_item, languageNames);
@@ -100,7 +104,11 @@ public class VocabularyGameActivity extends GameActivity {
         wordDao.getWordsByLanguageAsyncTask(targetLanguage.getId(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
-                // TODO verify if there is at least one element in the list
+                // Verify if there is at least one element in the list
+                if (result.isEmpty()){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
                 wordToTranslate = getRandomItemFromList(result);
                 Log.i("VocabularyGameActivity", wordToTranslate.getWordName());
                 wordToTranslateTextView.setText(wordToTranslate.getWordName());
