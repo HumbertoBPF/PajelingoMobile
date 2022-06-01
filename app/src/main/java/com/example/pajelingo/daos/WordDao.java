@@ -25,6 +25,9 @@ public abstract class WordDao extends BaseDao<Word>{
     @Query("SELECT * FROM Word WHERE idCategory = :idCategory AND idLanguage = :idLanguage")
     protected abstract List<Word> findWordsByCategoryAndByLanguage(long idCategory, long idLanguage);
 
+    @Query("SELECT * FROM Word WHERE wordName LIKE :pattern")
+    protected abstract List<Word> searchWords(String pattern);
+
     public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(long idLanguage,
                                                                          OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
@@ -63,6 +66,21 @@ public abstract class WordDao extends BaseDao<Word>{
             @Override
             protected List<Word> doInBackground(Void... voids) {
                 return findWordsByCategoryAndByLanguage(idCategory, idLanguage);
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                super.onPostExecute(words);
+                onResultListener.onResult(words);
+            }
+        };
+    }
+
+    public AsyncTask<Void, Void, List<Word>> searchWordsTask(String pattern, OnResultListener<List<Word>> onResultListener){
+        return new AsyncTask<Void, Void, List<Word>>() {
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                return searchWords(pattern);
             }
 
             @Override

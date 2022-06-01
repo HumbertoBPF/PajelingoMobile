@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedId = item.getItemId();
         // Launch synchronization
-        if (item.getItemId() == R.id.action_synchro) {
+        if (selectedId == R.id.action_synchro) {
             // Ask user's confirmation before launching a synchro
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.dialog_download_resources_title)
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog confirmationDialog = builder.create();
             confirmationDialog.show();
             return true;
+        }else if (selectedId == R.id.action_search){
+            startActivity(new Intent(this, SearchActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

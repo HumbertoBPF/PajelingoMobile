@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.activities.games;
 
 import android.os.Bundle;
 import android.widget.Toast;

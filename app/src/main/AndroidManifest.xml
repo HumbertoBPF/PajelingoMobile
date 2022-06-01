@@ -13,9 +13,15 @@
         android:theme="@style/Theme.Pajelingo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.MeaningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SplashScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,16 +29,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ConjugationGameActivity"
+            android:name=".activities.games.ConjugationGameActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ArticleGameActivity"
+            android:name=".activities.games.ArticleGameActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.VocabularyGameActivity"
+            android:name=".activities.games.VocabularyGameActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.GameActivity"
+            android:name=".activities.games.GameActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
