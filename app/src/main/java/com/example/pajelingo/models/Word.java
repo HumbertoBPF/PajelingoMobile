@@ -5,10 +5,11 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Word {
+public class Word implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private Long id;
     @SerializedName(value = "word_name")

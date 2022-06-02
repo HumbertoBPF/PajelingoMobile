@@ -25,4 +25,5 @@
     <string name="tab_icon_search_title">Search word</string>
     <string name="tab_icon_synchro_title">Get resources</string>
     <string name="search_button_text">Search</string>
+    <string name="search_edit_text_hint">Search something</string>
 </resources>

@@ -64,7 +64,7 @@ public class SearchResultsRecyclerView extends RecyclerView.Adapter<SearchResult
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, MeaningActivity.class);
-                    intent.putExtra("wordId", word.getId());
+                    intent.putExtra("word", word);
                     context.startActivity(intent);
                 }
             });
