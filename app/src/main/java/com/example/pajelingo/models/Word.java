@@ -14,19 +14,19 @@ public class Word {
     @SerializedName(value = "word_name")
     private String wordName;
     @SerializedName(value = "language")
-    private Long idLanguage;
+    private String language;
     @SerializedName(value = "article")
     private Long idArticle;
     @SerializedName(value = "category")
-    private Long idCategory;
+    private String category;
     @SerializedName(value = "synonyms")
     private List<Long> idsSynonyms;
 
-    public Word(String wordName, Long idLanguage, Long idArticle, Long idCategory, List<Long> idsSynonyms) {
+    public Word(String wordName, String language, Long idArticle, String category, List<Long> idsSynonyms) {
         this.wordName = wordName;
-        this.idLanguage = idLanguage;
+        this.language = language;
         this.idArticle = idArticle;
-        this.idCategory = idCategory;
+        this.category = category;
         this.idsSynonyms = idsSynonyms;
     }
 
@@ -46,12 +46,12 @@ public class Word {
         this.wordName = wordName;
     }
 
-    public Long getIdLanguage() {
-        return idLanguage;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setIdLanguage(Long idLanguage) {
-        this.idLanguage = idLanguage;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public Long getIdArticle() {
@@ -62,12 +62,12 @@ public class Word {
         this.idArticle = idArticle;
     }
 
-    public Long getIdCategory() {
-        return idCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public List<Long> getIdsSynonyms() {

@@ -16,24 +16,24 @@ public abstract class WordDao extends BaseDao<Word>{
         super("Word");
     }
 
-    @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage")
-    protected abstract List<Word> findWordsByLanguage(long idLanguage);
+    @Query("SELECT * FROM Word WHERE language = :language;")
+    protected abstract List<Word> findWordsByLanguage(String language);
 
-    @Query("SELECT * FROM Word WHERE idLanguage = :idLanguage AND idArticle IS NOT NULL")
-    protected abstract List<Word> findNounsByLanguage(long idLanguage);
+    @Query("SELECT * FROM Word WHERE language = :language AND idArticle IS NOT NULL;")
+    protected abstract List<Word> findNounsByLanguage(String language);
 
-    @Query("SELECT * FROM Word WHERE idCategory = :idCategory AND idLanguage = :idLanguage")
-    protected abstract List<Word> findWordsByCategoryAndByLanguage(long idCategory, long idLanguage);
+    @Query("SELECT * FROM Word WHERE category = :category AND language = :language;")
+    protected abstract List<Word> findWordsByCategoryAndByLanguage(String category, String language);
 
     @Query("SELECT * FROM Word WHERE wordName LIKE :pattern")
     protected abstract List<Word> searchWords(String pattern);
 
-    public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(long idLanguage,
+    public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(String language,
                                                                          OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findWordsByLanguage(idLanguage);
+                return findWordsByLanguage(language);
             }
 
             @Override
@@ -44,12 +44,12 @@ public abstract class WordDao extends BaseDao<Word>{
         };
     }
 
-    public AsyncTask<Void, Void, List<Word>> getNounsByLanguageAsyncTask(long idLanguage,
+    public AsyncTask<Void, Void, List<Word>> getNounsByLanguageAsyncTask(String language,
                                                                          OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findNounsByLanguage(idLanguage);
+                return findNounsByLanguage(language);
             }
 
             @Override
@@ -60,12 +60,12 @@ public abstract class WordDao extends BaseDao<Word>{
         };
     }
 
-    public AsyncTask<Void, Void, List<Word>> getWordsByCategoryAndByLanguageTask(long idCategory, long idLanguage,
+    public AsyncTask<Void, Void, List<Word>> getWordsByCategoryAndByLanguageTask(String category, String language,
                                                                                  OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findWordsByCategoryAndByLanguage(idCategory, idLanguage);
+                return findWordsByCategoryAndByLanguage(category, language);
             }
 
             @Override

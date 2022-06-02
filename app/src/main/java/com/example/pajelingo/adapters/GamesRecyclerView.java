@@ -55,7 +55,7 @@ public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.Ga
                 @Override
                 public void onClick(View v) {
                     try {
-                        Class destinyClass = Class.forName("com.example.pajelingo.activities."+gameName.replace(" ","")+"Activity");
+                        Class destinyClass = Class.forName("com.example.pajelingo.activities.games."+gameName.replace(" ","")+"Activity");
                         context.startActivity(new Intent(context, destinyClass));
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();

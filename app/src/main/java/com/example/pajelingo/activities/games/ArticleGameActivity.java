@@ -91,7 +91,7 @@ public class ArticleGameActivity extends GameActivity {
         answerInputEditText.setHint(R.string.article_game_hint_input_text);
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getNounsByLanguageAsyncTask(language.getId(), new OnResultListener<List<Word>>() {
+        wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
                 // Verify if there are at least one word

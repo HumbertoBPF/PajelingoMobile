@@ -101,7 +101,7 @@ public class VocabularyGameActivity extends GameActivity {
         answerInputEditText.setHint(getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName());
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getWordsByLanguageAsyncTask(targetLanguage.getId(), new OnResultListener<List<Word>>() {
+        wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), new OnResultListener<List<Word>>() {
             @Override
             public void onResult(List<Word> result) {
                 // Verify if there is at least one element in the list

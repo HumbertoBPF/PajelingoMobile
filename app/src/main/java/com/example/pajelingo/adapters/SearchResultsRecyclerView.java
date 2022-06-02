@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MeaningActivity;
-import com.example.pajelingo.daos.LanguageDao;
-import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Word;
 
 import java.util.List;
@@ -50,7 +48,7 @@ public class SearchResultsRecyclerView extends RecyclerView.Adapter<SearchResult
 
         private final TextView wordNameTextView;
         private final TextView languageTextView;
-        private final ConstraintLayout rootView;
+        private final CardView rootView;
 
         public SearchResultsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,9 +58,8 @@ public class SearchResultsRecyclerView extends RecyclerView.Adapter<SearchResult
         }
 
         public void bind(Word word){
-            LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
             wordNameTextView.setText(word.getWordName());
-            languageDao.findRecordByIdTask(word.getIdLanguage(), result -> languageTextView.setText(result.getLanguageName())).execute();
+            languageTextView.setText(word.getLanguage());
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

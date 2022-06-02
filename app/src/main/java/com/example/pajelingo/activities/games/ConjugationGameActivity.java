@@ -12,12 +12,10 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.CategoryDao;
 import com.example.pajelingo.daos.ConjugationDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.Category;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
@@ -100,56 +98,45 @@ public class ConjugationGameActivity extends GameActivity {
         pronoun5.setText(language.getPersonalPronoun5());
         pronoun6.setText(language.getPersonalPronoun6());
 
-        CategoryDao categoryDao = AppDatabase.getInstance(this).getCategoryDao();
-        // We want to get the object corresponding to the category "verb"
-        categoryDao.getCategoryByNameTask("verbs", new OnResultListener<Category>() {
+        // We want to get only the words that are verbs
+        WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
+        wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), new OnResultListener<List<Word>>() {
             @Override
-            public void onResult(Category result) {
-                // Verify if one category is returned
-                if (result == null){
+            public void onResult(List<Word> result) {
+                // Verify if at least one word is returned
+                if (result.isEmpty()){
                     finishActivityNotEnoughResources();
                     return;
                 }
-                WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
-                wordDao.getWordsByCategoryAndByLanguageTask(result.getId(), language.getId(), new OnResultListener<List<Word>>() {
+                // Pick a word that is in the category "verb" and whose language corresponds to the selected language
+                Word word = getRandomItemFromList(result);
+                ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
+                conjugationDao.getConjugationsFromVerbTask(word.getId(), new OnResultListener<List<Conjugation>>() {
                     @Override
-                    public void onResult(List<Word> result) {
-                        // Verify if at least one word is returned
+                    public void onResult(List<Conjugation> result) {
+                        // Verify if there are at least one conjugation is returned
                         if (result.isEmpty()){
                             finishActivityNotEnoughResources();
                             return;
                         }
-                        // Pick a word that is in the category "verb" and whose language corresponds to the selected language
-                        Word word = getRandomItemFromList(result);
-                        ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
-                        conjugationDao.getConjugationsFromVerbTask(word.getId(), new OnResultListener<List<Conjugation>>() {
+                        // Pick a random conjugation of the chosen verb
+                        conjugation = getRandomItemFromList(result);
+                        verb.setText(word.getWordName() + " - " + conjugation.getTense());
+                        checkButton.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onResult(List<Conjugation> result) {
-                                // Verify if there are at least one conjugation is returned
-                                if (result.isEmpty()){
-                                    finishActivityNotEnoughResources();
-                                    return;
-                                }
-                                // Pick a random conjugation of the chosen verb
-                                conjugation = getRandomItemFromList(result);
-                                verb.setText(word.getWordName() + " - " + conjugation.getTense());
-                                checkButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        checkButton.setOnClickListener(null);
-                                        List<String> answers = new ArrayList<>();
-                                        // Trim the answers since the user may accidentally insert a space before of after them
-                                        answers.add(conjugation1.getText().toString().trim());
-                                        answers.add(conjugation2.getText().toString().trim());
-                                        answers.add(conjugation3.getText().toString().trim());
-                                        answers.add(conjugation4.getText().toString().trim());
-                                        answers.add(conjugation5.getText().toString().trim());
-                                        answers.add(conjugation6.getText().toString().trim());
-                                        verifyAnswer(answers);
-                                    }
-                                });
+                            public void onClick(View v) {
+                                checkButton.setOnClickListener(null);
+                                List<String> answers = new ArrayList<>();
+                                // Trim the answers since the user may accidentally insert a space before of after them
+                                answers.add(conjugation1.getText().toString().trim());
+                                answers.add(conjugation2.getText().toString().trim());
+                                answers.add(conjugation3.getText().toString().trim());
+                                answers.add(conjugation4.getText().toString().trim());
+                                answers.add(conjugation5.getText().toString().trim());
+                                answers.add(conjugation6.getText().toString().trim());
+                                verifyAnswer(answers);
                             }
-                        }).execute();
+                        });
                     }
                 }).execute();
             }

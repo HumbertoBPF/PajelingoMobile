@@ -12,10 +12,10 @@ public class Article {
     @SerializedName(value = "article_name")
     private String articleName;
     @SerializedName(value = "language")
-    private Long idLanguage;
+    private String language;
 
-    public Article(Long idLanguage) {
-        this.idLanguage = idLanguage;
+    public Article(String language) {
+        this.language = language;
     }
 
     public Long getId() {
@@ -34,11 +34,11 @@ public class Article {
         this.articleName = articleName;
     }
 
-    public Long getIdLanguage() {
-        return idLanguage;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setIdLanguage(Long idLanguage) {
-        this.idLanguage = idLanguage;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
