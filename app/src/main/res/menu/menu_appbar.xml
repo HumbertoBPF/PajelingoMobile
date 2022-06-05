@@ -14,4 +14,10 @@
         android:title="@string/tab_icon_synchro_title"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_online"
+        android:icon="@drawable/ic_online_mode"
+        android:title="@string/tab_icon_online_mode_title"
+        app:showAsAction="ifRoom"/>
+
 </menu>

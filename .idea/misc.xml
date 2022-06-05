@@ -4,12 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Humberto/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/drawable-anydpi/ic_connected_mode.xml" value="0.21614583333333334" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/drawable/rounded_button_background.xml" value="0.21510416666666668" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_article_game.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_conjugation_game.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_dual_language_choice.xml" value="0.21875" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_login.xml" value="0.1296875" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_meaning.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_search.xml" value="0.19895833333333332" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_single_language_choice.xml" value="0.21875" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_vocabulary_game.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/activity_vocabulary_game_feedback.xml" value="0.23854166666666668" />
@@ -19,6 +24,7 @@
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/search_results_item_layout.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/layout/single_language_choice_activity.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/menu/menu_appbar.xml" value="0.2359375" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/menu/menu_appbar_not_connected.xml" value="0.2" />
       </map>
     </option>
   </component>

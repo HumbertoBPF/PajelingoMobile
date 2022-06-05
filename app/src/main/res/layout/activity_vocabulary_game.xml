@@ -48,6 +48,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="10dp"
-        android:text="@string/check_button"/>
+        android:text="@string/check_button_text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
