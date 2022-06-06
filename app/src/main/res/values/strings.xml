@@ -38,4 +38,10 @@
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
     <string name="choose_language_label">Choose a language</string>
+    <string name="greeting_text">Welcome,\u0020</string>
+    <string-array name="games_names_list">
+        <item>Vocabulary Game</item>
+        <item>Article Game</item>
+        <item>Conjugation Game</item>
+    </string-array>
 </resources>

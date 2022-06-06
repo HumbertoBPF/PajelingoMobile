@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,25 +16,27 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.GamesRecyclerView;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView greetingTextView;
     private RecyclerView gamesRecyclerView;
+
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        greetingTextView = findViewById(R.id.greeting_text_view);
         gamesRecyclerView = findViewById(R.id.games_recycler_view);
-        List<String> games = new ArrayList<>();
-        games.add("Vocabulary Game");
-        games.add("Article Game");
-        games.add("Conjugation Game");
 
-        gamesRecyclerView.setAdapter(new GamesRecyclerView(this, games));
+        sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
+
+        gamesRecyclerView.setAdapter(new GamesRecyclerView(this,
+                Arrays.asList(getResources().getStringArray(R.array.games_names_list))));
     }
 
     @Override
@@ -89,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void swapConnexionMode() {
         // Swap between online and offline mode
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
-
         boolean isOnlineMode = sp.getBoolean(getString(R.string.is_online_mode_sp), false);
 
         if (!isOnlineMode){
@@ -98,17 +99,18 @@ public class MainActivity extends AppCompatActivity {
         }else{
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean(getString(R.string.is_online_mode_sp), false);
+            // Remove user from Shared Preferences due to logout
+            editor.remove(getString(R.string.username_sp));
+            editor.remove(getString(R.string.password_sp));
             editor.apply();
             // Update menu layout
-            invalidateOptionsMenu();
+            onResume();
         }
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the app is in the online mode, show the option to pass to offline mode
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
-
         MenuItem onlineItem = menu.findItem(R.id.action_online);
         if (sp.getBoolean(getString(R.string.is_online_mode_sp), false)){
             onlineItem.setIcon(R.drawable.ic_online_mode);
@@ -124,6 +126,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Greet user if it is logged in
+        String username = sp.getString(getString(R.string.username_sp), null);
+        if (username != null){
+            greetingTextView.setText(getString(R.string.greeting_text)+username);
+        }else{
+            greetingTextView.setText(null);
+        }
         // Verify if it is necessary to change the layout of the menu(the online/offline mode icon)
         invalidateOptionsMenu();
     }
