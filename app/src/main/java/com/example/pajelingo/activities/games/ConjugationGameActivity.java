@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities.games;
 
 import static com.example.pajelingo.util.Tools.getRandomItemFromList;
+import static com.example.pajelingo.util.Tools.isUserAuthenticated;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.synchronization.ScoreUploader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,6 +168,12 @@ public class ConjugationGameActivity extends GameActivity {
         if (conjugation.getConjugation1().equals(answerConjugation1) && conjugation.getConjugation2().equals(answerConjugation2) &&
         conjugation.getConjugation3().equals(answerConjugation3) && conjugation.getConjugation4().equals(answerConjugation4) &&
         conjugation.getConjugation5().equals(answerConjugation5) && conjugation.getConjugation6().equals(answerConjugation6)){
+
+            if (isUserAuthenticated(this)){
+                ScoreUploader uploader = new ScoreUploader(this, language, "conjugation_game");
+                uploader.upload();
+            }
+
             feedback = getString(R.string.correct_answer_message);
             feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
         }else{

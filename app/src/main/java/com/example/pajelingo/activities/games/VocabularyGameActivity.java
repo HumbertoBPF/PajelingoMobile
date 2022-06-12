@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities.games;
 
 import static com.example.pajelingo.util.Tools.getRandomItemFromList;
+import static com.example.pajelingo.util.Tools.isUserAuthenticated;
 
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.synchronization.ScoreUploader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +159,13 @@ public class VocabularyGameActivity extends GameActivity {
                 }
 
                 if (isAnswerCorrect){
+
+                    if (isUserAuthenticated(VocabularyGameActivity.this)){
+                        ScoreUploader uploader = new ScoreUploader(VocabularyGameActivity.this,
+                                targetLanguage, "vocabulary_game");
+                        uploader.upload();
+                    }
+
                     feedback = getString(R.string.correct_answer_message);
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
                 }else{

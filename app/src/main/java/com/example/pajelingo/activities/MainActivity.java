@@ -1,5 +1,7 @@
 package com.example.pajelingo.activities;
 
+import static com.example.pajelingo.util.Tools.isUserAuthenticated;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.GamesRecyclerView;
 import com.example.pajelingo.synchronization.ArticleSynchro;
+import com.example.pajelingo.util.Tools;
 
 import java.util.Arrays;
 
@@ -127,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Greet user if it is logged in
-        String username = sp.getString(getString(R.string.username_sp), null);
-        if (username != null){
+        if (isUserAuthenticated(this)){
+            String username = sp.getString(getString(R.string.username_sp), null);
             greetingTextView.setText(getString(R.string.greeting_text)+username);
         }else{
             greetingTextView.setText(null);

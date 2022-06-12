@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities.games;
 
 import static com.example.pajelingo.util.Tools.getRandomItemFromList;
+import static com.example.pajelingo.util.Tools.isUserAuthenticated;
 
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.synchronization.ScoreUploader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +139,13 @@ public class ArticleGameActivity extends GameActivity {
 
                 String feedback;
                 if (answerString.equals(result.getArticleName())){
+
+                    if (isUserAuthenticated(ArticleGameActivity.this)){
+                        ScoreUploader uploader = new ScoreUploader(ArticleGameActivity.this,
+                                language, "article_game");
+                        uploader.upload();
+                    }
+
                     feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
                     feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
                 }else{

@@ -1,8 +1,9 @@
 package com.example.pajelingo.activities;
 
+import static com.example.pajelingo.util.Tools.getAuthToken;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,6 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import retrofit2.Call;
@@ -79,11 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString(getString(R.string.username_sp), username);
         editor.putString(getString(R.string.password_sp), password);
         editor.apply();
-    }
-
-    private String getAuthToken(String username, String password) {
-        byte[] data = (username + ":" + password).getBytes(StandardCharsets.UTF_8);
-        return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP);
     }
 
 }
