@@ -17,13 +17,13 @@ public abstract class WordDao extends BaseDao<Word>{
     }
 
     @Query("SELECT * FROM Word WHERE language = :language;")
-    protected abstract List<Word> findWordsByLanguage(String language);
+    protected abstract List<Word> getWordsByLanguage(String language);
 
     @Query("SELECT * FROM Word WHERE language = :language AND idArticle IS NOT NULL;")
-    protected abstract List<Word> findNounsByLanguage(String language);
+    protected abstract List<Word> getNounsByLanguage(String language);
 
     @Query("SELECT * FROM Word WHERE category = :category AND language = :language;")
-    protected abstract List<Word> findWordsByCategoryAndByLanguage(String category, String language);
+    protected abstract List<Word> getWordsByCategoryAndByLanguage(String category, String language);
 
     @Query("SELECT * FROM Word WHERE wordName LIKE :pattern")
     protected abstract List<Word> searchWords(String pattern);
@@ -33,7 +33,7 @@ public abstract class WordDao extends BaseDao<Word>{
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findWordsByLanguage(language);
+                return getWordsByLanguage(language);
             }
 
             @Override
@@ -49,7 +49,7 @@ public abstract class WordDao extends BaseDao<Word>{
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findNounsByLanguage(language);
+                return getNounsByLanguage(language);
             }
 
             @Override
@@ -65,7 +65,7 @@ public abstract class WordDao extends BaseDao<Word>{
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return findWordsByCategoryAndByLanguage(category, language);
+                return getWordsByCategoryAndByLanguage(category, language);
             }
 
             @Override

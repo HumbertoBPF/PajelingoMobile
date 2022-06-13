@@ -32,7 +32,7 @@ public class SynonymsByLanguageTask extends AsyncTask<Void, Void, List<String>> 
         List<String> synonyms = new ArrayList<>();
 
         for (Long synonymId : word.getIdsSynonyms()){
-            Word synonym = wordDao.findRecordById(synonymId);
+            Word synonym = wordDao.getRecordById(synonymId);
             // Return only the synonyms whose language matches with the specified one
             if (synonym.getLanguage().equals(language.getLanguageName())){
                 synonyms.add(synonym.getWordName());

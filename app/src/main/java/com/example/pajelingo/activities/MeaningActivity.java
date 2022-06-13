@@ -32,7 +32,7 @@ public class MeaningActivity extends AppCompatActivity {
 
         ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
 
-        articleDao.findRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
+        articleDao.getRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
             @Override
             public void onResult(Article result) {
                 String title = result.getArticleName();

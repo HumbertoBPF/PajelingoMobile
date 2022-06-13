@@ -162,7 +162,7 @@ public class VocabularyGameActivity extends GameActivity {
 
                     if (isUserAuthenticated(VocabularyGameActivity.this)){
                         ScoreUploader uploader = new ScoreUploader(VocabularyGameActivity.this,
-                                targetLanguage, "vocabulary_game");
+                                targetLanguage, game.getGameTag());
                         uploader.upload();
                     }
 

@@ -19,6 +19,6 @@ public class WordSynchro extends ResourcesSynchro<Word> {
             public Call<List<Word>> getCallForResources() {
                 return LanguageSchoolAPIHelper.getApiObject().getWords();
             }
-        }, null, downloadDialog);
+        }, new GameSynchro(context, downloadDialog), downloadDialog);
     }
 }

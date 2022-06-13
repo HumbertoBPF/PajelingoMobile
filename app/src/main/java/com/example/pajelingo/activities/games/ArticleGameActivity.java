@@ -3,7 +3,6 @@ package com.example.pajelingo.activities.games;
 import static com.example.pajelingo.util.Tools.getRandomItemFromList;
 import static com.example.pajelingo.util.Tools.isUserAuthenticated;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,11 +29,6 @@ public class ArticleGameActivity extends GameActivity {
 
     private Language language;
     private Word word;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected void setup() {
@@ -127,7 +121,7 @@ public class ArticleGameActivity extends GameActivity {
 
         ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
         // Gets the article related to the word and verifies user's answer
-        articleDao.findRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
+        articleDao.getRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
             @Override
             public void onResult(Article result) {
                 // Verify if an article is returned
@@ -142,7 +136,7 @@ public class ArticleGameActivity extends GameActivity {
 
                     if (isUserAuthenticated(ArticleGameActivity.this)){
                         ScoreUploader uploader = new ScoreUploader(ArticleGameActivity.this,
-                                language, "article_game");
+                                language, game.getGameTag());
                         uploader.upload();
                     }
 

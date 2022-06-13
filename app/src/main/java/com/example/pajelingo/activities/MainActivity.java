@@ -16,10 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.GamesRecyclerView;
+import com.example.pajelingo.daos.GameDao;
+import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.OnResultListener;
+import com.example.pajelingo.models.Game;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 import com.example.pajelingo.util.Tools;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,8 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
         sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
 
-        gamesRecyclerView.setAdapter(new GamesRecyclerView(this,
-                Arrays.asList(getResources().getStringArray(R.array.games_names_list))));
+        GameDao gameDao = AppDatabase.getInstance(this).getGameDao();
+        gameDao.getAllRecordsTask(new OnResultListener<List<Game>>() {
+            @Override
+            public void onResult(List<Game> result) {
+                gamesRecyclerView.setAdapter(new GamesRecyclerView(MainActivity.this, result));
+            }
+        }).execute();
     }
 
     @Override

@@ -11,15 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.Game;
 
 import java.util.List;
 
 public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.GameViewHolder> {
 
     private Context context;
-    private List<String> games;
+    private List<Game> games;
 
-    public GamesRecyclerView(Context context, List<String> games){
+    public GamesRecyclerView(Context context, List<Game> games){
         this.context = context;
         this.games = games;
     }
@@ -49,14 +50,17 @@ public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.Ga
             this.gameNameTextView = itemView.findViewById(R.id.game_name_text_view);
         }
 
-        public void bind(Context context, String gameName){
-            this.gameNameTextView.setText(gameName);
+        public void bind(Context context, Game game){
+            this.gameNameTextView.setText(game.getGameName());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Class destinyClass = Class.forName("com.example.pajelingo.activities.games."+gameName.replace(" ","")+"Activity");
-                        context.startActivity(new Intent(context, destinyClass));
+                        Class destinyClass = Class.forName("com.example.pajelingo.activities.games."
+                                + game.getGameName().replace(" ","")+"Activity");
+                        Intent intent = new Intent(context, destinyClass);
+                        intent.putExtra("game", game);
+                        context.startActivity(intent);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }

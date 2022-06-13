@@ -3,6 +3,7 @@ package com.example.pajelingo.retrofit;
 import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Category;
 import com.example.pajelingo.models.Conjugation;
+import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
@@ -20,6 +21,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface LanguageSchoolAPI {
+
+    @GET("games")
+    Call<List<Game>> getGames();
 
     @GET("articles")
     Call<List<Article>> getArticles();

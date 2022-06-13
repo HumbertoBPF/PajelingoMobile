@@ -66,22 +66,22 @@ public abstract class BaseDao<E> {
     }
 
     @RawQuery
-    protected abstract E findRecordById(SupportSQLiteQuery sqLiteQuery);
+    protected abstract E getRecordById(SupportSQLiteQuery sqLiteQuery);
 
     /**
      * Executes the query to get the element among all the records that match with the specified id.
      * @return The entity corresponded to the specified id.
      */
-    public E findRecordById(long id) {
-        return findRecordById(new SimpleSQLiteQuery("SELECT * FROM "+tableName+" WHERE id = "+id));
+    public E getRecordById(long id) {
+        return getRecordById(new SimpleSQLiteQuery("SELECT * FROM "+tableName+" WHERE id = "+id));
     }
 
-    public AsyncTask<Void, Void, E> findRecordByIdTask(long id, OnResultListener<E> onResultListener){
+    public AsyncTask<Void, Void, E> getRecordByIdTask(long id, OnResultListener<E> onResultListener){
         return new AsyncTask<Void, Void, E>(){
 
             @Override
             protected E doInBackground(Void... voids) {
-                return findRecordById(id);
+                return getRecordById(id);
             }
 
             @Override
