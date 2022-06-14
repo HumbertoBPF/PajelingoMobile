@@ -1,7 +1,5 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.util.Tools.getAuthToken;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -12,16 +10,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.ScoreDao;
-import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Score;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.synchronization.ScoreSynchro;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -43,30 +36,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                Call<List<Score>> loginCall = LanguageSchoolAPIHelper.getApiObject().getScores(getAuthToken(username, password));
-                loginCall.enqueue(new Callback<List<Score>>() {
-                    @Override
-                    public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
-                            saveStateAndUserCredentials(username, password);
-                            // Save scores
-                            ScoreDao scoreDao = AppDatabase.getInstance(LoginActivity.this).getScoreDao();
-                            scoreDao.getSaveAsyncTask(response.body(), null).execute();
 
-                            finish();
-                        }else if (response.code() == 401){
-                            Toast.makeText(LoginActivity.this, R.string.warning_invalid_credientials, Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(LoginActivity.this, R.string.warning_fail_login, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
+                new ScoreSynchro(LoginActivity.this, username, password, new OnResultListener<List<Score>>() {
                     @Override
-                    public void onFailure(Call<List<Score>> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, R.string.warning_fail_login, Toast.LENGTH_LONG).show();
+                    public void onResult(List<Score> result) {
+                        Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
+                        saveStateAndUserCredentials(username, password);
+                        finish();
                     }
-                });
+                }).execute();
             }
         });
     }
@@ -75,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         // Save mode and credentials in SharedPreferences
         SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(getString(R.string.is_online_mode_sp), true);
         editor.putString(getString(R.string.username_sp), username);
         editor.putString(getString(R.string.password_sp), password);
         editor.apply();
