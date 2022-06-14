@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/tab_icon_search_title"
+        android:id="@+id/action_rankings"
+        android:icon="@drawable/ic_ranking"
+        android:title="@string/tab_icon_rankings_title"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_synchro"
-        android:icon="@drawable/ic_action_download"
+        android:icon="@drawable/ic_synchro"
         android:title="@string/tab_icon_synchro_title"
         app:showAsAction="ifRoom"/>
 

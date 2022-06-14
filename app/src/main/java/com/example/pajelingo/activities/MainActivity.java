@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -15,23 +16,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.GamesRecyclerView;
+import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.synchronization.ArticleSynchro;
-import com.example.pajelingo.util.Tools;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView greetingTextView;
+    private TextView warningNoResourcesTextView;
     private RecyclerView gamesRecyclerView;
-
+    private FloatingActionButton searchButton;
     private SharedPreferences sp;
+    private GameDao gameDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         greetingTextView = findViewById(R.id.greeting_text_view);
+        warningNoResourcesTextView = findViewById(R.id.warning_no_resources_text_view);
         gamesRecyclerView = findViewById(R.id.games_recycler_view);
+        searchButton = findViewById(R.id.search_button);
 
         sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
 
-        GameDao gameDao = AppDatabase.getInstance(this).getGameDao();
+        gameDao = AppDatabase.getInstance(this).getGameDao();
+
+        loadGames();
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            }
+        });
+    }
+
+    private void loadGames(){
         gameDao.getAllRecordsTask(new OnResultListener<List<Game>>() {
             @Override
             public void onResult(List<Game> result) {
-                gamesRecyclerView.setAdapter(new GamesRecyclerView(MainActivity.this, result));
+                if (result.isEmpty()){
+                    warningNoResourcesTextView.setVisibility(View.VISIBLE);
+                }else{
+                    warningNoResourcesTextView.setVisibility(View.GONE);
+                }
+                gamesRecyclerView.setAdapter(new GameAdapter(MainActivity.this, result));
             }
         }).execute();
     }
@@ -64,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
         // Launch synchronization
         if (selectedId == R.id.action_synchro) {
             askConfirmationSynchroResources();
-        }else if (selectedId == R.id.action_search){
-            startActivity(new Intent(this, SearchActivity.class));
+        }else if (selectedId == R.id.action_rankings){
+            startActivity(new Intent(this, RankingActivity.class));
         }else if (selectedId == R.id.action_online){
             swapConnexionMode();
         }
@@ -100,18 +121,20 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
                 .setCancelable(false).create();
         downloadDialog.show();
+        downloadDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                loadGames();
+            }
+        });
         new ArticleSynchro(MainActivity.this, downloadDialog).execute();
     }
 
     private void swapConnexionMode() {
-        // Swap between online and offline mode
-        boolean isOnlineMode = sp.getBoolean(getString(R.string.is_online_mode_sp), false);
-
-        if (!isOnlineMode){
+        if (!isUserAuthenticated(this)){
             startActivity(new Intent(this, LoginActivity.class));
         }else{
             SharedPreferences.Editor editor = sp.edit();
-            editor.putBoolean(getString(R.string.is_online_mode_sp), false);
             // Remove user from Shared Preferences due to logout
             editor.remove(getString(R.string.username_sp));
             editor.remove(getString(R.string.password_sp));
@@ -125,12 +148,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the app is in the online mode, show the option to pass to offline mode
         MenuItem onlineItem = menu.findItem(R.id.action_online);
-        if (sp.getBoolean(getString(R.string.is_online_mode_sp), false)){
+        MenuItem rankingItem = menu.findItem(R.id.action_rankings);
+
+        if (isUserAuthenticated(this)){
             onlineItem.setIcon(R.drawable.ic_online_mode);
             onlineItem.setTitle(R.string.tab_icon_online_mode_title);
+            rankingItem.setVisible(true);
         }else{
             onlineItem.setIcon(R.drawable.ic_offline_mode);
             onlineItem.setTitle(R.string.tab_icon_offline_mode_title);
+            rankingItem.setVisible(false);
         }
 
         return super.onPrepareOptionsMenu(menu);

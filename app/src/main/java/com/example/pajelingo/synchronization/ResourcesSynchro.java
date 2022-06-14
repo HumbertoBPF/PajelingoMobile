@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.daos.BaseDao;
+import com.example.pajelingo.interfaces.OnResultListener;
 
 import java.util.List;
 
@@ -47,12 +48,17 @@ public abstract class ResourcesSynchro<E> {
                     if (entities != null){
                         Log.i("ResourcesSynchro","Number of elements of "+resourceName+" table: " + entities.size());
                     }
-                    dao.getSaveAsyncTask(entities).execute();
+                    dao.getSaveAsyncTask(entities, new OnResultListener<List<E>>() {
+                        @Override
+                        public void onResult(List<E> result) {
+                            nextStep();
+                        }
+                    }).execute();
                 }else{
                     Log.e("ResourcesSynchro", "doInBackground:onResponse not successful");
                     downloadDialog.setMessage("Fail to download "+resourceName+" table");
+                    nextStep();
                 }
-                nextStep();
             }
 
             @Override

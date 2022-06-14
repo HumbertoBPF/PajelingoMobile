@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                             saveStateAndUserCredentials(username, password);
                             // Save scores
                             ScoreDao scoreDao = AppDatabase.getInstance(LoginActivity.this).getScoreDao();
-                            scoreDao.getSaveAsyncTask(response.body()).execute();
+                            scoreDao.getSaveAsyncTask(response.body(), null).execute();
 
                             finish();
                         }else if (response.code() == 401){

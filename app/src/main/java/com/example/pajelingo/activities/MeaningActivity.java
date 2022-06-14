@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.MeaningsRecyclerView;
+import com.example.pajelingo.adapters.MeaningAdapter;
 import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.MeaningDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -46,7 +46,7 @@ public class MeaningActivity extends AppCompatActivity {
                 meaningDao.getMeaningOfWordTask(word.getId(), new OnResultListener<List<Meaning>>() {
                     @Override
                     public void onResult(List<Meaning> result) {
-                        meaningsRecyclerView.setAdapter(new MeaningsRecyclerView(result));
+                        meaningsRecyclerView.setAdapter(new MeaningAdapter(result));
                     }
                 }).execute();
             }

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.SearchResultsRecyclerView;
+import com.example.pajelingo.adapters.SearchResultsAdapter;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 
@@ -16,7 +16,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText searchEditText;
     private Button searchButton;
-    private RecyclerView recyclerView;
+    private RecyclerView resultsRecyclerView;
     private WordDao wordDao;
 
     @Override
@@ -24,16 +24,16 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        searchEditText = findViewById(R.id.search_edit_text);
+        searchEditText = findViewById(R.id.language_spinner);
         searchButton = findViewById(R.id.search_button);
-        recyclerView = findViewById(R.id.results_search_recycler_view);
+        resultsRecyclerView = findViewById(R.id.ranking_recycler_view);
 
         wordDao = AppDatabase.getInstance(this).getWordDao();
 
         searchButton.setOnClickListener(v -> {
             String pattern = searchEditText.getText().toString();
             wordDao.searchWordsTask("%"+pattern+"%", result ->
-                    recyclerView.setAdapter(new SearchResultsRecyclerView(SearchActivity.this, result))).execute();
+                    resultsRecyclerView.setAdapter(new SearchResultsAdapter(SearchActivity.this, result))).execute();
         });
     }
 }

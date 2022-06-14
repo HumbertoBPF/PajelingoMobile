@@ -39,6 +39,13 @@
     <string name="login_button_text">Login</string>
     <string name="choose_language_label">Choose a language</string>
     <string name="greeting_text">Welcome,\u0020</string>
+    <string name="tab_icon_rankings_title">Rankings</string>
+    <string name="general_ranking_spinner_text">General</string>
+    <string name="update_ranking_dialog_title">Updating ranking</string>
+    <string name="update_ranking_dialog_message">Synchronization in progress</string>
+    <string name="update_ranking_success_message">Rankings updated</string>
+    <string name="update_ranking_fail_message">Synchronization failed. Please verify your internet connexion</string>
+    <string name="message_no_resources">Do a resources synchronization(loop button on the top of the screen) to have access to the games.</string>
     <string-array name="games_names_list">
         <item>Vocabulary Game</item>
         <item>Article Game</item>

@@ -13,11 +13,11 @@ import com.example.pajelingo.models.Meaning;
 
 import java.util.List;
 
-public class MeaningsRecyclerView extends RecyclerView.Adapter<MeaningsRecyclerView.MeaningViewHolder> {
+public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningViewHolder> {
 
     private final List<Meaning> meanings;
 
-    public MeaningsRecyclerView(List<Meaning> meanings) {
+    public MeaningAdapter(List<Meaning> meanings) {
         this.meanings = meanings;
     }
 

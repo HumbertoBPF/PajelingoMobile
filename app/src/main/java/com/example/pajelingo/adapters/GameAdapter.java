@@ -15,25 +15,25 @@ import com.example.pajelingo.models.Game;
 
 import java.util.List;
 
-public class GamesRecyclerView extends RecyclerView.Adapter<GamesRecyclerView.GameViewHolder> {
+public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder> {
 
     private Context context;
     private List<Game> games;
 
-    public GamesRecyclerView(Context context, List<Game> games){
+    public GameAdapter(Context context, List<Game> games){
         this.context = context;
         this.games = games;
     }
 
     @NonNull
     @Override
-    public GamesRecyclerView.GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GameAdapter.GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_item_layout, parent, false);
         return new GameViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GamesRecyclerView.GameViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GameAdapter.GameViewHolder holder, int position) {
         holder.bind(context, games.get(position));
     }
 

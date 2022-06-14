@@ -17,25 +17,25 @@ import com.example.pajelingo.models.Word;
 
 import java.util.List;
 
-public class SearchResultsRecyclerView extends RecyclerView.Adapter<SearchResultsRecyclerView.SearchResultsViewHolder> {
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultsViewHolder> {
 
     private final Context context;
     private final List<Word> words;
 
-    public SearchResultsRecyclerView(Context context, List<Word> words){
+    public SearchResultsAdapter(Context context, List<Word> words){
         this.context = context;
         this.words = words;
     }
 
     @NonNull
     @Override
-    public SearchResultsRecyclerView.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchResultsAdapter.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_results_item_layout, parent, false);
-        return new SearchResultsRecyclerView.SearchResultsViewHolder(view);
+        return new SearchResultsAdapter.SearchResultsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchResultsRecyclerView.SearchResultsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchResultsAdapter.SearchResultsViewHolder holder, int position) {
         holder.bind(words.get(position));
     }
 

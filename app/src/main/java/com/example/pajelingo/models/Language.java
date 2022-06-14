@@ -25,6 +25,14 @@ public class Language {
     @SerializedName(value = "personal_pronoun_6")
     private String personalPronoun6;
 
+    public Language(){
+
+    }
+
+    public Language(String languageName) {
+        this.languageName = languageName;
+    }
+
     public Language(String languageName, String personalPronoun1, String personalPronoun2, String personalPronoun3,
                     String personalPronoun4, String personalPronoun5, String personalPronoun6) {
         this.languageName = languageName;
@@ -98,5 +106,10 @@ public class Language {
 
     public void setPersonalPronoun6(String personalPronoun6) {
         this.personalPronoun6 = personalPronoun6;
+    }
+
+    @Override
+    public String toString() {
+        return languageName;
     }
 }

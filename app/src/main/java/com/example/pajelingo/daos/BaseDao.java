@@ -55,12 +55,20 @@ public abstract class BaseDao<E> {
     @Insert(onConflict = REPLACE)
     public abstract void save(List<E> entity);
 
-    public AsyncTask<Void, Void, Void> getSaveAsyncTask(List<E> entities){
-        return new AsyncTask<Void, Void, Void>() {
+    public AsyncTask<Void, Void, List<E>> getSaveAsyncTask(List<E> entities, OnResultListener<List<E>> onResultListener){
+        return new AsyncTask<Void, Void, List<E>>() {
             @Override
-            protected Void doInBackground(Void... voids) {
+            protected List<E> doInBackground(Void... voids) {
                 save(entities);
-                return null;
+                return entities;
+            }
+
+            @Override
+            protected void onPostExecute(List<E> list) {
+                super.onPostExecute(list);
+                if (onResultListener != null){
+                    onResultListener.onResult(list);
+                }
             }
         };
     }

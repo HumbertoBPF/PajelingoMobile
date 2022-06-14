@@ -22,7 +22,6 @@ import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ScoreUploader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleGameActivity extends GameActivity {
@@ -40,20 +39,25 @@ public class ArticleGameActivity extends GameActivity {
         languageDao.getAllRecordsTask(new OnResultListener<List<Language>>() {
             @Override
             public void onResult(List<Language> result) {
-                List<String> languageNames = new ArrayList<>();
-                for (Language language : result){
-                    if (!language.getLanguageName().equals("English")){
-                        languageNames.add(language.getLanguageName());
-                    }
-                }
                 // Verify if there are at least one language
                 if (result.isEmpty()){
                     finishActivityNotEnoughResources();
                     return;
                 }
+                // Remove English from the list of results
+                int indexEnglish = -1;
+                for (int i = 0;i< result.size();i++){
+                    if (result.get(i).getLanguageName().equals("English")){
+                        indexEnglish = i;
+                        break;
+                    }
+                }
+                if (indexEnglish != -1){
+                    result.remove(indexEnglish);
+                }
                 // Fill the adapter with the name of all the languages available
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
-                        android.R.layout.simple_spinner_item, languageNames);
+                ArrayAdapter<Language> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
+                        android.R.layout.simple_spinner_item, result);
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 // Apply the adapter to the baseLanguageSpinner
