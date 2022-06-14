@@ -28,12 +28,10 @@
     <string name="search_edit_text_hint">Search something</string>
     <string name="tab_icon_online_mode_title">Online mode</string>
     <string name="tab_icon_offline_mode_title">Offline mode</string>
-    <string name="is_online_mode_sp">is_online_mode</string>
     <string name="sp_file_name">MySharedPref</string>
-    <string name="warning_invalid_credientials">Invalid username or password</string>
-    <string name="warning_fail_login">Connexion error, please verify your internet connexion</string>
     <string name="username_sp">username</string>
     <string name="password_sp">password</string>
+    <string name="last_score_synchro_sp">last_score_synchro</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
@@ -41,14 +39,14 @@
     <string name="greeting_text">Welcome,\u0020</string>
     <string name="tab_icon_rankings_title">Rankings</string>
     <string name="general_ranking_spinner_text">General</string>
-    <string name="update_ranking_dialog_title">Updating ranking</string>
-    <string name="update_ranking_dialog_message">Synchronization in progress</string>
+    <string name="update_ranking_dialog_title">Please, wait</string>
+    <string name="update_ranking_dialog_message">Verifying credentials and updating scores…</string>
+    <string name="warning_invalid_credientials">Invalid username or password</string>
+    <string name="warning_fail_login">Connexion error, please verify your internet connexion</string>
     <string name="update_ranking_success_message">Rankings updated</string>
-    <string name="update_ranking_fail_message">Synchronization failed. Please verify your internet connexion</string>
     <string name="message_no_resources">Do a resources synchronization(loop button on the top of the screen) to have access to the games.</string>
-    <string-array name="games_names_list">
-        <item>Vocabulary Game</item>
-        <item>Article Game</item>
-        <item>Conjugation Game</item>
-    </string-array>
+    <string name="confirm_update_rankings_dialog_title">Rankings update</string>
+    <string name="yes_button_text">Yes</string>
+    <string name="no_button_text">No</string>
+    <string name="default_last_synchro_date">not found</string>
 </resources>

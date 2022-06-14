@@ -1,10 +1,8 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.util.Tools.getAuthToken;
-
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +24,9 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.synchronization.ScoreSynchro;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -116,55 +110,37 @@ public class RankingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_synchro){
-            AlertDialog updateDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.update_ranking_dialog_title).setMessage(R.string.update_ranking_dialog_message)
-                    .setCancelable(false).create();
-            updateDialog.show();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    launchRankingUpdate(updateDialog);
-                }
-            }, 2000);
-            launchRankingUpdate(updateDialog);
+            launchRankingUpdate();
         }
         return super.onOptionsItemSelected(item);
     }
-    private void launchRankingUpdate(AlertDialog updateDialog) {
+
+    private void launchRankingUpdate() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
 
         String username = sp.getString(getString(R.string.username_sp),"");
         String password = sp.getString(getString(R.string.password_sp),"");
 
-        Call<List<Score>> call = LanguageSchoolAPIHelper
-                .getApiObject().getScores(getAuthToken(username, password));
-        call.enqueue(new Callback<List<Score>>() {
-            @Override
-            public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {
-                if (response.isSuccessful()){
-                    List<Score> scores = response.body();
-                    scoreDao.getSaveAsyncTask(scores, new OnResultListener<List<Score>>() {
-                        @Override
-                        public void onResult(List<Score> result) {
+        String lastSynchroDate = sp.getString(getString(R.string.last_score_synchro_sp), getString(R.string.default_last_synchro_date));
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.confirm_update_rankings_dialog_title)
+                .setMessage("Do you want to update the rankings ? (Last update: "+lastSynchroDate+")")
+                .setPositiveButton(R.string.yes_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        new ScoreSynchro(RankingActivity.this, username, password, result -> {
                             showGeneralRanking();
-                            Toast.makeText(RankingActivity.this, R.string.update_ranking_success_message, Toast.LENGTH_SHORT).show();
-                            updateDialog.dismiss();
-                        }
-                    }).execute();
-                }else{
-                    Toast.makeText(RankingActivity.this,
-                            R.string.update_ranking_fail_message, Toast.LENGTH_SHORT).show();
-                    updateDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Score>> call, Throwable t) {
-                Toast.makeText(RankingActivity.this,
-                        R.string.update_ranking_fail_message, Toast.LENGTH_SHORT).show();
-                updateDialog.dismiss();
-            }
-        });
+                            Toast.makeText(RankingActivity.this,
+                                    R.string.update_ranking_success_message, Toast.LENGTH_SHORT).show();
+                        }).execute();
+                    }
+                })
+                .setNegativeButton(R.string.no_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
     }
 }
