@@ -29,7 +29,7 @@ import com.example.pajelingo.models.Word;
         Meaning.class, Word.class, Score.class, Game.class}, version = 1)
 @TypeConverters(SynonymsConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
-    private static final String NAME_DB = "Pajelingo.db";
+    public static final String NAME_DB = "Pajelingo.db";
 
     public abstract ArticleDao getArticleDao();
     public abstract CategoryDao getCategoryDao();
