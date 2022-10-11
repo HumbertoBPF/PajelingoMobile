@@ -17,7 +17,7 @@ public abstract class MeaningDao extends BaseDao<Meaning>{
     }
 
     @Query("SELECT * FROM meaning WHERE idWord=:idWord")
-    protected abstract List<Meaning> getMeaningsOfWord(long idWord);
+    public abstract List<Meaning> getMeaningsOfWord(long idWord);
 
     public AsyncTask<Void, Void, List<Meaning>> getMeaningOfWordTask(long idWord, OnResultListener<List<Meaning>> onResultListener) {
         return new AsyncTask<Void, Void, List<Meaning>>() {

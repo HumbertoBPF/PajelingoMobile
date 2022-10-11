@@ -5,7 +5,11 @@
       <map>
         <entry key="..\:/Users/Humberto/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/activity_main.xml" value="0.1296875" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/activity_meaning.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/activity_search.xml" value="0.1296875" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/game_item_layout.xml" value="0.19384057971014493" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/meaning_item_layout.xml" value="0.18020833333333333" />
+        <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/layout/search_results_item_layout.xml" value="0.19384057971014493" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/MobileDev/Pajelingo/app/src/main/res/menu/menu_appbar.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/drawable-anydpi/ic_connected_mode.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/Humberto/Desktop/Humberto/Study/Pajelingo/app/src/main/res/drawable-anydpi/ic_online_mode.xml" value="0.1828125" />

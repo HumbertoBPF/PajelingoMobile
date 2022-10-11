@@ -39,6 +39,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         holder.bind(words.get(position));
     }
 
+    public Word getItem(int position){
+        return words.get(position);
+    }
+
     @Override
     public int getItemCount() {
         return words.size();

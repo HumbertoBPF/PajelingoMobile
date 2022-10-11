@@ -7,7 +7,7 @@
     tools:context=".activities.SearchActivity">
 
     <EditText
-        android:id="@+id/language_spinner"
+        android:id="@+id/search_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
@@ -23,18 +23,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/language_spinner"
+        app:layout_constraintStart_toEndOf="@id/search_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="10dp"
         android:text="@string/search_button_text"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ranking_recycler_view"
+        android:id="@+id/search_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/language_spinner"
+        app:layout_constraintTop_toBottomOf="@id/search_edit_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
