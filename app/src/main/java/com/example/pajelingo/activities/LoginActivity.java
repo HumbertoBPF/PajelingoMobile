@@ -1,5 +1,7 @@
 package com.example.pajelingo.activities;
 
+import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -41,21 +43,12 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResult(List<Score> result) {
                         Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
-                        saveStateAndUserCredentials(username, password);
+                        saveStateAndUserCredentials(getApplicationContext(), username, password);
                         finish();
                     }
                 }).execute();
             }
         });
-    }
-
-    private void saveStateAndUserCredentials(String username, String password) {
-        // Save mode and credentials in SharedPreferences
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(getString(R.string.username_sp), username);
-        editor.putString(getString(R.string.password_sp), password);
-        editor.apply();
     }
 
 }

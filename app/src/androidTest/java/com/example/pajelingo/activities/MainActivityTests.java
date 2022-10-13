@@ -11,30 +11,26 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.isGameNameAtPosition;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Game;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
+import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Response;
 
-@RunWith(AndroidJUnit4.class)
 public class MainActivityTests extends UITests{
-    private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
+    private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
     public void setUp() throws IOException {
-        Response<List<Game>> response = languageSchoolAPI.getGames().execute();
+        Response<List<Game>> response = languageSchoolAPITest.getGames().execute();
         List<Game> games = response.body();
         AppDatabase.getInstance(context).getGameDao().save(games);
     }

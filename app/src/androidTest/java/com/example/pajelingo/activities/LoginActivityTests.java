@@ -36,6 +36,7 @@ public class LoginActivityTests extends UITests{
 
     @Before
     public void setUp() throws IOException {
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
         languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         languageSchoolAPITest.signup(testUser).execute();
     }
@@ -90,11 +91,16 @@ public class LoginActivityTests extends UITests{
 
         assert username.equals(testUser.getUsername());
         assert password.equals(testUser.getPassword());
+        // Verify menu icons on app bar (ranking must be rendered after login)
+        onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_online)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_rankings)).check(matches(isDisplayed()));
     }
 
     @After
     public void tearDown() throws IOException {
         languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
     
 }

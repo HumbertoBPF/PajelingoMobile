@@ -88,8 +88,6 @@ public class ArticleGameActivity extends GameActivity {
         TextView wordTextView = findViewById(R.id.word_text_view);
         Button checkButton = findViewById(R.id.check_button);
 
-        answerInputEditText.setHint(R.string.article_game_hint_input_text);
-
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
         wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), new OnResultListener<List<Word>>() {
             @Override

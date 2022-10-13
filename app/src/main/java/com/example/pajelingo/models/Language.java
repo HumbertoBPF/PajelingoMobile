@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity
 public class Language {
 
@@ -111,5 +113,18 @@ public class Language {
     @Override
     public String toString() {
         return languageName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Language language = (Language) o;
+        return language.getId().equals(this.id) &&
+                language.getLanguageName().equals(this.languageName) &&
+                language.getPersonalPronoun1().equals(this.personalPronoun1) &&
+                language.getPersonalPronoun2().equals(this.personalPronoun2) &&
+                language.getPersonalPronoun3().equals(this.personalPronoun3) &&
+                language.getPersonalPronoun4().equals(this.personalPronoun4) &&
+                language.getPersonalPronoun5().equals(this.personalPronoun5) &&
+                language.getPersonalPronoun6().equals(this.personalPronoun6);
     }
 }

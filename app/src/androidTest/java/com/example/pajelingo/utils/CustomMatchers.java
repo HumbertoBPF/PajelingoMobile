@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.SearchResultsAdapter;
+import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 
@@ -149,6 +150,46 @@ public class CustomMatchers {
                 }
 
                 return true;
+            }
+        };
+    }
+
+    public static Matcher<? super View> isWordInLanguage(List<Word> wordsInLanguage, Language language){
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Word in TextView is in ").appendValue(language.getLanguageName());
+            }
+
+            @Override
+            protected boolean matchesSafely(TextView item) {
+                String wordInTextView = item.getText().toString();
+
+                for (Word word: wordsInLanguage){
+                    if (wordInTextView.equals(word.getWordName())){
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        };
+    }
+
+    public static Matcher<? super View> checkAnswerFeedback(boolean isCorrectAnswer){
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the feedback corresponds to a ")
+                        .appendText(isCorrectAnswer?"correct":"incorrect")
+                        .appendText(" answer.");
+            }
+
+            @Override
+            protected boolean matchesSafely(TextView item) {
+                String feedbackMessage = item.getText().toString();
+                String startText = isCorrectAnswer?"Correct :)":"Wrong answer";
+                return feedbackMessage.startsWith(startText);
             }
         };
     }
