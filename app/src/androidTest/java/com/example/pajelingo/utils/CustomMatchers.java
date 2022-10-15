@@ -24,7 +24,7 @@ import java.util.List;
 public class CustomMatchers {
     public static Matcher<? super View> isGameNameAtPosition(int position, String gameName){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-            private Matcher<View> displayed = isDisplayed();
+            private final Matcher<View> displayed = isDisplayed();
             @Override
             public void describeTo(Description description) {
                 description.appendText("View with game ")

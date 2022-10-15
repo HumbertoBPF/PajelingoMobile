@@ -10,10 +10,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.isGameNameAtPosition;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.Game;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 
@@ -21,18 +21,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.List;
-
-import retrofit2.Response;
 
 public class MainActivityTests extends UITests{
     private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
     public void setUp() throws IOException {
-        Response<List<Game>> response = languageSchoolAPITest.getGames().execute();
-        List<Game> games = response.body();
-        AppDatabase.getInstance(context).getGameDao().save(games);
+        saveEntitiesFromAPI(languageSchoolAPITest.getGames(), AppDatabase.getInstance(context).getGameDao());
     }
 
     @Test

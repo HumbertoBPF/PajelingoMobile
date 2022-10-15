@@ -14,6 +14,7 @@ import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
 import static com.example.pajelingo.utils.Tools.getRandomString;
+import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ArticleDao;
@@ -23,8 +24,8 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
+import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,28 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import retrofit2.Response;
-
 public class SearchToolTests extends UITests{
-    private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
+    private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
     public void setUp() throws IOException {
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
-        MeaningDao meaningDao = AppDatabase.getInstance(context).getMeaningDao();
-
-        Response<List<Word>> responseWords = languageSchoolAPI.getWords().execute();
-        List<Word> words = responseWords.body();
-        wordDao.save(words);
-
-        Response<List<Article>> responseArticles = languageSchoolAPI.getArticles().execute();
-        List<Article> articles = responseArticles.body();
-        articleDao.save(articles);
-
-        Response<List<Meaning>> responseMeanings = languageSchoolAPI.getMeanings().execute();
-        List<Meaning> meanings = responseMeanings.body();
-        meaningDao.save(meanings);
+        saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
+        saveEntitiesFromAPI(languageSchoolAPITest.getArticles(), AppDatabase.getInstance(context).getArticleDao());
+        saveEntitiesFromAPI(languageSchoolAPITest.getMeanings(), AppDatabase.getInstance(context).getMeaningDao());
     }
 
     @Test
@@ -100,7 +87,17 @@ public class SearchToolTests extends UITests{
 
         int randomPosition = new Random().nextInt(words.size());
         Word randomWord = words.get(randomPosition);
-        Article article = articleDao.getRecordById(randomWord.getIdArticle());
+
+        String articleName = "";
+        String wordName = randomWord.getWordName();
+
+        Long idArticle = randomWord.getIdArticle();
+
+        if (idArticle != null){
+            Article article = articleDao.getRecordById(idArticle);
+            articleName = article.getArticleName();
+        }
+
         List<Meaning> meanings = meaningDao.getMeaningsOfWord(randomWord.getId());
 
         onView(withId(R.id.search_button)).perform(click());
@@ -109,7 +106,7 @@ public class SearchToolTests extends UITests{
 
         onView(withId(R.id.search_recycler_view)).perform(actionOnItemAtPosition(randomPosition, click()));
         onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
-        onView(withText(article.getArticleName()+" "+randomWord.getWordName())).check(matches(isDisplayed()));
+        onView(withText(articleName+" "+wordName)).check(matches(isDisplayed()));
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);

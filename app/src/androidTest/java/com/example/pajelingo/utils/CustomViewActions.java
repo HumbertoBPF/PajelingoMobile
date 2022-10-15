@@ -121,4 +121,57 @@ public class CustomViewActions {
             }
         };
     }
+
+    public static ViewAction inputVocabularyGameAnswer(List<Word> wordsInTargetLanguage, List<Word> words,
+                                                       Language baseLanguage, boolean isCorrect) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Inputs an answer to the Vocabulary Game";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                TextView wordTextView = view.findViewById(R.id.word_text_view);
+                String wordInTextView = wordTextView.getText().toString();
+                String answer = isCorrect?getSynonym(wordInTextView):getRandomString(10);
+
+                EditText answerEditText = view.findViewById(R.id.answer_input);
+                answerEditText.setText(answer);
+            }
+
+            private String getSynonym(String wordShown){
+                Word wordObjectShown = null;
+
+                for (Word word: wordsInTargetLanguage){
+                    if (word.getWordName().equals(wordShown)){
+                        wordObjectShown = word;
+                        break;
+                    }
+                }
+
+                if (wordObjectShown == null){
+                    throw new NullPointerException("No word in language "+
+                            baseLanguage.getLanguageName()+" matches the word "+wordShown+".");
+                }
+
+                List<Long> synonymsIds = wordObjectShown.getIdsSynonyms();
+
+                for (Word word: words){
+                    if (synonymsIds.contains(word.getId()) &&
+                            word.getLanguage().equals(baseLanguage.getLanguageName())){
+                        return word.getWordName();
+                    }
+                }
+
+                throw new NullPointerException("No synonym in the base language "
+                        + baseLanguage.getLanguageName() +" was found to the word shown "+wordShown+".");
+            }
+        };
+    }
 }

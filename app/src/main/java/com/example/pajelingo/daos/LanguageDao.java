@@ -15,7 +15,7 @@ public abstract class LanguageDao extends BaseDao<Language>{
     }
 
     @Query("SELECT * FROM Language WHERE languageName = :languageName")
-    protected abstract Language getLanguageByName(String languageName);
+    public abstract Language getLanguageByName(String languageName);
 
     public AsyncTask<Void, Void, Language> getLanguageByNameAsyncTask(String languageName,
                                                                       OnResultListener<Language> onResultListener){
