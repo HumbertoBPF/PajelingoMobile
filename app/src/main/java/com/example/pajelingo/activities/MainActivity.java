@@ -1,6 +1,6 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.util.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.content.DialogInterface;
 import android.content.Intent;

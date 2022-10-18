@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.tests.general_tests;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -6,16 +6,17 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.example.pajelingo.util.Tools.getAuthToken;
-import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
-import static com.example.pajelingo.utils.CustomMatchers.checkScoreAtPosition;
-import static com.example.pajelingo.utils.Tools.getRandomInteger;
-import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPosition;
+import static com.example.pajelingo.utils.TestTools.getRandomInteger;
+import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -24,6 +25,7 @@ import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
+import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +34,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class RankingActivityTests extends UITests{
+public class RankingActivityTests extends UITests {
     private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
     private final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
 
@@ -74,7 +76,7 @@ public class RankingActivityTests extends UITests{
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
 
         for (int i=0;i<scores.size();i++){
-            onView(withId(R.id.ranking_recycler_view)).check(matches(checkScoreAtPosition(i, scores.get(i))));
+            onView(withId(R.id.ranking_recycler_view)).check(matches(isScoreAtPosition(scores.get(i), i)));
         }
     }
 

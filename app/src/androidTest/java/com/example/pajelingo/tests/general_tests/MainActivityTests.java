@@ -1,30 +1,29 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.tests.general_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.isGameNameAtPosition;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
+import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class MainActivityTests extends UITests{
+public class MainActivityTests extends UITests {
     private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
@@ -35,13 +34,7 @@ public class MainActivityTests extends UITests{
     @Test
     public void testRenderingMainActivity(){
         activityScenario = ActivityScenario.launch(MainActivity.class);
-
-        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
-        onView(withId(R.id.action_online)).check(matches(isDisplayed()));
-        onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition(0, "Vocabulary Game")));
-        onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition(1, "Article Game")));
-        onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition(2, "Conjugation Game")));
+        assertIsMenuActivity(true);
     }
 
     @Test
@@ -63,6 +56,13 @@ public class MainActivityTests extends UITests{
         onView(isRoot()).perform(waitForView(withText(context.getString(R.string.dialog_download_resources_title)), 5000, true));
         onView(withText(R.string.dialog_download_resources_decline)).perform(click());
         onView(withText(context.getString(R.string.progress_download_title))).check(doesNotExist());
-        testRenderingMainActivity();
+        assertIsMenuActivity(true);
+    }
+
+    @Test
+    public void testMainActivityWithNoData(){
+        AppDatabase.getInstance(context).clearAllTables();
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        assertIsMenuActivity(false);
     }
 }

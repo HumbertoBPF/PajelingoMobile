@@ -1,6 +1,6 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 
 import android.os.Bundle;
 import android.view.View;

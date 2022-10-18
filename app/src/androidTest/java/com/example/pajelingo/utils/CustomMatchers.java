@@ -1,7 +1,6 @@
 package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.example.pajelingo.utils.Tools.findConjugationOfVerb;
 
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +23,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class CustomMatchers {
-    public static Matcher<? super View> isGameNameAtPosition(int position, String gameName){
+    /**
+     * Verifies if the item at the specified position of a RecyclerView contains the specified game name.
+     * @param gameName game name that is expected to be at the specified position.
+     * @param position position of the concerned item.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isGameNameAtPosition(String gameName, int position){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             private final Matcher<View> displayed = isDisplayed();
             @Override
@@ -52,7 +57,13 @@ public class CustomMatchers {
         };
     }
 
-    public static Matcher<? super View> isScoreAtPosition(Word word, int position){
+    /**
+     * Verifies if the item at the specified position of a RecyclerView corresponds to the specified word.
+     * @param word Word instance that is expected to be at the specified position.
+     * @param position position of the concerned item.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isWordAtPosition(Word word, int position){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {
@@ -83,6 +94,12 @@ public class CustomMatchers {
         };
     }
 
+    /**
+     * Verifies if the item at the specified position of a RecyclerView corresponds to the specified meaning.
+     * @param meaning Meaning instance that is expected to be at the specified position.
+     * @param position position of the concerned item.
+     * @return Matcher that performs the mentioned validation.
+     */
     public static Matcher<? super View> isMeaningAtPosition(Meaning meaning, int position){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
@@ -112,6 +129,12 @@ public class CustomMatchers {
         };
     }
 
+    /**
+     * Verifies if a RecyclerView containing a list of results of a search is coherent, that is if the
+     * results are in alphabetic order and if they contain the provided search pattern.
+     * @param searchPattern search pattern provided.
+     * @return Matcher that performs the mentioned validation.
+     */
     public static Matcher<? super View> searchResultsMatchPattern(String searchPattern){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
@@ -156,7 +179,12 @@ public class CustomMatchers {
         };
     }
 
-    public static Matcher<? super View> isTextViewWordInList(List<Word> wordsInLanguage){
+    /**
+     * Verifies if the word of a TextView is contained in the specified list.
+     * @param words list of words concerned by the assertion.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isTextViewWordInList(List<Word> words){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             public void describeTo(Description description) {
@@ -167,7 +195,7 @@ public class CustomMatchers {
             protected boolean matchesSafely(TextView item) {
                 String wordInTextView = item.getText().toString();
 
-                for (Word word: wordsInLanguage){
+                for (Word word: words){
                     if (wordInTextView.equals(word.getWordName())){
                         return true;
                     }
@@ -178,7 +206,13 @@ public class CustomMatchers {
         };
     }
 
-    public static Matcher<? super View> isTextViewVerbAndConjugationInList(List<Word> verbsInLanguage, List<Conjugation> conjugations){
+    /**
+     * Verifies if the verb and the conjugation contained in a TextView are contained in the specified lists.
+     * @param verbs list of verbs concerned by the assertion.
+     * @param conjugations list of conjugations concerned by the assertion.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isTextViewVerbAndConjugationInList(List<Word> verbs, List<Conjugation> conjugations){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             public void describeTo(Description description) {
@@ -190,11 +224,16 @@ public class CustomMatchers {
                 String verb = item.getText().toString().split(" - ")[0];
                 String tense = item.getText().toString().split(" - ")[1];
 
-                return findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations) != null;
+                return TestTools.findConjugationOfVerb(verb, tense, verbs, conjugations) != null;
             }
         };
     }
 
+    /**
+     * Verifies if the provided feedback.
+     * @param isCorrectAnswer specifies if the feedback is positive or negative.
+     * @return Matcher that performs the mentioned validation.
+     */
     public static Matcher<? super View> checkAnswerFeedback(boolean isCorrectAnswer){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
@@ -213,7 +252,13 @@ public class CustomMatchers {
         };
     }
 
-    public static Matcher<? super View> checkScoreAtPosition(int position, Score score){
+    /**
+     * Verifies if the item at the specified position of a RecyclerView contains the specified score.
+     * @param score score that is expected to be at the specified position.
+     * @param position position of the concerned item.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isScoreAtPosition(Score score, int position){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {

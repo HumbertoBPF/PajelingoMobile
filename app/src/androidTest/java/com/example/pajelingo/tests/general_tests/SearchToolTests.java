@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.tests.general_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -11,14 +11,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
-import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPosition;
+import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
-import static com.example.pajelingo.utils.Tools.getRandomString;
-import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.TestTools.getRandomString;
+import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.MeaningDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -26,6 +27,7 @@ import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
+import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class SearchToolTests extends UITests{
+public class SearchToolTests extends UITests {
     private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
@@ -72,7 +74,7 @@ public class SearchToolTests extends UITests{
             Word word = words.get(i);
             onView(withId(R.id.search_recycler_view))
                     .perform(scrollToPosition(i))
-                    .check(matches(isScoreAtPosition(word, i)));
+                    .check(matches(isWordAtPosition(word, i)));
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities.games;
 
-import static com.example.pajelingo.util.Tools.getRandomItemFromList;
-import static com.example.pajelingo.util.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
+import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.util.Log;
 import android.view.View;

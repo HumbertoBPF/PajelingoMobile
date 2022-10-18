@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.tests.general_tests;
 
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
@@ -10,11 +10,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.util.Tools.getAuthToken;
-import static com.example.pajelingo.util.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.Tools.getRandomInteger;
-import static com.example.pajelingo.utils.Tools.getRandomString;
+import static com.example.pajelingo.utils.TestTools.getRandomInteger;
+import static com.example.pajelingo.utils.TestTools.getRandomString;
 import static org.hamcrest.Matchers.allOf;
 
 import android.content.SharedPreferences;
@@ -22,9 +22,11 @@ import android.content.SharedPreferences;
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
+import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +34,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class LoginActivityTests extends UITests{
+public class LoginActivityTests extends UITests {
     private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
     private final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
 

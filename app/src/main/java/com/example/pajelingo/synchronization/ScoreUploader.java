@@ -1,7 +1,7 @@
 package com.example.pajelingo.synchronization;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.pajelingo.util.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import android.content.Context;
 import android.content.SharedPreferences;

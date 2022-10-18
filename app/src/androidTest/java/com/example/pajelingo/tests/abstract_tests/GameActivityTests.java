@@ -1,10 +1,9 @@
-package com.example.pajelingo.activities.games;
+package com.example.pajelingo.tests.abstract_tests;
 
-import static com.example.pajelingo.util.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.UITests;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
@@ -15,7 +14,7 @@ import org.junit.Before;
 
 import java.io.IOException;
 
-public class GameActivityTests extends UITests {
+public abstract class GameActivityTests extends UITests {
     protected final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
     protected final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
 

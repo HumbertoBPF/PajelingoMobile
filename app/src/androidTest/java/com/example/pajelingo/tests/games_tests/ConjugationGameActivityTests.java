@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities.games;
+package com.example.pajelingo.tests.games_tests;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -10,17 +10,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
-import static com.example.pajelingo.utils.Tools.assertScoreValue;
-import static com.example.pajelingo.utils.Tools.getRandomLanguage;
-import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.TestTools.assertScoreValue;
+import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
+import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
@@ -30,6 +31,8 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
+import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
 import org.junit.Test;
 
@@ -37,7 +40,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class ConjugationGameActivityTests extends GameActivityTests{
+public class ConjugationGameActivityTests extends GameActivityTests {
     @Override
     public void setUp() throws IOException {
         super.setUp();
@@ -96,17 +99,11 @@ public class ConjugationGameActivityTests extends GameActivityTests{
     public void testCorrectAnswerWithoutAuthenticationConjugationGame(){
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
     }
@@ -115,17 +112,11 @@ public class ConjugationGameActivityTests extends GameActivityTests{
     public void testWrongAnswerWithoutAuthenticationConjugationGame(){
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
     }
@@ -136,25 +127,19 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
@@ -168,25 +153,19 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
@@ -199,25 +178,19 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
@@ -230,31 +203,66 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         Language randomLanguage = getRandomLanguage(context);
 
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        List<Word> verbsInLanguage = wordDao.getWordsByCategoryAndByLanguage("verbs", Objects.requireNonNull(randomLanguage).getLanguageName());
-
-        ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-        List<Conjugation> conjugations = conjugationDao.getAllRecords();
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
+        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
         assertScoreValue(testUser, randomLanguage, "conjugation_game", 0L);
     }
 
+    @Test
+    public void testConjugationGameWithoutLanguageData() throws IOException {
+        AppDatabase.getInstance(context).clearAllTables();
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+        assertIsMenuActivity(true);
+    }
+
+    @Test
+    public void testConjugationGameWithoutWordData() throws IOException {
+        AppDatabase.getInstance(context).clearAllTables();
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
+
+        Language randomLanguage = getRandomLanguage(context);
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        setupConjugationGame(randomLanguage);
+        assertIsMenuActivity(true);
+    }
+
+    @Test
+    public void testConjugationGameWithoutConjugationData() throws IOException {
+        AppDatabase.getInstance(context).clearAllTables();
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
+        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getWords(), AppDatabase.getInstance(context).getWordDao());
+
+        Language randomLanguage = getRandomLanguage(context);
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        setupConjugationGame(randomLanguage);
+        assertIsMenuActivity(true);
+    }
+
+    /**
+     * Sets the language and launches the game.
+     * @param language language that must be set.
+     */
     private void setupConjugationGame(Language language){
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
         onView(withId(R.id.language_choice_spinner)).perform(click());

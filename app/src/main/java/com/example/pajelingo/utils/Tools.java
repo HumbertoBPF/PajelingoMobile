@@ -1,4 +1,4 @@
-package com.example.pajelingo.util;
+package com.example.pajelingo.utils;
 
 import static android.content.Context.MODE_PRIVATE;
 

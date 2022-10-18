@@ -1,9 +1,8 @@
 package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static com.example.pajelingo.utils.Tools.findConjugationOfVerb;
-import static com.example.pajelingo.utils.Tools.getRandomString;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,6 +14,10 @@ import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.daos.ArticleDao;
+import com.example.pajelingo.daos.ConjugationDao;
+import com.example.pajelingo.daos.WordDao;
+import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
@@ -72,8 +75,18 @@ public class CustomViewActions {
         };
     }
 
-    public static ViewAction inputArticleGameAnswer(List<Word> wordsInLanguage, List<Article> articles, boolean isCorrect) {
+    /**
+     * Input an answer for the article game.
+     * @param context application Context.
+     * @param language language selected in the game setup.
+     * @param isCorrect specifies if the provided answer must be correct.
+     * @return ViewAction that can allow to input an answer for the article game.
+     */
+    public static ViewAction inputArticleGameAnswer(Context context, Language language, boolean isCorrect) {
         return new ViewAction() {
+            private TextView wordTextView;
+            private EditText answerEditText;
+
             @Override
             public Matcher<View> getConstraints() {
                 return isRoot();
@@ -86,46 +99,61 @@ public class CustomViewActions {
 
             @Override
             public void perform(final UiController uiController, final View view) {
-                TextView wordTextView = view.findViewById(R.id.word_text_view);
-                String wordInTextView = wordTextView.getText().toString();
-                String answer = isCorrect?getCorrectArticle(wordInTextView):getRandomString(5);
+                this.wordTextView = view.findViewById(R.id.word_text_view);
+                this.answerEditText = view.findViewById(R.id.answer_input);
 
-                EditText answerEditText = view.findViewById(R.id.answer_input);
-                answerEditText.setText(answer);
+                if (isCorrect){
+                    setCorrectAnswer();
+                }else{
+                    this.answerEditText.setText(TestTools.getRandomString(5));
+                }
             }
 
-            private String getCorrectArticle(String wordShown){
-                Word wordObjectInTextView = null;
-                Article wordArticle = null;
+            private void setCorrectAnswer(){
+                WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
+                ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
 
-                for (Word word: wordsInLanguage){
-                    if (word.getWordName().equals(wordShown)){
-                        wordObjectInTextView = word;
+                wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), words -> {
+                    Word wordObjectInTextView = null;
+
+                    for (Word word: words){
+                        if (word.getWordName().equals(this.wordTextView.getText().toString())){
+                            wordObjectInTextView = word;
+                        }
                     }
-                }
 
-                if (wordObjectInTextView == null){
-                    throw new NullPointerException("No word in the database matches the word shown.");
-                }
-
-                for (Article article: articles){
-                    if (article.getId().equals(wordObjectInTextView.getIdArticle())){
-                        wordArticle = article;
+                    if (wordObjectInTextView == null){
+                        throw new NullPointerException("No word in the database matches the word shown.");
                     }
-                }
 
-                if (wordArticle == null){
-                    throw new NullPointerException("No article matches the word shown.");
-                }
+                    Word finalWordObjectInTextView = wordObjectInTextView;
+                    articleDao.getAllRecordsTask(articles -> {
+                        for (Article article: articles){
+                            if (article.getId().equals(finalWordObjectInTextView.getIdArticle())){
+                                answerEditText.setText(article.getArticleName());
+                                return;
+                            }
+                        }
 
-                return wordArticle.getArticleName();
+                        throw new NullPointerException("No article matches the word shown.");
+                    }).execute();
+                }).execute();
             }
         };
     }
 
-    public static ViewAction inputVocabularyGameAnswer(List<Word> wordsInTargetLanguage, List<Word> words,
-                                                       Language baseLanguage, boolean isCorrect) {
+    /**
+     * Input an answer for the vocabulary game.
+     * @param context application Context.
+     * @param baseLanguage base language selected in the game setup.
+     * @param isCorrect specifies if the provided answer must be correct.
+     * @return ViewAction that can allow to input an answer for the vocabulary game.
+     */
+    public static ViewAction inputVocabularyGameAnswer(Context context, Language baseLanguage, boolean isCorrect) {
         return new ViewAction() {
+            private TextView wordTextView;
+            private EditText answerEditText;
+
             @Override
             public Matcher<View> getConstraints() {
                 return isRoot();
@@ -138,46 +166,63 @@ public class CustomViewActions {
 
             @Override
             public void perform(final UiController uiController, final View view) {
-                TextView wordTextView = view.findViewById(R.id.word_text_view);
-                String wordInTextView = wordTextView.getText().toString();
-                String answer = isCorrect?getSynonym(wordInTextView):getRandomString(10);
+                this.wordTextView = view.findViewById(R.id.word_text_view);
+                this.answerEditText = view.findViewById(R.id.answer_input);
 
-                EditText answerEditText = view.findViewById(R.id.answer_input);
-                answerEditText.setText(answer);
+                if (isCorrect){
+                    setCorrectAnswer();
+                }else{
+                    answerEditText.setText(TestTools.getRandomString(10));
+                }
             }
 
-            private String getSynonym(String wordShown){
-                Word wordObjectShown = null;
+            private void setCorrectAnswer(){
+                WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
+                String wordShown = wordTextView.getText().toString();
 
-                for (Word word: wordsInTargetLanguage){
-                    if (word.getWordName().equals(wordShown)){
-                        wordObjectShown = word;
-                        break;
+                wordDao.getAllRecordsTask(result -> {
+                    Word wordObjectShown = null;
+
+                    for (Word word: result){
+                        if (word.getWordName().equals(wordShown)){
+                            wordObjectShown = word;
+                            break;
+                        }
                     }
-                }
 
-                if (wordObjectShown == null){
-                    throw new NullPointerException("No word in language "+
-                            baseLanguage.getLanguageName()+" matches the word "+wordShown+".");
-                }
-
-                List<Long> synonymsIds = wordObjectShown.getIdsSynonyms();
-
-                for (Word word: words){
-                    if (synonymsIds.contains(word.getId()) &&
-                            word.getLanguage().equals(baseLanguage.getLanguageName())){
-                        return word.getWordName();
+                    if (wordObjectShown == null){
+                        throw new NullPointerException("No word in language "+
+                                baseLanguage.getLanguageName()+" matches the word "+wordShown+".");
                     }
-                }
 
-                throw new NullPointerException("No synonym in the base language "
-                        + baseLanguage.getLanguageName() +" was found to the word shown "+wordShown+".");
+                    Word finalWordObjectShown = wordObjectShown;
+                    wordDao.getWordsByLanguageAsyncTask(baseLanguage.getLanguageName(), result1 -> {
+                        List<Long> synonymsIds = finalWordObjectShown.getIdsSynonyms();
+
+                        for (Word word: result1){
+                            if (synonymsIds.contains(word.getId()) &&
+                                    word.getLanguage().equals(baseLanguage.getLanguageName())){
+                                answerEditText.setText(word.getWordName());
+                                return;
+                            }
+                        }
+
+                        throw new NullPointerException("No synonym in the base language "
+                                + baseLanguage.getLanguageName() +" was found to the word shown "+wordShown+".");
+                    }).execute();
+                }).execute();
             }
         };
     }
 
-    public static ViewAction inputConjugationGameAnswer(List<Word> verbsInLanguage, List<Conjugation> conjugations,
-                                                        boolean isCorrect) {
+    /**
+     * Input an answer for the conjugation game.
+     * @param context application Context.
+     * @param language language selected in the game setup.
+     * @param isCorrect specifies if the provided answer must be correct.
+     * @return ViewAction that can allow to input an answer for the conjugation game.
+     */
+    public static ViewAction inputConjugationGameAnswer(Context context, Language language, boolean isCorrect) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -195,25 +240,32 @@ public class CustomViewActions {
                 String verbAndTenseInTextView = verbAndTenseTextView.getText().toString();
                 String verb = verbAndTenseInTextView.split(" - ")[0];
                 String tense = verbAndTenseInTextView.split(" - ")[1];
-                Conjugation correctAnswer = findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations);
 
-                if (correctAnswer == null){
-                    throw new NullPointerException("No valid answer was found in the specified verb and conjugation lists.");
-                }
+                WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
+                wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), verbsInLanguage -> {
+                    ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
+                    conjugationDao.getAllRecordsTask(conjugations -> {
+                        Conjugation correctAnswer = TestTools.findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations);
 
-                EditText inputConjugation1 = view.findViewById(R.id.conjugation_1);
-                EditText inputConjugation2 = view.findViewById(R.id.conjugation_2);
-                EditText inputConjugation3 = view.findViewById(R.id.conjugation_3);
-                EditText inputConjugation4 = view.findViewById(R.id.conjugation_4);
-                EditText inputConjugation5 = view.findViewById(R.id.conjugation_5);
-                EditText inputConjugation6 = view.findViewById(R.id.conjugation_6);
+                        if (correctAnswer == null){
+                            throw new NullPointerException("No valid answer was found in the specified verb and conjugation lists.");
+                        }
 
-                inputConjugation1.setText(isCorrect?correctAnswer.getConjugation1():getRandomString(10));
-                inputConjugation2.setText(isCorrect?correctAnswer.getConjugation2():getRandomString(10));
-                inputConjugation3.setText(isCorrect?correctAnswer.getConjugation3():getRandomString(10));
-                inputConjugation4.setText(isCorrect?correctAnswer.getConjugation4():getRandomString(10));
-                inputConjugation5.setText(isCorrect?correctAnswer.getConjugation5():getRandomString(10));
-                inputConjugation6.setText(isCorrect?correctAnswer.getConjugation6():getRandomString(10));
+                        EditText inputConjugation1 = view.findViewById(R.id.conjugation_1);
+                        EditText inputConjugation2 = view.findViewById(R.id.conjugation_2);
+                        EditText inputConjugation3 = view.findViewById(R.id.conjugation_3);
+                        EditText inputConjugation4 = view.findViewById(R.id.conjugation_4);
+                        EditText inputConjugation5 = view.findViewById(R.id.conjugation_5);
+                        EditText inputConjugation6 = view.findViewById(R.id.conjugation_6);
+
+                        inputConjugation1.setText(isCorrect?correctAnswer.getConjugation1(): TestTools.getRandomString(10));
+                        inputConjugation2.setText(isCorrect?correctAnswer.getConjugation2(): TestTools.getRandomString(10));
+                        inputConjugation3.setText(isCorrect?correctAnswer.getConjugation3(): TestTools.getRandomString(10));
+                        inputConjugation4.setText(isCorrect?correctAnswer.getConjugation4(): TestTools.getRandomString(10));
+                        inputConjugation5.setText(isCorrect?correctAnswer.getConjugation5(): TestTools.getRandomString(10));
+                        inputConjugation6.setText(isCorrect?correctAnswer.getConjugation6(): TestTools.getRandomString(10));
+                    }).execute();
+                }).execute();
             }
         };
     }

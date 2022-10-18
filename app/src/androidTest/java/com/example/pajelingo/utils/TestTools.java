@@ -1,6 +1,6 @@
 package com.example.pajelingo.utils;
 
-import static com.example.pajelingo.util.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import android.content.Context;
 
@@ -23,7 +23,7 @@ import java.util.Random;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class Tools {
+public class TestTools {
     /**
      * Generates a random string composed of lowercase letters.
      * @param length length of the string
@@ -93,7 +93,7 @@ public class Tools {
     /**
      * Returns a random language from the app database. Languages that must be excluded from being
      * picked can be specified as varargs.
-     * @param context application context
+     * @param context application Context
      * @param excludedLanguages name of the languages that must be excluded
      * @return random language in the app database obeying the constraints
      */
@@ -137,7 +137,6 @@ public class Tools {
     public static Conjugation findConjugationOfVerb(String verbString, String tenseString,
                                                     List<Word> verbs, List<Conjugation> conjugations){
         Word verbObject = null;
-        Conjugation conjugationObject = null;
         // Search a word matching the verb string in the specified verb list
         for (Word verb: verbs){
             if (verbString.equals(verb.getWordName())){
