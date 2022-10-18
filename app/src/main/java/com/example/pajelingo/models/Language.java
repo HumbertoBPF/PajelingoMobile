@@ -118,13 +118,14 @@ public class Language {
     @Override
     public boolean equals(Object o) {
         Language language = (Language) o;
-        return language.getId().equals(this.id) &&
-                language.getLanguageName().equals(this.languageName) &&
-                language.getPersonalPronoun1().equals(this.personalPronoun1) &&
-                language.getPersonalPronoun2().equals(this.personalPronoun2) &&
-                language.getPersonalPronoun3().equals(this.personalPronoun3) &&
-                language.getPersonalPronoun4().equals(this.personalPronoun4) &&
-                language.getPersonalPronoun5().equals(this.personalPronoun5) &&
-                language.getPersonalPronoun6().equals(this.personalPronoun6);
+
+        return Objects.equals(language.getId(), this.id) &&
+                Objects.equals(language.getLanguageName(), this.languageName) &&
+                Objects.equals(language.getPersonalPronoun1(), this.personalPronoun1) &&
+                Objects.equals(language.getPersonalPronoun2(), this.personalPronoun2) &&
+                Objects.equals(language.getPersonalPronoun3(), this.personalPronoun3) &&
+                Objects.equals(language.getPersonalPronoun4(), this.personalPronoun4) &&
+                Objects.equals(language.getPersonalPronoun5(), this.personalPronoun5) &&
+                Objects.equals(language.getPersonalPronoun6(), this.personalPronoun6);
     }
 }

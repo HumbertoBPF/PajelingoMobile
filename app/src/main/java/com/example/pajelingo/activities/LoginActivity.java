@@ -2,7 +2,6 @@ package com.example.pajelingo.activities;
 
 import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;

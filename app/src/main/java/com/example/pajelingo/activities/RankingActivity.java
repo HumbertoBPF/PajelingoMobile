@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,10 +28,9 @@ import com.example.pajelingo.synchronization.ScoreSynchro;
 
 import java.util.List;
 
-public class RankingActivity extends AppCompatActivity {
+public class RankingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner languageSpinner;
-    private Button searchButton;
     private RecyclerView rankingRecyclerView;
     private LanguageDao languageDao;
     private ScoreDao scoreDao;
@@ -42,7 +41,6 @@ public class RankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ranking);
 
         languageSpinner = findViewById(R.id.language_spinner);
-        searchButton = findViewById(R.id.search_button);
         rankingRecyclerView = findViewById(R.id.ranking_recycler_view);
 
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
@@ -56,13 +54,7 @@ public class RankingActivity extends AppCompatActivity {
                         android.R.layout.simple_spinner_item, result);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 languageSpinner.setAdapter(adapter);
-
-                searchButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        applyFilter();
-                    }
-                });
+                languageSpinner.setOnItemSelectedListener(RankingActivity.this);
             }
         }).execute();
 
@@ -142,5 +134,15 @@ public class RankingActivity extends AppCompatActivity {
                     }
                 }).create();
         dialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        applyFilter();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

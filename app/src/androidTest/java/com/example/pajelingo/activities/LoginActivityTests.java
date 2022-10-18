@@ -19,6 +19,8 @@ import static org.hamcrest.Matchers.allOf;
 
 import android.content.SharedPreferences;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
@@ -47,6 +49,8 @@ public class LoginActivityTests extends UITests{
         String passwordLabel = context.getString(R.string.password_label);
         String buttonLoginText = context.getString(R.string.login_button_text);
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.action_online)).perform(click());
 
         onView(allOf(withId(R.id.username_label), withText(usernameLabel))).check(matches(isDisplayed()));
@@ -60,6 +64,9 @@ public class LoginActivityTests extends UITests{
     public void testLoginFailed(){
         String username = getRandomString(getRandomInteger(1, 18));
         String password = getRandomString(getRandomInteger(6, 30));
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.action_online)).perform(click());
 
         onView(withId(R.id.username_edit_text)).perform(typeText(username), closeSoftKeyboard());
@@ -74,6 +81,8 @@ public class LoginActivityTests extends UITests{
 
     @Test
     public void testLoginSuccessful(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.action_online)).perform(click());
 
         onView(withId(R.id.username_edit_text)).perform(typeText(testUser.getUsername()), closeSoftKeyboard());
@@ -99,6 +108,7 @@ public class LoginActivityTests extends UITests{
 
     @After
     public void tearDown() throws IOException {
+        super.tearDown();
         languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }

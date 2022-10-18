@@ -17,10 +17,10 @@ public abstract class ScoreDao extends BaseDao<Score> {
     }
     // Perform a group by to compute the total score
     @Query("SELECT id, user, language, game, sum(score) AS score FROM Score GROUP BY user ORDER BY score DESC;")
-    protected abstract List<Score> getAllScoresSorted();
+    public abstract List<Score> getAllScoresSorted();
 
     @Query("SELECT id, user, language, game, sum(score) AS score FROM Score WHERE language=:languageName GROUP BY user ORDER BY score DESC;")
-    protected abstract List<Score> getAllScoresSorted(String languageName);
+    public abstract List<Score> getAllScoresSorted(String languageName);
 
     public AsyncTask<Void,Void,List<Score>> getAllScoresSortedTask(OnResultListener<List<Score>> onResultListener){
         return new AsyncTask<Void, Void, List<Score>>() {

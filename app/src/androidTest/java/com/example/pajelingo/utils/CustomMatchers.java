@@ -13,6 +13,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.SearchResultsAdapter;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Meaning;
+import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
 
 import org.hamcrest.Description;
@@ -208,6 +209,35 @@ public class CustomMatchers {
                 String feedbackMessage = item.getText().toString();
                 String startText = isCorrectAnswer?"Correct :)":"Wrong answer";
                 return feedbackMessage.startsWith(startText);
+            }
+        };
+    }
+
+    public static Matcher<? super View> checkScoreAtPosition(int position, Score score){
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the item at position ")
+                        .appendValue(position)
+                        .appendText(" corresponds to the specified score.");
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                RecyclerView.ViewHolder viewHolder = item.findViewHolderForAdapterPosition(position);
+
+                if (viewHolder == null){
+                    throw new IndexOutOfBoundsException("View at position "+position+" not found.");
+                }
+
+                View view = viewHolder.itemView;
+                TextView positionTextView = view.findViewById(R.id.position_text_view);
+                TextView usernameTextView = view.findViewById(R.id.username_text_view);
+                TextView scoreTextView = view.findViewById(R.id.score_text_view);
+
+                return positionTextView.getText().toString().equals(String.valueOf(position+1)) &&
+                        usernameTextView.getText().toString().equals(score.getUser()) &&
+                        scoreTextView.getText().toString().equals(String.valueOf(score.getScore()));
             }
         };
     }

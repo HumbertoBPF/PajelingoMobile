@@ -21,7 +21,10 @@ import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
@@ -42,6 +45,7 @@ public class VocabularyGameActivityTests extends GameActivityTests{
 
     @Test
     public void testRenderingSetupVocabularyGame() {
+        activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(0, click()));
         assertRenderingSetupLayout();
     }
@@ -50,8 +54,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
     public void testChooseLanguageSetupValidationVocabularyGame(){
         Language randomLanguage = getRandomLanguage(context);
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
         setupVocabularyGame(randomLanguage, randomLanguage);
-
         assertRenderingSetupLayout();
     }
 
@@ -63,11 +67,11 @@ public class VocabularyGameActivityTests extends GameActivityTests{
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         List<Word> wordsInLanguage = wordDao.getWordsByLanguage(Objects.requireNonNull(targetLanguage).getLanguageName());
 
-        setupVocabularyGame(baseLanguage, targetLanguage);
-
         String answerInputHint = context.getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName();
         String textCheckButton = context.getString(R.string.check_button_text);
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        setupVocabularyGame(baseLanguage, targetLanguage);
         onView(withId(R.id.word_text_view)).check(matches(isTextViewWordInList(wordsInLanguage)));
         onView(allOf(withId(R.id.answer_input), withHint(answerInputHint))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
@@ -77,6 +81,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
     public void testCorrectAnswerWithoutAuthenticationVocabularyGame(){
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
@@ -93,6 +99,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
     public void testWrongAnswerWithoutAuthenticationVocabularyGame(){
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
@@ -111,6 +119,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
@@ -140,6 +150,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupVocabularyGame(baseLanguage, targetLanguage);
 
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
@@ -168,6 +180,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupVocabularyGame(baseLanguage, targetLanguage);
 
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
@@ -195,6 +209,8 @@ public class VocabularyGameActivityTests extends GameActivityTests{
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 

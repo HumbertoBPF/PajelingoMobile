@@ -16,6 +16,8 @@ import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPatte
 import static com.example.pajelingo.utils.Tools.getRandomString;
 import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
 import com.example.pajelingo.daos.MeaningDao;
 import com.example.pajelingo.daos.WordDao;
@@ -45,6 +47,8 @@ public class SearchToolTests extends UITests{
 
     @Test
     public void testRenderingSearchActivity(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.search_button)).perform(click());
         onView(withId(R.id.search_edit_text)).check(matches(isDisplayed()));
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
@@ -55,6 +59,8 @@ public class SearchToolTests extends UITests{
         String searchPattern = getRandomString(1);
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         List<Word> words = wordDao.searchWords("%"+searchPattern+"%");
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.search_button)).perform(click());
         onView(withId(R.id.search_edit_text)).perform(typeText(searchPattern), closeSoftKeyboard());
@@ -88,6 +94,8 @@ public class SearchToolTests extends UITests{
         String wordName = randomWord.getWordName();
 
         List<Meaning> meanings = meaningDao.getMeaningsOfWord(randomWord.getId());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.search_button)).perform(click());
         onView(withId(R.id.search_edit_text)).perform(typeText(searchPattern), closeSoftKeyboard());

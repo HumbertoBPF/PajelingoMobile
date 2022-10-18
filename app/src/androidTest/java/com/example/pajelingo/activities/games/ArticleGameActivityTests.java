@@ -21,7 +21,10 @@ import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -47,6 +50,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
         String labelLanguageSpinner = context.getString(R.string.choose_language_label);
         String textPlayButton = context.getString(R.string.play_button_text);
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(1, click()));
         onView(allOf(withId(R.id.label_language_choice), withText(labelLanguageSpinner))).check(matches(isDisplayed()));
         onView(withId(R.id.language_choice_spinner)).check(matches((isDisplayed())));
@@ -59,6 +64,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         List<Word> wordsInLanguage = wordDao.getNounsByLanguage(randomLanguage.getLanguageName());
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupArticleGame(randomLanguage);
 
@@ -80,6 +87,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupArticleGame(randomLanguage);
 
         onView(isRoot()).perform(inputArticleGameAnswer(wordsInLanguage, articles, true));
@@ -96,6 +105,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupArticleGame(randomLanguage);
 
@@ -115,6 +126,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupArticleGame(randomLanguage);
 
@@ -145,6 +158,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupArticleGame(randomLanguage);
 
         onView(isRoot()).perform(inputArticleGameAnswer(wordsInLanguage, articles, false));
@@ -174,6 +189,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupArticleGame(randomLanguage);
 
         onView(isRoot()).perform(inputArticleGameAnswer(wordsInLanguage, articles, true));
@@ -202,6 +219,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         List<Article> articles = articleDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupArticleGame(randomLanguage);
 

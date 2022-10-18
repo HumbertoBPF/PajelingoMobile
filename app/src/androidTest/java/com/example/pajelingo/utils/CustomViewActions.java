@@ -1,7 +1,6 @@
 package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-
 import static com.example.pajelingo.utils.Tools.findConjugationOfVerb;
 import static com.example.pajelingo.utils.Tools.getRandomString;
 

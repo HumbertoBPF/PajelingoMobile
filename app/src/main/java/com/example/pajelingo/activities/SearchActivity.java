@@ -1,7 +1,6 @@
 package com.example.pajelingo.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 

@@ -20,7 +20,10 @@ import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.ConjugationDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -47,6 +50,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
         String labelLanguageSpinner = context.getString(R.string.choose_language_label);
         String textPlayButton = context.getString(R.string.play_button_text);
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
         onView(allOf(withId(R.id.label_language_choice), withText(labelLanguageSpinner))).check(matches(isDisplayed()));
         onView(withId(R.id.language_choice_spinner)).check(matches((isDisplayed())));
@@ -62,6 +67,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
@@ -95,6 +102,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupConjugationGame(randomLanguage);
 
         onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
@@ -111,6 +120,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
@@ -130,6 +141,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 
@@ -161,6 +174,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupConjugationGame(randomLanguage);
 
         onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, false));
@@ -190,6 +205,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
 
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupConjugationGame(randomLanguage);
 
         onView(isRoot()).perform(inputConjugationGameAnswer(verbsInLanguage, conjugations, true));
@@ -218,6 +235,8 @@ public class ConjugationGameActivityTests extends GameActivityTests{
 
         ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
         List<Conjugation> conjugations = conjugationDao.getAllRecords();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupConjugationGame(randomLanguage);
 

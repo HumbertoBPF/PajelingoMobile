@@ -12,6 +12,8 @@ import static com.example.pajelingo.utils.CustomMatchers.isGameNameAtPosition;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 
+import androidx.test.core.app.ActivityScenario;
+
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
@@ -32,6 +34,8 @@ public class MainActivityTests extends UITests{
 
     @Test
     public void testRenderingMainActivity(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
         onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
         onView(withId(R.id.action_online)).check(matches(isDisplayed()));
@@ -42,6 +46,8 @@ public class MainActivityTests extends UITests{
 
     @Test
     public void testSync(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.action_synchro)).perform(click());
         onView(isRoot()).perform(waitForView(withText(context.getString(R.string.dialog_download_resources_title)), 5000, true));
         onView(withText(R.string.dialog_download_resources_confirm)).perform(click());
@@ -51,6 +57,8 @@ public class MainActivityTests extends UITests{
 
     @Test
     public void testDeclineSyncConfirmationDialog(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.action_synchro)).perform(click());
         onView(isRoot()).perform(waitForView(withText(context.getString(R.string.dialog_download_resources_title)), 5000, true));
         onView(withText(R.string.dialog_download_resources_decline)).perform(click());

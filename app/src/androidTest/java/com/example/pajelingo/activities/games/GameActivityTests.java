@@ -31,6 +31,7 @@ public class GameActivityTests extends UITests {
 
     @After
     public void tearDown() throws IOException {
+        super.tearDown();
         languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
