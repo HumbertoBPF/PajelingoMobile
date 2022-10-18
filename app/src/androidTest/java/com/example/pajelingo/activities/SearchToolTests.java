@@ -17,11 +17,9 @@ import static com.example.pajelingo.utils.Tools.getRandomString;
 import static com.example.pajelingo.utils.Tools.saveEntitiesFromAPI;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.MeaningDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
@@ -75,7 +73,6 @@ public class SearchToolTests extends UITests{
     @Test
     public void testRenderingMeaningOfWord(){
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-        ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
         MeaningDao meaningDao = AppDatabase.getInstance(context).getMeaningDao();
 
         String searchPattern = getRandomString(1);
@@ -88,15 +85,7 @@ public class SearchToolTests extends UITests{
         int randomPosition = new Random().nextInt(words.size());
         Word randomWord = words.get(randomPosition);
 
-        String articleName = "";
         String wordName = randomWord.getWordName();
-
-        Long idArticle = randomWord.getIdArticle();
-
-        if (idArticle != null){
-            Article article = articleDao.getRecordById(idArticle);
-            articleName = article.getArticleName();
-        }
 
         List<Meaning> meanings = meaningDao.getMeaningsOfWord(randomWord.getId());
 
@@ -106,7 +95,7 @@ public class SearchToolTests extends UITests{
 
         onView(withId(R.id.search_recycler_view)).perform(actionOnItemAtPosition(randomPosition, click()));
         onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
-        onView(withText(articleName+" "+wordName)).check(matches(isDisplayed()));
+        onView(withText(wordName)).check(matches(isDisplayed()));
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);

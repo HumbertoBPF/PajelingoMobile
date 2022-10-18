@@ -7,9 +7,11 @@ import android.content.Context;
 import com.example.pajelingo.daos.BaseDao;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
+import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 
 import java.io.IOException;
@@ -117,4 +119,44 @@ public class Tools {
         // Otherwise, return a random language
         return languages.get(getRandomInteger(0, languages.size() - 1));
     }
+
+    /**
+     * Finds the conjugation of a verb in a certain tense given a list of verbs and a list of conjugations.
+     * This method only returns the conjugation if:
+     * <br><br>
+     * -    The verb string is in the verb list.<br>
+     * -    A conjugation whose tense matches the tense string and the verb id matches the verb found.
+     * <br><br>
+     * If no conjugation matches the criteria above, null is returned.
+     * @param verbString verb of the desired conjugation
+     * @param tenseString tense of the desired conjugation
+     * @param verbs list of verbs available
+     * @param conjugations list of conjugations available
+     * @return the matched conjugation
+     */
+    public static Conjugation findConjugationOfVerb(String verbString, String tenseString,
+                                                    List<Word> verbs, List<Conjugation> conjugations){
+        Word verbObject = null;
+        Conjugation conjugationObject = null;
+        // Search a word matching the verb string in the specified verb list
+        for (Word verb: verbs){
+            if (verbString.equals(verb.getWordName())){
+                verbObject = verb;
+                break;
+            }
+        }
+
+        if (verbObject == null){
+            return null;
+        }
+        // Search a conjugation matching the conjugation string and the verb found in the specified conjugation list
+        for (Conjugation conjugation: conjugations){
+            if (verbObject.getId().equals(conjugation.getWordId()) && tenseString.equals(conjugation.getTense())){
+                return conjugation;
+            }
+        }
+
+        return null;
+    }
+
 }

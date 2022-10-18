@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.MeaningAdapter;
-import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.MeaningDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 
@@ -30,25 +28,13 @@ public class MeaningActivity extends AppCompatActivity {
 
         Word word = (Word) getIntent().getSerializableExtra("word");
 
-        ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
+        setTitle(word.getWordName());
 
-        articleDao.getRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
+        MeaningDao meaningDao = AppDatabase.getInstance(MeaningActivity.this).getMeaningDao();
+        meaningDao.getMeaningOfWordTask(word.getId(), new OnResultListener<List<Meaning>>() {
             @Override
-            public void onResult(Article result) {
-                String title = result.getArticleName();
-                if (!title.endsWith("'")){
-                    title += " ";
-                }
-                title += word.getWordName();
-                setTitle(title);
-
-                MeaningDao meaningDao = AppDatabase.getInstance(MeaningActivity.this).getMeaningDao();
-                meaningDao.getMeaningOfWordTask(word.getId(), new OnResultListener<List<Meaning>>() {
-                    @Override
-                    public void onResult(List<Meaning> result) {
-                        meaningsRecyclerView.setAdapter(new MeaningAdapter(result));
-                    }
-                }).execute();
+            public void onResult(List<Meaning> result) {
+                meaningsRecyclerView.setAdapter(new MeaningAdapter(result));
             }
         }).execute();
     }

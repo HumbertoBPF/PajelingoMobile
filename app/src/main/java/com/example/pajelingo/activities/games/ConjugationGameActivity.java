@@ -74,7 +74,7 @@ public class ConjugationGameActivity extends GameActivity {
     protected void startGame() {
         setContentView(R.layout.activity_conjugation_game);
 
-        TextView verb = findViewById(R.id.verb);
+        TextView verb = findViewById(R.id.verb_and_tense_text_view);
         TextView pronoun1 = findViewById(R.id.pronoun_1);
         TextView pronoun2 = findViewById(R.id.pronoun_2);
         TextView pronoun3 = findViewById(R.id.pronoun_3);

@@ -1,6 +1,7 @@
 package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static com.example.pajelingo.utils.Tools.findConjugationOfVerb;
 
 import android.view.View;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.SearchResultsAdapter;
-import com.example.pajelingo.models.Language;
+import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 
@@ -154,11 +155,11 @@ public class CustomMatchers {
         };
     }
 
-    public static Matcher<? super View> isWordInLanguage(List<Word> wordsInLanguage, Language language){
+    public static Matcher<? super View> isTextViewWordInList(List<Word> wordsInLanguage){
         return new BoundedMatcher<View, TextView>(TextView.class) {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Word in TextView is in ").appendValue(language.getLanguageName());
+                description.appendText("Word in TextView is in the specified list.");
             }
 
             @Override
@@ -171,7 +172,24 @@ public class CustomMatchers {
                     }
                 }
 
-                return false;
+                throw new NullPointerException("No word in the language matched the word displayed.");
+            }
+        };
+    }
+
+    public static Matcher<? super View> isTextViewVerbAndConjugationInList(List<Word> verbsInLanguage, List<Conjugation> conjugations){
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verb in TextView is in the specified list.");
+            }
+
+            @Override
+            protected boolean matchesSafely(TextView item) {
+                String verb = item.getText().toString().split(" - ")[0];
+                String tense = item.getText().toString().split(" - ")[1];
+
+                return findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations) != null;
             }
         };
     }

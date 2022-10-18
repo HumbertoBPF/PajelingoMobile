@@ -23,7 +23,7 @@ public abstract class WordDao extends BaseDao<Word>{
     public abstract List<Word> getNounsByLanguage(String language);
 
     @Query("SELECT * FROM Word WHERE category = :category AND language = :language;")
-    protected abstract List<Word> getWordsByCategoryAndByLanguage(String category, String language);
+    public abstract List<Word> getWordsByCategoryAndByLanguage(String category, String language);
 
     @Query("SELECT * FROM Word WHERE wordName LIKE :pattern ORDER BY LOWER(wordName)")
     public abstract List<Word> searchWords(String pattern);

@@ -13,7 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
-import static com.example.pajelingo.utils.CustomMatchers.isWordInLanguage;
+import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
 import static com.example.pajelingo.utils.Tools.assertScoreValue;
 import static com.example.pajelingo.utils.Tools.getRandomLanguage;
@@ -62,7 +62,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(withId(R.id.word_text_view)).check(matches(isWordInLanguage(wordsInLanguage, randomLanguage)));
+        onView(withId(R.id.word_text_view)).check(matches(isTextViewWordInList(wordsInLanguage)));
 
         String answerInputHint = context.getString(R.string.article_game_hint_input_text);
         String textCheckButton = context.getString(R.string.check_button_text);

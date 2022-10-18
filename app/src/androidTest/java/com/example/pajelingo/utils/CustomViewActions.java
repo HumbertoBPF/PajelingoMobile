@@ -2,6 +2,7 @@ package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
+import static com.example.pajelingo.utils.Tools.findConjugationOfVerb;
 import static com.example.pajelingo.utils.Tools.getRandomString;
 
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.test.espresso.util.TreeIterables;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.models.Article;
+import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 
@@ -171,6 +173,48 @@ public class CustomViewActions {
 
                 throw new NullPointerException("No synonym in the base language "
                         + baseLanguage.getLanguageName() +" was found to the word shown "+wordShown+".");
+            }
+        };
+    }
+
+    public static ViewAction inputConjugationGameAnswer(List<Word> verbsInLanguage, List<Conjugation> conjugations,
+                                                        boolean isCorrect) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Inputs an answer to the Conjugation Game";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                TextView verbAndTenseTextView = view.findViewById(R.id.verb_and_tense_text_view);
+                String verbAndTenseInTextView = verbAndTenseTextView.getText().toString();
+                String verb = verbAndTenseInTextView.split(" - ")[0];
+                String tense = verbAndTenseInTextView.split(" - ")[1];
+                Conjugation correctAnswer = findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations);
+
+                if (correctAnswer == null){
+                    throw new NullPointerException("No valid answer was found in the specified verb and conjugation lists.");
+                }
+
+                EditText inputConjugation1 = view.findViewById(R.id.conjugation_1);
+                EditText inputConjugation2 = view.findViewById(R.id.conjugation_2);
+                EditText inputConjugation3 = view.findViewById(R.id.conjugation_3);
+                EditText inputConjugation4 = view.findViewById(R.id.conjugation_4);
+                EditText inputConjugation5 = view.findViewById(R.id.conjugation_5);
+                EditText inputConjugation6 = view.findViewById(R.id.conjugation_6);
+
+                inputConjugation1.setText(isCorrect?correctAnswer.getConjugation1():getRandomString(10));
+                inputConjugation2.setText(isCorrect?correctAnswer.getConjugation2():getRandomString(10));
+                inputConjugation3.setText(isCorrect?correctAnswer.getConjugation3():getRandomString(10));
+                inputConjugation4.setText(isCorrect?correctAnswer.getConjugation4():getRandomString(10));
+                inputConjugation5.setText(isCorrect?correctAnswer.getConjugation5():getRandomString(10));
+                inputConjugation6.setText(isCorrect?correctAnswer.getConjugation6():getRandomString(10));
             }
         };
     }

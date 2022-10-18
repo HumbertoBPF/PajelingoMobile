@@ -13,7 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.util.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
-import static com.example.pajelingo.utils.CustomMatchers.isWordInLanguage;
+import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
 import static com.example.pajelingo.utils.Tools.assertScoreValue;
 import static com.example.pajelingo.utils.Tools.getRandomLanguage;
@@ -68,7 +68,7 @@ public class VocabularyGameActivityTests extends GameActivityTests{
         String answerInputHint = context.getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName();
         String textCheckButton = context.getString(R.string.check_button_text);
 
-        onView(withId(R.id.word_text_view)).check(matches(isWordInLanguage(wordsInLanguage, targetLanguage)));
+        onView(withId(R.id.word_text_view)).check(matches(isTextViewWordInList(wordsInLanguage)));
         onView(allOf(withId(R.id.answer_input), withHint(answerInputHint))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
     }

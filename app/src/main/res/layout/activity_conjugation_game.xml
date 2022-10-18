@@ -15,7 +15,7 @@
         android:layout_margin="10dp">
 
         <TextView
-            android:id="@+id/verb"
+            android:id="@+id/verb_and_tense_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,7 @@
             android:id="@+id/conjugation_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/verb"
+            app:layout_constraintTop_toBottomOf="@id/verb_and_tense_text_view"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toEndOf="parent"
             android:maxLength="10"
