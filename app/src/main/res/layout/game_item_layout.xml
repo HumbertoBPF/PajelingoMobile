@@ -2,10 +2,10 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="8dp"
     android:layout_marginHorizontal="5dp"
     android:layout_marginVertical="5dp"
-    app:cardBackgroundColor="@color/base_gray"
+    app:cardBackgroundColor="@color/blue"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -17,14 +17,14 @@
             android:id="@+id/game_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginVertical="15dp"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="Game Name"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Game Name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
