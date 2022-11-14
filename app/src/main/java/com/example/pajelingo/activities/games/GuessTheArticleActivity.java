@@ -24,7 +24,7 @@ import com.example.pajelingo.synchronization.ScoreUploader;
 
 import java.util.List;
 
-public class ArticleGameActivity extends GameActivity {
+public class GuessTheArticleActivity extends GameActivity {
 
     private Language language;
     private Word word;
@@ -56,7 +56,7 @@ public class ArticleGameActivity extends GameActivity {
                     result.remove(indexEnglish);
                 }
                 // Fill the adapter with the name of all the languages available
-                ArrayAdapter<Language> adapter = new ArrayAdapter<>(ArticleGameActivity.this,
+                ArrayAdapter<Language> adapter = new ArrayAdapter<>(GuessTheArticleActivity.this,
                         android.R.layout.simple_spinner_item, result);
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -82,7 +82,7 @@ public class ArticleGameActivity extends GameActivity {
 
     @Override
     protected void startGame() {
-        setContentView(R.layout.activity_article_game);
+        setContentView(R.layout.activity_guess_the_article);
 
         EditText answerInputEditText = findViewById(R.id.answer_input);
         TextView wordTextView = findViewById(R.id.word_text_view);
@@ -136,9 +136,9 @@ public class ArticleGameActivity extends GameActivity {
                 String feedback;
                 if (answerString.equals(result.getArticleName())){
 
-                    if (isUserAuthenticated(ArticleGameActivity.this)){
-                        ScoreUploader uploader = new ScoreUploader(ArticleGameActivity.this,
-                                language, game.getGameTag());
+                    if (isUserAuthenticated(GuessTheArticleActivity.this)){
+                        ScoreUploader uploader = new ScoreUploader(GuessTheArticleActivity.this,
+                                language, game.getId());
                         uploader.upload();
                     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 public class Word implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "word_name")
     private String wordName;

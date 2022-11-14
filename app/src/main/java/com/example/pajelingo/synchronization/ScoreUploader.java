@@ -22,12 +22,12 @@ public class ScoreUploader {
 
     private final Context context;
     private final Language language;
-    private final String game;
+    private final Long gameId;
 
-    public ScoreUploader(Context context, Language language, String game) {
+    public ScoreUploader(Context context, Language language, Long gameId) {
         this.context = context;
         this.language = language;
-        this.game = game;
+        this.gameId = gameId;
     }
 
     public void upload(){
@@ -37,14 +37,14 @@ public class ScoreUploader {
         String password = sp.getString(context.getString(R.string.password_sp), null);
 
         Call<List<Score>> call = LanguageSchoolAPIHelper.getApiObject().getScore(getAuthToken(username, password),
-                language.getId(), game);
+                language.getId(), gameId);
         call.enqueue(new Callback<List<Score>>() {
             @Override
             public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {
                 if (response.isSuccessful()){
                     List<Score> scores = response.body();
                     if (scores == null || scores.isEmpty()){
-                        Score newScore = new Score(null, language.getLanguageName(), game, 1L);
+                        Score newScore = new Score(null, language.getLanguageName(), gameId, 1L);
                         Call<Score> createScoreCall = LanguageSchoolAPIHelper
                                 .getApiObject().createScore(getAuthToken(username, password), newScore);
                         createScoreCall.enqueue(new Callback<Score>() {

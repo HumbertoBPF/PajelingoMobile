@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Language {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "language_name")
     private String languageName;

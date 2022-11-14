@@ -46,6 +46,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         super.setUp();
         saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
         saveEntitiesFromAPI(languageSchoolAPITest.getConjugations(), AppDatabase.getInstance(context).getConjugationDao());
+        game = AppDatabase.getInstance(context).getGameDao().getGameByName("Conjugation Game");
     }
 
     @Test
@@ -135,7 +136,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -144,7 +145,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 2L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 2L);
     }
 
     @Test
@@ -161,7 +162,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -169,7 +170,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 1L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -186,7 +187,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -194,7 +195,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 1L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -211,7 +212,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "conjugation_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -219,7 +220,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "conjugation_game", 0L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 0L);
     }
 
     @Test

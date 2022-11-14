@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 public class Meaning {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "word")
     private Long idWord;

@@ -32,8 +32,8 @@ public abstract class UITests {
         onView(withId(R.id.action_online)).check(matches(isDisplayed()));
 
         if (hasGames){
-            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Vocabulary Game", 0)));
-            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Article Game", 1)));
+            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Vocabulary Training", 0)));
+            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Guess the Article", 1)));
             onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Conjugation Game", 2)));
         }else{
             onView(withId(R.id.warning_no_resources_text_view)).check(matches(isDisplayed()));

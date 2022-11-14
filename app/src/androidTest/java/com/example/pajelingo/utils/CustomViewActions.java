@@ -149,7 +149,7 @@ public class CustomViewActions {
      * @param isCorrect specifies if the provided answer must be correct.
      * @return ViewAction that can allow to input an answer for the vocabulary game.
      */
-    public static ViewAction inputVocabularyGameAnswer(Context context, Language baseLanguage, boolean isCorrect) {
+    public static ViewAction inputVocabularyGameAnswer(Context context, Language baseLanguage, Language targetLanguage, boolean isCorrect) {
         return new ViewAction() {
             private TextView wordTextView;
             private EditText answerEditText;
@@ -180,7 +180,7 @@ public class CustomViewActions {
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
                 String wordShown = wordTextView.getText().toString();
 
-                wordDao.getAllRecordsTask(result -> {
+                wordDao.getNounsByLanguageAsyncTask(targetLanguage.getLanguageName(), result -> {
                     Word wordObjectShown = null;
 
                     for (Word word: result){

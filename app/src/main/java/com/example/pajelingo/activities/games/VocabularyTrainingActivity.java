@@ -3,7 +3,6 @@ package com.example.pajelingo.activities.games;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,7 +24,7 @@ import com.example.pajelingo.synchronization.ScoreUploader;
 
 import java.util.List;
 
-public class VocabularyGameActivity extends GameActivity {
+public class VocabularyTrainingActivity extends GameActivity {
 
     private Language baseLanguage;
     private Language targetLanguage;
@@ -48,7 +47,7 @@ public class VocabularyGameActivity extends GameActivity {
                     return;
                 }
                 // Fill the adapter with the name of all the languages available
-                ArrayAdapter<Language> adapter = new ArrayAdapter<>(VocabularyGameActivity.this,
+                ArrayAdapter<Language> adapter = new ArrayAdapter<>(VocabularyTrainingActivity.this,
                         android.R.layout.simple_spinner_item, result);
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -62,7 +61,7 @@ public class VocabularyGameActivity extends GameActivity {
                         String targetLanguageName = targetLanguageSpinner.getSelectedItem().toString();
                         // The base and target languages must be different
                         if (baseLanguageName.equals(targetLanguageName)){
-                            Toast.makeText(VocabularyGameActivity.this, R.string.warning_base_target_len_eq,
+                            Toast.makeText(VocabularyTrainingActivity.this, R.string.warning_base_target_len_eq,
                                     Toast.LENGTH_LONG).show();
                         }else{
                             playButton.setOnClickListener(null);
@@ -89,7 +88,7 @@ public class VocabularyGameActivity extends GameActivity {
 
     @Override
     protected void startGame() {
-        setContentView(R.layout.activity_vocabulary_game);
+        setContentView(R.layout.activity_vocabulary_training);
 
         TextView wordToTranslateTextView = findViewById(R.id.word_text_view);
         EditText answerInputEditText = findViewById(R.id.answer_input);
@@ -107,7 +106,6 @@ public class VocabularyGameActivity extends GameActivity {
                     return;
                 }
                 wordToTranslate = getRandomItemFromList(result);
-                Log.i("VocabularyGameActivity", wordToTranslate.getWordName());
                 wordToTranslateTextView.setText(wordToTranslate.getWordName());
                 checkButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -155,9 +153,9 @@ public class VocabularyGameActivity extends GameActivity {
 
                 if (isAnswerCorrect){
 
-                    if (isUserAuthenticated(VocabularyGameActivity.this)){
-                        ScoreUploader uploader = new ScoreUploader(VocabularyGameActivity.this,
-                                targetLanguage, game.getGameTag());
+                    if (isUserAuthenticated(VocabularyTrainingActivity.this)){
+                        ScoreUploader uploader = new ScoreUploader(VocabularyTrainingActivity.this,
+                                targetLanguage, game.getId());
                         uploader.upload();
                     }
 

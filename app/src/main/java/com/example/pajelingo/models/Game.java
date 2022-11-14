@@ -10,16 +10,13 @@ import java.io.Serializable;
 @Entity
 public class Game implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
-    @SerializedName(value = "game_tag")
-    private String gameTag;
     @SerializedName(value = "game_name")
     private String gameName;
 
-    public Game(Long id, String gameTag, String gameName) {
+    public Game(Long id, String gameName) {
         this.id = id;
-        this.gameTag = gameTag;
         this.gameName = gameName;
     }
 
@@ -29,14 +26,6 @@ public class Game implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getGameTag() {
-        return gameTag;
-    }
-
-    public void setGameTag(String gameTag) {
-        this.gameTag = gameTag;
     }
 
     public String getGameName() {

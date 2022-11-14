@@ -44,6 +44,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     public void setUp() throws IOException {
         super.setUp();
         saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
+        game = AppDatabase.getInstance(context).getGameDao().getGameByName("Vocabulary Training");
     }
 
     @Test
@@ -91,7 +92,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, true));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage,true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
     }
@@ -105,7 +106,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, false));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
     }
@@ -121,19 +122,19 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, true));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), "vocabulary_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, true));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, targetLanguage, "vocabulary_game", 2L);
+        assertScoreValue(testUser, targetLanguage, game.getId(), 2L);
     }
 
     @Test
@@ -147,19 +148,19 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, false));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), "vocabulary_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, true));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, targetLanguage, "vocabulary_game", 1L);
+        assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -173,19 +174,19 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, true));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), "vocabulary_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, false));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, targetLanguage, "vocabulary_game", 1L);
+        assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -199,19 +200,19 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, false));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), "vocabulary_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, false));
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, targetLanguage, "vocabulary_game", 0L);
+        assertScoreValue(testUser, targetLanguage, game.getId(), 0L);
     }
 
     @Test

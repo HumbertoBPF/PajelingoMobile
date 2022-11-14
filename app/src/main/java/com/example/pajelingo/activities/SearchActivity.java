@@ -28,6 +28,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        setTitle(R.string.dictionary_title);
+
         searchEditText = findViewById(R.id.search_edit_text);
         searchButton = findViewById(R.id.search_button);
         resultsRecyclerView = findViewById(R.id.search_recycler_view);

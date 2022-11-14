@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Article {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "article_name")
     private String articleName;

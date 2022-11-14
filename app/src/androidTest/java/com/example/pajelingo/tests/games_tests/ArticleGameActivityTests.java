@@ -45,6 +45,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         super.setUp();
         saveEntitiesFromAPI(languageSchoolAPITest.getArticles(), AppDatabase.getInstance(context).getArticleDao());
         saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
+        game = AppDatabase.getInstance(context).getGameDao().getGameByName("Guess the Article");
     }
 
     @Test
@@ -119,7 +120,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "article_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -127,7 +128,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, randomLanguage, "article_game", 2L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 2L);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "article_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -152,7 +153,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, randomLanguage, "article_game", 1L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -169,7 +170,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "article_game", 1L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -177,7 +178,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "article_game", 1L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
     @Test
@@ -194,7 +195,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), "article_game", 0L);
+        assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
@@ -202,7 +203,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
 
-        assertScoreValue(testUser, randomLanguage, "article_game", 0L);
+        assertScoreValue(testUser, randomLanguage, game.getId(), 0L);
     }
 
     @Test

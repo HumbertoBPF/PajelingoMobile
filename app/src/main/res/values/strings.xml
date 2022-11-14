@@ -49,4 +49,7 @@
     <string name="yes_button_text">Yes</string>
     <string name="no_button_text">No</string>
     <string name="default_last_synchro_date">not found</string>
+    <string name="dictionary_title">Dictionary</string>
+    <string name="ranking_title">Rankings</string>
+    <string name="login_title">Login</string>
 </resources>

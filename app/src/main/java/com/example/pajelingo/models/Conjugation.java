@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Conjugation {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "word")
     private Long wordId;

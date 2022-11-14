@@ -37,10 +37,10 @@
             android:name=".activities.games.ConjugationGameActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.games.ArticleGameActivity"
+            android:name=".activities.games.GuessTheArticleActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.games.VocabularyGameActivity"
+            android:name=".activities.games.VocabularyTrainingActivity"
             android:exported="false" />
         <activity
             android:name=".activities.games.GameActivity"

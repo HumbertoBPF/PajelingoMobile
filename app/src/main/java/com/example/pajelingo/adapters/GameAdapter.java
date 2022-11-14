@@ -56,8 +56,10 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 @Override
                 public void onClick(View v) {
                     try {
+                        String gameActivityName = getGameActivityClassName(game);
+
                         Class destinyClass = Class.forName("com.example.pajelingo.activities.games."
-                                + game.getGameName().replace(" ","")+"Activity");
+                                +  gameActivityName + "Activity");
                         Intent intent = new Intent(context, destinyClass);
                         intent.putExtra("game", game);
                         context.startActivity(intent);
@@ -66,6 +68,28 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                     }
                 }
             });
+        }
+        // TODO test this function
+        private String getGameActivityClassName(Game game) {
+            String gameActivityName = "";
+            Character currentChar;
+            Character lastChar = ' ';
+            String gameName = game.getGameName();
+
+            for (int i = 0; i < gameName.length(); i++){
+                currentChar = gameName.charAt(i);
+
+                if (!currentChar.equals(' ')){
+                    if (lastChar.equals(' ')){
+                        currentChar = Character.toUpperCase(currentChar);
+                    }
+                    gameActivityName += currentChar;
+                }
+
+                lastChar = currentChar;
+            }
+
+            return gameActivityName;
         }
 
     }

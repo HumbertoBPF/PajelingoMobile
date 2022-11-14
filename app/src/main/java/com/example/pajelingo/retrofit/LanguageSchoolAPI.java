@@ -49,7 +49,7 @@ public interface LanguageSchoolAPI {
     @GET("scores")
     Call<List<Score>> getScore(@Header("Authorization") String authString,
                                 @Query("language_id") long languageId,
-                                @Query("game") String game);
+                                @Query("game") Long gameId);
 
     @POST("scores/")
     Call<Score> createScore(@Header("Authorization") String authString, @Body Score score);

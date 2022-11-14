@@ -5,6 +5,7 @@ import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
@@ -17,6 +18,7 @@ import java.io.IOException;
 public abstract class GameActivityTests extends UITests {
     protected final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
     protected final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
+    protected Game game;
 
     @Before
     public void setUp() throws IOException {

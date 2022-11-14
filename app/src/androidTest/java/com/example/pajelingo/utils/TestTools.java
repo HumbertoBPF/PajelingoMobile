@@ -3,6 +3,7 @@ package com.example.pajelingo.utils;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.pajelingo.daos.BaseDao;
 import com.example.pajelingo.daos.LanguageDao;
@@ -55,18 +56,19 @@ public class TestTools {
      * Verifies that the specified score of a user has a certain value.
      * @param user user owner of the score
      * @param language language of the score
-     * @param game game of the score
+     * @param gameId id of the concerned game
      * @param value value to be asserted
      * @throws IOException thrown when some error related with HTTP communication occurs
      * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    public static void assertScoreValue(User user, Language language, String game, Long value) throws IOException, InterruptedException {
+    public static void assertScoreValue(User user, Language language, Long gameId, Long value) throws IOException, InterruptedException {
         Thread.sleep(3000);
 
         Response<List<Score>> responseScore =
                 LanguageSchoolAPIHelperTest.getApiObject()
-                        .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getId(), game).execute();
+                        .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getId(), gameId).execute();
         List<Score> scores = responseScore.body();
+        Log.i("HELLO", scores.size()+"");
 
         assert scores != null;
         if (value.equals(0L)){

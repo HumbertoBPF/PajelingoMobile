@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 public class Category {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     @SerializedName(value = "category_name")
     private String categoryName;

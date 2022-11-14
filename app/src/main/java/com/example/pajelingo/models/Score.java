@@ -5,14 +5,14 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Score {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private Long id;
     private String user;
     private String language;
-    private String game;
+    private Long game;
     private Long score;
 
-    public Score(String user, String language, String game, Long score) {
+    public Score(String user, String language, Long game, Long score) {
         this.user = user;
         this.language = language;
         this.game = game;
@@ -43,11 +43,11 @@ public class Score {
         this.language = language;
     }
 
-    public String getGame() {
+    public Long getGame() {
         return game;
     }
 
-    public void setGame(String game) {
+    public void setGame(Long game) {
         this.game = game;
     }
 

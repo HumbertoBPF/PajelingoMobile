@@ -166,7 +166,7 @@ public class ConjugationGameActivity extends GameActivity {
         conjugation.getConjugation5().equals(answerConjugation5) && conjugation.getConjugation6().equals(answerConjugation6)){
 
             if (isUserAuthenticated(this)){
-                ScoreUploader uploader = new ScoreUploader(this, language, game.getGameTag());
+                ScoreUploader uploader = new ScoreUploader(this, language, game.getId());
                 uploader.upload();
             }
 
