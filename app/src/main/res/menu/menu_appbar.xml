@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_rankings"
-        android:icon="@drawable/ic_ranking"
-        android:title="@string/tab_icon_rankings_title"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/action_synchro"
         android:icon="@drawable/ic_synchro"
         android:title="@string/tab_icon_synchro_title"
@@ -16,8 +10,14 @@
 
     <item
         android:id="@+id/action_online"
-        android:icon="@drawable/ic_online_mode"
-        android:title="@string/tab_icon_online_mode_title"
+        android:icon="@drawable/ic_login"
+        android:title="@string/tab_icon_login_title"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_rankings"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/tab_icon_menu_title"
         app:showAsAction="ifRoom"/>
 
 </menu>

@@ -12,6 +12,13 @@
         android:theme="@style/Theme.Pajelingo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.MenuActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.RankingActivity"
             android:exported="false" />
         <activity

@@ -26,8 +26,8 @@
     <string name="tab_icon_synchro_title">Get resources</string>
     <string name="search_button_text">Search</string>
     <string name="search_edit_text_hint">Search something</string>
-    <string name="tab_icon_online_mode_title">Online mode</string>
-    <string name="tab_icon_offline_mode_title">Offline mode</string>
+    <string name="tab_icon_login_title">Login</string>
+    <string name="tab_icon_logout_title">Logout</string>
     <string name="sp_file_name">MySharedPref</string>
     <string name="username_sp">username</string>
     <string name="password_sp">password</string>
@@ -36,8 +36,9 @@
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
     <string name="choose_language_label">Choose a language</string>
-    <string name="greeting_text">Welcome,\u0020</string>
+    <string name="greeting_text">Welcome back,\u0020</string>
     <string name="tab_icon_rankings_title">Rankings</string>
+    <string name="tab_icon_menu_title">Menu</string>
     <string name="general_ranking_spinner_text">General</string>
     <string name="update_ranking_dialog_title">Please, wait</string>
     <string name="update_ranking_dialog_message">Verifying credentials and updating scores…</string>

@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (selectedId == R.id.action_synchro) {
             askConfirmationSynchroResources();
         }else if (selectedId == R.id.action_rankings){
-            startActivity(new Intent(this, RankingActivity.class));
+            startActivity(new Intent(this, MenuActivity.class));
         }else if (selectedId == R.id.action_online){
             swapConnexionMode();
         }
@@ -139,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
         MenuItem rankingItem = menu.findItem(R.id.action_rankings);
 
         if (isUserAuthenticated(this)){
-            onlineItem.setIcon(R.drawable.ic_online_mode);
-            onlineItem.setTitle(R.string.tab_icon_online_mode_title);
-            rankingItem.setVisible(true);
+            onlineItem.setIcon(R.drawable.ic_login);
+            onlineItem.setTitle(R.string.tab_icon_login_title);
         }else{
-            onlineItem.setIcon(R.drawable.ic_offline_mode);
-            onlineItem.setTitle(R.string.tab_icon_offline_mode_title);
-            rankingItem.setVisible(false);
+            onlineItem.setIcon(R.drawable.ic_logout);
+            onlineItem.setTitle(R.string.tab_icon_logout_title);
         }
 
         return super.onPrepareOptionsMenu(menu);
