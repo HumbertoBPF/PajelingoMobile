@@ -14,10 +14,13 @@ public class Game implements Serializable {
     private Long id;
     @SerializedName(value = "game_name")
     private String gameName;
+    @SerializedName(value = "android_game_activity")
+    private String androidGameActivity;
 
-    public Game(Long id, String gameName) {
+    public Game(Long id, String gameName, String androidGameActivity) {
         this.id = id;
         this.gameName = gameName;
+        this.androidGameActivity = androidGameActivity;
     }
 
     public Long getId() {
@@ -34,5 +37,13 @@ public class Game implements Serializable {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public String getAndroidGameActivity() {
+        return androidGameActivity;
+    }
+
+    public void setAndroidGameActivity(String androidGameActivity) {
+        this.androidGameActivity = androidGameActivity;
     }
 }

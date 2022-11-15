@@ -68,7 +68,6 @@ public class TestTools {
                 LanguageSchoolAPIHelperTest.getApiObject()
                         .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getId(), gameId).execute();
         List<Score> scores = responseScore.body();
-        Log.i("HELLO", scores.size()+"");
 
         assert scores != null;
         if (value.equals(0L)){

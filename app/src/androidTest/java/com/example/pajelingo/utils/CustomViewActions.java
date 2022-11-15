@@ -180,7 +180,7 @@ public class CustomViewActions {
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
                 String wordShown = wordTextView.getText().toString();
 
-                wordDao.getNounsByLanguageAsyncTask(targetLanguage.getLanguageName(), result -> {
+                wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), result -> {
                     Word wordObjectShown = null;
 
                     for (Word word: result){
@@ -192,7 +192,7 @@ public class CustomViewActions {
 
                     if (wordObjectShown == null){
                         throw new NullPointerException("No word in language "+
-                                baseLanguage.getLanguageName()+" matches the word "+wordShown+".");
+                                targetLanguage.getLanguageName()+" matches the word "+wordShown+".");
                     }
 
                     Word finalWordObjectShown = wordObjectShown;

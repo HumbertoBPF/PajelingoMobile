@@ -19,12 +19,8 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.Game;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,25 +47,17 @@ public class MainActivity extends AppCompatActivity {
 
         loadGames();
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            }
-        });
+        searchButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SearchActivity.class)));
     }
 
     private void loadGames(){
-        gameDao.getAllRecordsTask(new OnResultListener<List<Game>>() {
-            @Override
-            public void onResult(List<Game> result) {
-                if (result.isEmpty()){
-                    warningNoResourcesTextView.setVisibility(View.VISIBLE);
-                }else{
-                    warningNoResourcesTextView.setVisibility(View.GONE);
-                }
-                gamesRecyclerView.setAdapter(new GameAdapter(MainActivity.this, result));
+        gameDao.getEnabledGamesTask(result -> {
+            if (result.isEmpty()){
+                warningNoResourcesTextView.setVisibility(View.VISIBLE);
+            }else{
+                warningNoResourcesTextView.setVisibility(View.GONE);
             }
+            gamesRecyclerView.setAdapter(new GameAdapter(MainActivity.this, result));
         }).execute();
     }
 

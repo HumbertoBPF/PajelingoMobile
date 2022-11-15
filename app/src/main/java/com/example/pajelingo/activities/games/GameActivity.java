@@ -20,6 +20,7 @@ public abstract class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
         game = (Game) getIntent().getSerializableExtra("game");
+        setTitle(game.getGameName());
         setup();
     }
 
