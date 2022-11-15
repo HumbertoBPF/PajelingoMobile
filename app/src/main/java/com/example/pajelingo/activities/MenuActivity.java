@@ -2,12 +2,11 @@ package com.example.pajelingo.activities;
 
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.MenuItemAdapter;

@@ -11,13 +11,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
 import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
 import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -30,7 +30,6 @@ import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
 import org.junit.Test;
@@ -43,7 +42,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     @Override
     public void setUp() throws IOException {
         super.setUp();
-        saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
         game = AppDatabase.getInstance(context).getGameDao().getGameByName("Vocabulary Training");
     }
 
@@ -218,7 +217,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     @Test
     public void testVocabularyGameWithoutLanguageData() throws IOException {
         AppDatabase.getInstance(context).clearAllTables();
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -228,8 +227,8 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     @Test
     public void testVocabularyGameWithoutWordData() throws IOException {
         AppDatabase.getInstance(context).clearAllTables();
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());

@@ -25,8 +25,6 @@ import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
-import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Before;
@@ -38,13 +36,11 @@ import java.util.List;
 import java.util.Random;
 
 public class SearchToolTests extends UITests {
-    private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
-
     @Before
     public void setUp() throws IOException {
-        saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
-        saveEntitiesFromAPI(languageSchoolAPITest.getArticles(), AppDatabase.getInstance(context).getArticleDao());
-        saveEntitiesFromAPI(languageSchoolAPITest.getMeanings(), AppDatabase.getInstance(context).getMeaningDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getArticles(), AppDatabase.getInstance(context).getArticleDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getMeanings(), AppDatabase.getInstance(context).getMeaningDao());
     }
 
     @Test

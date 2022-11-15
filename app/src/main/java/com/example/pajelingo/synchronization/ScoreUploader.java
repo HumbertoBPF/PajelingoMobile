@@ -37,7 +37,7 @@ public class ScoreUploader {
         String password = sp.getString(context.getString(R.string.password_sp), null);
 
         Call<List<Score>> call = LanguageSchoolAPIHelper.getApiObject().getScore(getAuthToken(username, password),
-                language.getId(), gameId);
+                language.getLanguageName(), gameId);
         call.enqueue(new Callback<List<Score>>() {
             @Override
             public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {

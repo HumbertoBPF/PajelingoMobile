@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Pajelingo</string>
     <string name="dialog_download_resources_title">Download resources</string>
-    <string name="dialog_download_resources_message">You are going to download the resources from the server. Please, make sure to have an internet connexion.</string>
+    <string name="dialog_download_resources_message">You are going to download the resources from the server. Please, make sure to be connected to internet.</string>
     <string name="dialog_download_resources_confirm">Launch</string>
     <string name="dialog_download_resources_decline">Cancel</string>
 
@@ -40,8 +40,8 @@
     <string name="tab_icon_rankings_title">Rankings</string>
     <string name="tab_icon_menu_title">Menu</string>
     <string name="general_ranking_spinner_text">General</string>
-    <string name="update_ranking_dialog_title">Please, wait</string>
-    <string name="update_ranking_dialog_message">Verifying credentials and updating scores…</string>
+    <string name="login_dialog_title">Please, wait</string>
+    <string name="login_dialog_message">Verifying credentials…</string>
     <string name="warning_invalid_credientials">Invalid username or password</string>
     <string name="warning_fail_login">Connexion error, please verify your internet connexion</string>
     <string name="update_ranking_success_message">Rankings updated</string>

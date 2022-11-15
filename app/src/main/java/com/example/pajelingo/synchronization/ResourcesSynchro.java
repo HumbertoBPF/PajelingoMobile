@@ -74,14 +74,11 @@ public abstract class ResourcesSynchro<E> {
      * Calls the object responsible for the next synchronization step.
      */
     protected void nextStep() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (nextTask != null) {
-                    nextTask.execute();
-                }else {
-                    downloadDialog.dismiss();
-                }
+        handler.postDelayed(() -> {
+            if (nextTask != null) {
+                nextTask.execute();
+            }else {
+                downloadDialog.dismiss();
             }
         },2000);
     }

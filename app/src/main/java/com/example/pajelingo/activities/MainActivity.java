@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // Launch synchronization
         if (selectedId == R.id.action_synchro) {
             askConfirmationSynchroResources();
-        }else if (selectedId == R.id.action_rankings){
+        }else if (selectedId == R.id.action_menu){
             startActivity(new Intent(this, MenuActivity.class));
         }else if (selectedId == R.id.action_online){
             swapConnexionMode();
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the app is in the online mode, show the option to pass to offline mode
         MenuItem onlineItem = menu.findItem(R.id.action_online);
-        MenuItem rankingItem = menu.findItem(R.id.action_rankings);
+        MenuItem rankingItem = menu.findItem(R.id.action_menu);
 
         if (isUserAuthenticated(this)){
             onlineItem.setIcon(R.drawable.ic_login);

@@ -13,6 +13,8 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
+import com.example.pajelingo.retrofit.LanguageSchoolAPI;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
 import org.junit.After;
 
@@ -21,6 +23,7 @@ import java.io.IOException;
 public abstract class UITests {
     public ActivityScenario<MainActivity> activityScenario;
     protected final Context context = ApplicationProvider.getApplicationContext();
+    protected final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
     /**
      * Asserts that the activity currently rendered is the MainActivity.

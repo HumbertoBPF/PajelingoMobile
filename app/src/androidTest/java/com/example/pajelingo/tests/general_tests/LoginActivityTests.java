@@ -10,11 +10,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.TestTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.getRandomString;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
 
 import android.content.SharedPreferences;
@@ -24,8 +24,6 @@ import androidx.test.core.app.ActivityScenario;
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
-import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.After;
@@ -35,14 +33,13 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class LoginActivityTests extends UITests {
-    private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
     private final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
 
     @Before
     public void setUp() throws IOException {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-        languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPITest.signup(testUser).execute();
+        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+        languageSchoolAPI.signup(testUser).execute();
     }
 
     @Test
@@ -75,8 +72,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_edit_text)).perform(typeText(password), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.update_ranking_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.update_ranking_dialog_title)), 30000, false));
+        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 30000, false));
 
         assert !isUserAuthenticated(context);
     }
@@ -91,8 +88,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_edit_text)).perform(typeText(testUser.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.update_ranking_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.update_ranking_dialog_title)), 30000, false));
+        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 30000, false));
 
         assert isUserAuthenticated(context);
 
@@ -105,13 +102,13 @@ public class LoginActivityTests extends UITests {
         // Verify menu icons on app bar (ranking must be rendered after login)
         onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
         onView(withId(R.id.action_online)).check(matches(isDisplayed()));
-        onView(withId(R.id.action_rankings)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_menu)).check(matches(isDisplayed()));
     }
 
     @After
     public void tearDown() throws IOException {
         super.tearDown();
-        languageSchoolAPITest.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
     

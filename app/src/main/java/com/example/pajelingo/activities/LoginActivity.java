@@ -1,23 +1,29 @@
 package com.example.pajelingo.activities;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.Score;
-import com.example.pajelingo.synchronization.ScoreSynchro;
+import com.example.pajelingo.models.User;
+import com.example.pajelingo.retrofit.LanguageSchoolAPI;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -34,22 +40,49 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+        loginButton.setOnClickListener(v -> {
+            login();
+        });
+    }
 
-                new ScoreSynchro(LoginActivity.this, username, password, new OnResultListener<List<Score>>() {
-                    @Override
-                    public void onResult(List<Score> result) {
+    private void login(){
+        AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this).setTitle(R.string.login_dialog_title)
+                .setMessage(R.string.login_dialog_message).setCancelable(false).create();
+        dialog.show();
+
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        Call<User> call = languageSchoolAPI.login(getAuthToken(username, password));
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()){
+                    saveStateAndUserCredentials(getApplicationContext(), username, password);
+                    new Handler().postDelayed(() -> {
                         Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
-                        saveStateAndUserCredentials(getApplicationContext(), username, password);
+                        dialog.dismiss();
                         finish();
+                    }, 2000);
+                }else {
+                    if (response.code() == 401) {
+                        dialog.setMessage(getString(R.string.warning_invalid_credientials));
+                    } else {
+                        dialog.setMessage(getString(R.string.warning_fail_login));
                     }
-                }).execute();
+                    dismissDialogDelayed(dialog);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                dialog.setMessage(getString(R.string.warning_fail_login));
+                dismissDialogDelayed(dialog);
             }
         });
     }
 
+    private void dismissDialogDelayed(AlertDialog dialog){
+        new Handler().postDelayed(dialog::dismiss,2000);
+    }
 }

@@ -14,8 +14,6 @@ import androidx.test.core.app.ActivityScenario;
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
-import com.example.pajelingo.retrofit.LanguageSchoolAPITest;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Before;
@@ -24,11 +22,10 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class MainActivityTests extends UITests {
-    private final LanguageSchoolAPITest languageSchoolAPITest = (LanguageSchoolAPITest) LanguageSchoolAPIHelperTest.getApiObject();
 
     @Before
     public void setUp() throws IOException {
-        saveEntitiesFromAPI(languageSchoolAPITest.getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
     }
 
     @Test

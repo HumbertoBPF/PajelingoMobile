@@ -11,13 +11,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
 import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
 import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -30,7 +30,6 @@ import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
 import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
 import org.junit.Test;
@@ -43,8 +42,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
     @Override
     public void setUp() throws IOException {
         super.setUp();
-        saveEntitiesFromAPI(languageSchoolAPITest.getArticles(), AppDatabase.getInstance(context).getArticleDao());
-        saveEntitiesFromAPI(languageSchoolAPITest.getWords(), AppDatabase.getInstance(context).getWordDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getArticles(), AppDatabase.getInstance(context).getArticleDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
         game = AppDatabase.getInstance(context).getGameDao().getGameByName("Guess the Article");
     }
 
@@ -209,7 +208,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     @Test
     public void testArticleGameWithoutLanguageData() throws IOException {
         AppDatabase.getInstance(context).clearAllTables();
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
@@ -219,8 +218,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
     @Test
     public void testArticleGameWithoutWordData() throws IOException {
         AppDatabase.getInstance(context).clearAllTables();
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 
@@ -232,9 +231,9 @@ public class ArticleGameActivityTests extends GameActivityTests {
     @Test
     public void testArticleGameWithoutArticleData() throws IOException {
         AppDatabase.getInstance(context).clearAllTables();
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getGames(), AppDatabase.getInstance(context).getGameDao());
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
-        saveEntitiesFromAPI(LanguageSchoolAPIHelperTest.getApiObject().getWords(), AppDatabase.getInstance(context).getWordDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
+        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 

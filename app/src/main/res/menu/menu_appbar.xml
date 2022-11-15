@@ -15,7 +15,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_rankings"
+        android:id="@+id/action_menu"
         android:icon="@drawable/ic_menu"
         android:title="@string/tab_icon_menu_title"
         app:showAsAction="ifRoom"/>

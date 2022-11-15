@@ -3,7 +3,6 @@ package com.example.pajelingo.utils;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.pajelingo.daos.BaseDao;
 import com.example.pajelingo.daos.LanguageDao;
@@ -13,7 +12,7 @@ import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelperTest;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,8 +64,8 @@ public class TestTools {
         Thread.sleep(3000);
 
         Response<List<Score>> responseScore =
-                LanguageSchoolAPIHelperTest.getApiObject()
-                        .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getId(), gameId).execute();
+                LanguageSchoolAPIHelper.getApiObject()
+                        .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getLanguageName(), gameId).execute();
         List<Score> scores = responseScore.body();
 
         assert scores != null;
