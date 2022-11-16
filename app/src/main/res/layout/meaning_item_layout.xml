@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="5dp"
     android:layout_marginTop="5dp"
+    app:cardCornerRadius="4dp"
+    app:cardBackgroundColor="@color/blue"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -21,7 +23,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="16sp"
             android:layout_margin="10dp"
-            tools:text="Meaning of the current word" />
+            tools:text="Meaning of the current word"
+            android:textColor="@color/white"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

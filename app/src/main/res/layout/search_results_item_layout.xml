@@ -5,12 +5,14 @@
     android:id="@+id/root_view"
     android:layout_marginHorizontal="5dp"
     android:layout_marginTop="5dp"
+    app:cardCornerRadius="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/selector_blue">
 
         <TextView
             android:id="@+id/word_name_text_view"
@@ -25,6 +27,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Name word"
+            android:textColor="@color/white"
             />
 
         <TextView
@@ -38,6 +41,7 @@
             android:layout_marginBottom="10dp"
             android:textSize="16sp"
             tools:text="Language"
+            android:textColor="@color/white"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
