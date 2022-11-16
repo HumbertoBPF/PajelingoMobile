@@ -45,7 +45,8 @@
     <string name="warning_invalid_credientials">Invalid username or password</string>
     <string name="warning_fail_login">Connexion error, please verify your internet connexion</string>
     <string name="update_ranking_success_message">Rankings updated</string>
-    <string name="message_no_resources">Do a resources synchronization(loop button on the top of the screen) to have access to the games.</string>
+    <string name="no_resources_message">It seems that game data is missing… Do a sync (loop button on the top of the screen)
+        to have access to our games.</string>
     <string name="confirm_update_rankings_dialog_title">Rankings update</string>
     <string name="yes_button_text">Yes</string>
     <string name="no_button_text">No</string>
@@ -53,4 +54,6 @@
     <string name="dictionary_title">Dictionary</string>
     <string name="ranking_title">Rankings</string>
     <string name="login_title">Login</string>
+    <string name="search_something_message">What about searching something?</string>
+    <string name="no_results_message">No result matching your search was found</string>
 </resources>

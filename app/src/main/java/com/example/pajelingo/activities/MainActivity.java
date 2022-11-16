@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
@@ -25,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity {
 
     private TextView greetingTextView;
-    private TextView warningNoResourcesTextView;
+    private ConstraintLayout noDataWarning;
     private RecyclerView gamesRecyclerView;
     private FloatingActionButton searchButton;
     private SharedPreferences sp;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         greetingTextView = findViewById(R.id.greeting_text_view);
-        warningNoResourcesTextView = findViewById(R.id.warning_no_resources_text_view);
+        noDataWarning = findViewById(R.id.no_data_constraint_layout);
         gamesRecyclerView = findViewById(R.id.games_recycler_view);
         searchButton = findViewById(R.id.search_button);
 
@@ -53,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private void loadGames(){
         gameDao.getEnabledGamesTask(result -> {
             if (result.isEmpty()){
-                warningNoResourcesTextView.setVisibility(View.VISIBLE);
+                noDataWarning.setVisibility(View.VISIBLE);
             }else{
-                warningNoResourcesTextView.setVisibility(View.GONE);
+                noDataWarning.setVisibility(View.GONE);
             }
             gamesRecyclerView.setAdapter(new GameAdapter(MainActivity.this, result));
         }).execute();

@@ -39,7 +39,9 @@ public abstract class UITests {
             onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Guess the Article", 1)));
             onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Conjugation Game", 2)));
         }else{
-            onView(withId(R.id.warning_no_resources_text_view)).check(matches(isDisplayed()));
+            onView(withId(R.id.no_data_constraint_layout)).check(matches(isDisplayed()));
+            onView(withId(R.id.no_data_image_view)).check(matches(isDisplayed()));
+            onView(withId(R.id.no_data_text_view)).check(matches(isDisplayed()));
         }
     }
 
