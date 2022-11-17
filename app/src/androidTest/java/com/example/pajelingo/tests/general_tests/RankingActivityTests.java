@@ -44,14 +44,14 @@ public class RankingActivityTests extends UITests {
     public void testSelectGame(){
         LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
         List<Language> languages = languageDao.getAllRecords();
-        languages.add(new Language("General"));
+        languages.add(new Language(context.getString(R.string.general_ranking_spinner_text)));
 
         Language randomLanguage = languages.get(getRandomInteger(0, languages.size() - 1));
 
         ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
         List<Score> scores;
 
-        if (randomLanguage.getLanguageName().equals("General")){
+        if (randomLanguage.getLanguageName().equals(context.getString(R.string.general_ranking_spinner_text))){
             scores = scoreDao.getAllScoresSorted();
         }else{
             scores = scoreDao.getAllScoresSorted(randomLanguage.getLanguageName());

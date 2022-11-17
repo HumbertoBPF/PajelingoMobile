@@ -72,8 +72,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_edit_text)).perform(typeText(password), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 30000, false));
+        onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
 
         assert !isUserAuthenticated(context);
     }
@@ -88,8 +88,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_edit_text)).perform(typeText(testUser.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.login_dialog_title)), 30000, false));
+        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
 
         assert isUserAuthenticated(context);
 

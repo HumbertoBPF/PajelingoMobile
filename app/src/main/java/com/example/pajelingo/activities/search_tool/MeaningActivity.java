@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.activities.search_tool;
 
 import android.os.Bundle;
 

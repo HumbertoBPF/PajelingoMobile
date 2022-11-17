@@ -40,6 +40,7 @@
     <string name="tab_icon_rankings_title">Rankings</string>
     <string name="tab_icon_menu_title">Menu</string>
     <string name="general_ranking_spinner_text">General</string>
+    <string name="all_languages_spinner_option">All languages</string>
     <string name="login_dialog_title">Please, wait</string>
     <string name="login_dialog_message">Verifying credentials…</string>
     <string name="warning_invalid_credientials">Invalid username or password</string>
@@ -54,6 +55,6 @@
     <string name="dictionary_title">Dictionary</string>
     <string name="ranking_title">Rankings</string>
     <string name="login_title">Login</string>
-    <string name="search_something_message">What about searching something?</string>
+    <string name="loading_message">We are loading your results, please wait…</string>
     <string name="no_results_message">No result matching your search was found</string>
 </resources>

@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.search_tool.SearchActivity;
 import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.database.settings.AppDatabase;

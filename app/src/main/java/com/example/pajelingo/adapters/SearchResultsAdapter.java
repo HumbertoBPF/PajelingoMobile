@@ -12,7 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.MeaningActivity;
+import com.example.pajelingo.activities.search_tool.MeaningActivity;
 import com.example.pajelingo.models.Word;
 
 import java.util.List;

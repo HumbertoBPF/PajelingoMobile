@@ -39,10 +39,10 @@ public class MainActivityTests extends UITests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_synchro)).perform(click());
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.dialog_download_resources_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.dialog_download_resources_title), 5000, true));
         onView(withText(R.string.dialog_download_resources_confirm)).perform(click());
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.progress_download_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.progress_download_title)), 30000, false));
+        onView(isRoot()).perform(waitForView(withText(R.string.progress_download_title), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.progress_download_title), 30000, false));
     }
 
     @Test
@@ -50,9 +50,9 @@ public class MainActivityTests extends UITests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_synchro)).perform(click());
-        onView(isRoot()).perform(waitForView(withText(context.getString(R.string.dialog_download_resources_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.dialog_download_resources_title), 5000, true));
         onView(withText(R.string.dialog_download_resources_decline)).perform(click());
-        onView(withText(context.getString(R.string.progress_download_title))).check(doesNotExist());
+        onView(withText(R.string.progress_download_title)).check(doesNotExist());
         assertIsMenuActivity(true);
     }
 

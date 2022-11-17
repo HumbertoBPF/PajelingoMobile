@@ -14,8 +14,8 @@
         app:layout_constraintBottom_toTopOf="@id/ranking_recycler_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="5dp"/>
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ranking_recycler_view"
