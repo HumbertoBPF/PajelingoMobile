@@ -8,12 +8,12 @@
     <string name="progress_download_title">Download in progress</string>
     <string name="progress_download_initial_msg">Preparing your download</string>
 
-    <string name="play_button_text">Play!</string>
+    <string name="play_button_text">Play</string>
     <string name="check_button_text">Check</string>
 
     <string name="new_word_button_text">New word</string>
-    <string name="target_language_label">Target language:</string>
-    <string name="base_language_label">Base language:</string>
+    <string name="target_language_label">Select the target language</string>
+    <string name="base_language_label">Select the base language</string>
     <string name="instruction_vocabulary_game">Provide a translation in\u0020</string>
     <string name="warning_base_target_len_eq">Base language and target language must not be the same</string>
 
@@ -35,7 +35,7 @@
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
-    <string name="choose_language_label">Choose a language</string>
+    <string name="choose_language_label">Select a language</string>
     <string name="greeting_text">Welcome back,\u0020</string>
     <string name="tab_icon_rankings_title">Rankings</string>
     <string name="tab_icon_menu_title">Menu</string>

@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/root_view"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginTop="8dp"
+    app:cardCornerRadius="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -34,9 +35,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_1"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="8dp"
             android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="@color/black"
             android:gravity="center"
             tools:text="1"
             />
@@ -49,7 +50,9 @@
             app:layout_constraintStart_toEndOf="@id/guideline_1"
             app:layout_constraintEnd_toStartOf="@id/guideline_2"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginVertical="8dp"
             android:gravity="center"
             tools:text="HumbertoBPF"/>
 
@@ -62,7 +65,9 @@
             app:layout_constraintStart_toEndOf="@id/guideline_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:textSize="16sp"
+            android:layout_marginVertical="8dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
             android:gravity="center"
             tools:text="231"
             />

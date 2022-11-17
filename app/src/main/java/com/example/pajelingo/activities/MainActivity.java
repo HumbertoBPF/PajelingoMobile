@@ -155,9 +155,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Greet user if it is logged in
         if (isUserAuthenticated(this)){
+            greetingTextView.setVisibility(View.VISIBLE);
             String username = sp.getString(getString(R.string.username_sp), null);
             greetingTextView.setText(getString(R.string.greeting_text)+username);
         }else{
+            greetingTextView.setVisibility(View.GONE);
             greetingTextView.setText(null);
         }
         // Verify if it is necessary to change the layout of the menu(the online/offline mode icon)
