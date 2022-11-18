@@ -91,9 +91,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage,true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
     }
 
     @Test
@@ -105,9 +103,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
     }
 
     @Test
@@ -121,18 +117,12 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
         assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
         assertScoreValue(testUser, targetLanguage, game.getId(), 2L);
     }
 
@@ -147,18 +137,12 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
         assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
         assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
     }
 
@@ -173,18 +157,12 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
         assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
         assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
     }
 
@@ -199,18 +177,12 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
         assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
         assertScoreValue(testUser, targetLanguage, game.getId(), 0L);
     }
 
@@ -236,6 +208,18 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
         setupVocabularyGame(baseLanguage, targetLanguage);
         assertIsMenuActivity(true);
+    }
+
+    /**
+     * Inputs an answer and checks if it is correct or wrong.
+     * @param baseLanguage selected base language
+     * @param targetLanguage selected target language
+     * @param isCorrect boolean indicating if the answer is correct or wrong
+     */
+    private void inputAnswerAndCheckFeedback(Language baseLanguage, Language targetLanguage, boolean isCorrect) {
+        onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, isCorrect));
+        onView(withId(R.id.check_button)).perform(click());
+        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(isCorrect)));
     }
 
     /**

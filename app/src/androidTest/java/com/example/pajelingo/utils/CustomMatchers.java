@@ -2,6 +2,7 @@ package com.example.pajelingo.utils;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -283,6 +285,26 @@ public class CustomMatchers {
                 return positionTextView.getText().toString().equals(String.valueOf(position+1)) &&
                         usernameTextView.getText().toString().equals(score.getUser()) &&
                         scoreTextView.getText().toString().equals(String.valueOf(score.getScore()));
+            }
+        };
+    }
+
+    public static Matcher<? super View> floatActionButtonHasColor(int color){
+        return new BoundedMatcher<View, FloatingActionButton>(FloatingActionButton.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the color of the FloatingActionButton matches the specified color");
+            }
+
+            @Override
+            protected boolean matchesSafely(FloatingActionButton floatingActionButton) {
+                ColorStateList backgroundTintList = floatingActionButton.getBackgroundTintList();
+
+                if (backgroundTintList == null){
+                    throw new NullPointerException("No ColorStateList could be obtained from the FloatingActionButton");
+                }
+
+                return floatingActionButton.getBackgroundTintList().equals(ColorStateList.valueOf(color));
             }
         };
     }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.OnBoardingActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="8dp">
+
+        <ImageView
+            android:id="@+id/on_boarding_image_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:adjustViewBounds="true"
+            tools:src="@drawable/on_boarding_1"/>
+
+        <TextView
+            android:id="@+id/on_boarding_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/on_boarding_image_view"
+            tools:text="Description"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_arrow_right"
+        app:backgroundTint="@color/blue"
+        android:tint="@android:color/white"
+        app:tint="@android:color/white"
+        android:contentDescription="@string/fab_next_text"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_arrow_left"
+        app:backgroundTint="@color/blue"
+        android:tint="@android:color/white"
+        app:tint="@android:color/white"
+        android:contentDescription="@string/fab_back_text"/>
+
+    <Button
+        android:id="@+id/get_started_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/next_button"
+        app:layout_constraintBottom_toBottomOf="@id/next_button"
+        app:layout_constraintStart_toEndOf="@id/back_button"
+        app:layout_constraintEnd_toStartOf="@id/next_button"
+        android:text="@string/button_get_started_text"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

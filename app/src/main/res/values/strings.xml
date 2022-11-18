@@ -32,6 +32,7 @@
     <string name="username_sp">username</string>
     <string name="password_sp">password</string>
     <string name="last_score_synchro_sp">last_score_synchro</string>
+    <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
@@ -90,4 +91,10 @@
     <string name="faq_4_title">How much does it cost?</string>
     <string name="faq_4_description">It\'s free :)</string>
     <string name="faq_activity_title">FAQ</string>
+    <string name="fab_next_text">Next</string>
+    <string name="fab_back_text">Back</string>
+    <string name="on_boarding_1">Welcome to Pajelingo! We are here to help you to learn foreign languages :)</string>
+    <string name="on_boarding_2">We have several games and a powerful search tool for you, without registration! However, your experience is even better with an account :)</string>
+    <string name="on_boarding_3">Happy learning!</string>
+    <string name="button_get_started_text">Get started</string>
 </resources>

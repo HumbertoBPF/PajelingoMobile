@@ -87,9 +87,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
+        inputAnswerAndCheckFeedback(randomLanguage, true);
     }
 
     @Test
@@ -100,9 +98,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
+        inputAnswerAndCheckFeedback(randomLanguage, false);
     }
 
     @Test
@@ -115,18 +111,12 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, true);
         assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, true);
         assertScoreValue(testUser, randomLanguage, game.getId(), 2L);
     }
 
@@ -140,18 +130,12 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, false);
         assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, true);
         assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
@@ -165,18 +149,12 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, true));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(true)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, true);
         assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, false);
         assertScoreValue(testUser, randomLanguage, game.getId(), 1L);
     }
 
@@ -190,18 +168,12 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, false);
         assertScoreValue(testUser, Objects.requireNonNull(randomLanguage), game.getId(), 0L);
 
         onView(withId(R.id.new_word_button)).perform(click());
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(false)));
-
+        inputAnswerAndCheckFeedback(randomLanguage, false);
         assertScoreValue(testUser, randomLanguage, game.getId(), 0L);
     }
 
@@ -244,6 +216,17 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
         assertIsMenuActivity(true);
+    }
+
+    /**
+     * Inputs an answer and checks if it is correct or wrong.
+     * @param randomLanguage selected language
+     * @param isCorrect boolean indicating if the answer is correct or wrong
+     */
+    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
+        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
+        onView(withId(R.id.check_button)).perform(click());
+        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(isCorrect)));
     }
 
     /**

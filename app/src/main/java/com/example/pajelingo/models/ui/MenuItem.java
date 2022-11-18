@@ -1,4 +1,4 @@
-package com.example.pajelingo.models;
+package com.example.pajelingo.models.ui;
 
 import android.view.View;
 

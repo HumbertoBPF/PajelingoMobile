@@ -21,7 +21,7 @@ import org.junit.After;
 import java.io.IOException;
 
 public abstract class UITests {
-    public ActivityScenario<MainActivity> activityScenario;
+    public ActivityScenario activityScenario;
     protected final Context context = ApplicationProvider.getApplicationContext();
     protected final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 

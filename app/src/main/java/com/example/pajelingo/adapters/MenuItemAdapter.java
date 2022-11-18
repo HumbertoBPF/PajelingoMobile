@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.models.MenuItem;
+import com.example.pajelingo.models.ui.MenuItem;
 
 import java.util.List;
 

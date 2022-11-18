@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -17,7 +18,14 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
+
+                Class destinyActivity = MainActivity.class;
+                if (sp.getBoolean(getString(R.string.is_first_access), true)){
+                    destinyActivity = OnBoardingActivity.class;
+                }
+
+                startActivity(new Intent(SplashScreen.this, destinyActivity));
                 finish();
             }
         },3000);
