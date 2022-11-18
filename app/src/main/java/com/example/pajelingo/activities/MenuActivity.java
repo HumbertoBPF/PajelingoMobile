@@ -32,13 +32,14 @@ public class MenuActivity extends AppCompatActivity {
         List<MenuItem> menuItems = new ArrayList<>();
 
         if (isUserAuthenticated(MenuActivity.this)){
-            menuItems.add(new MenuItem(R.drawable.ic_profile, "Profile", null, null));
+            menuItems.add(new MenuItem(R.drawable.ic_profile, getString(R.string.profile_menu_item_title), null, null));
         }
 
-        menuItems.add(new MenuItem(R.drawable.ic_rankings, "Rankings", null,
+        menuItems.add(new MenuItem(R.drawable.ic_rankings, getString(R.string.rankings_menu_item_title), null,
                 v -> startActivity(new Intent(MenuActivity.this, RankingActivity.class))));
 
-        menuItems.add(new MenuItem(R.drawable.ic_faq, "FAQ", null, null));
+        menuItems.add(new MenuItem(R.drawable.ic_faq, getString(R.string.faq_menu_item_title), null,
+                v -> startActivity(new Intent(MenuActivity.this, FaqListActivity.class))));
 
         menuItemsRecyclerView.setAdapter(new MenuItemAdapter(menuItems));
     }

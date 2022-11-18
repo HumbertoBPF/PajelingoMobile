@@ -30,7 +30,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        setTitle(R.string.dictionary_title);
+        setTitle(R.string.dictionary_activity_title);
 
         searchEditText = findViewById(R.id.search_edit_text);
         languageSpinner = findViewById(R.id.language_spinner);
@@ -47,6 +47,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             languageSpinner.setAdapter(adapter);
             languageSpinner.setOnItemSelectedListener(SearchActivity.this);
+            int lastPosition = languageSpinner.getAdapter().getCount();
+            languageSpinner.setSelection(lastPosition - 1);
         }).execute();
 
         searchButton.setOnClickListener(v -> {

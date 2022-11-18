@@ -28,7 +28,7 @@ public class RankingActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
-        setTitle(R.string.ranking_title);
+        setTitle(R.string.ranking_activity_title);
 
         languageSpinner = findViewById(R.id.language_spinner);
         rankingRecyclerView = findViewById(R.id.ranking_recycler_view);

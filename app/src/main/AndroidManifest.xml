@@ -12,6 +12,20 @@
         android:theme="@style/Theme.Pajelingo"
         android:usesCleartextTraffic="true" >
         <activity
+            android:name=".activities.FaqActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.FaqListActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.search_tool.SearchActivity"
             android:exported="false" >
             <meta-data

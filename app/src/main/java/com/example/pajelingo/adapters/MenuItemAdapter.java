@@ -55,23 +55,27 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
             String title = menuItem.getTitle();
             String description = menuItem.getDescription();
 
-            if (menuItem.getIconResource() != null){
+            if (iconResource != null){
                 iconImageView.setVisibility(View.VISIBLE);
                 iconImageView.setImageResource(iconResource);
             }else{
                 iconImageView.setVisibility(View.GONE);
             }
 
-            if (menuItem.getTitle() != null){
+            if (title != null){
                 titleTextView.setVisibility(View.VISIBLE);
                 titleTextView.setText(title);
             }else{
                 titleTextView.setVisibility(View.GONE);
             }
 
-            if (menuItem.getDescription() != null){
+            if (description != null){
                 descriptionTextView.setVisibility(View.VISIBLE);
-                descriptionTextView.setText(description);
+                if (description.length() > 100){
+                    descriptionTextView.setText(description.substring(0, 97)+"...");
+                }else{
+                    descriptionTextView.setText(description);
+                }
             }else{
                 descriptionTextView.setVisibility(View.GONE);
             }

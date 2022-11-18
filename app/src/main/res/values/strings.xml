@@ -52,9 +52,42 @@
     <string name="yes_button_text">Yes</string>
     <string name="no_button_text">No</string>
     <string name="default_last_synchro_date">not found</string>
-    <string name="dictionary_title">Dictionary</string>
-    <string name="ranking_title">Rankings</string>
-    <string name="login_title">Login</string>
+    <string name="dictionary_activity_title">Dictionary</string>
+    <string name="ranking_activity_title">Rankings</string>
+    <string name="login_activity_title">Login</string>
     <string name="loading_message">We are loading your results, please wait…</string>
     <string name="no_results_message">No result matching your search was found</string>
+    <string name="profile_menu_item_title">Profile</string>
+    <string name="rankings_menu_item_title">Rankings</string>
+    <string name="faq_menu_item_title">FAQ</string>
+    <string name="faq_1_title">Who is the creator of this app?</string>
+    <string name="faq_1_description">My name is Humberto Borges. I\'m a web and mobile developer interested in learn more about
+        the development world. I also love learning foreign languages and online platforms had a great role on my learning.
+        Hence I came up with the idea of developing an app by myself to contribute as developer and as a learner. Find me on
+        GitHub and on LinkedIn:
+        \n\n
+        www.linkedin.com/in/humberto-bpf
+        https://github.com/HumbertoBPF</string>
+    <string name="faq_2_title">What is this app for?</string>
+    <string name="faq_2_description">This app aims to help you to improve your skills in foreign languages.
+        \n\n
+        An important part of leaning a new language is about practicing it everyday, so you\'ll find here games where you can practice key
+        aspects of your target language, such as vocabulary and verb conjugation. The games are simple such that you can play it while
+        taking a bus or waiting on a line. You don\'t need to have an account to play the games, but you can compete with other players
+        in our rankings by signing up.
+        \n\n
+        This app also has a search tool that you can use to get more vocabulary. We provide the meanings of the words in their language
+        instead of translations to keep your immersion in your target language.
+    </string>
+    <string name="faq_3_title">Can I use this app offline?</string>
+    <string name="faq_3_description">Most features of this app work offline if you performed a sync successfully at least once. That\'s the case
+        for the games and the search tool. Account related functionalities, for example login and performing account information updates require
+        an internet connexion.
+        \n\n
+        Sync are necessary to keep app resources, like rankings and game data, updated. Because we try to improve this app and your experience with
+        it constantly, we recommend that you perform syncs regularly (at least weekly). Since app data is downloaded from our server, you need to be
+        online to perform a sync successfully.</string>
+    <string name="faq_4_title">How much does it cost?</string>
+    <string name="faq_4_description">It\'s free :)</string>
+    <string name="faq_activity_title">FAQ</string>
 </resources>

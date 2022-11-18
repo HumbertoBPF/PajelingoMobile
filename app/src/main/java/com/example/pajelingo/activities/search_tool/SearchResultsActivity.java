@@ -32,7 +32,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        setTitle(R.string.dictionary_title);
+        setTitle(R.string.dictionary_activity_title);
 
         warningConstraintLayout = findViewById(R.id.warning_constraint_layout);
         warningImageView = findViewById(R.id.warning_image_view);
