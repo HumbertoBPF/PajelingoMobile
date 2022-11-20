@@ -171,10 +171,10 @@ public class ConjugationGameActivity extends GameActivity {
             }
 
             feedback = getString(R.string.correct_answer_message);
-            feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.correct_answer_color));
+            feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.success_color));
         }else{
             feedback = getString(R.string.wrong_answer_message);
-            feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.wrong_answer_color));
+            feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.danger_color));
         }
 
         feedback += language.getPersonalPronoun1() + " " + conjugation.getConjugation1() + "\n" +

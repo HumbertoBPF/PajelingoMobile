@@ -7,6 +7,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#A1D0FF</color>
     <color name="blue_2">#6EB6FF</color>
-    <color name="wrong_answer_color">#DC3545</color>
-    <color name="correct_answer_color">#198754</color>
+    <color name="danger_color">#DC3545</color>
+    <color name="success_color">#198754</color>
+    <color name="raw_blue">#0000FF</color>
 </resources>

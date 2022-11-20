@@ -3,10 +3,12 @@ package com.example.pajelingo.activities;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -25,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
+    private TextView signupLinkTextView;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -36,12 +39,18 @@ public class LoginActivity extends AppCompatActivity {
 
         setTitle(R.string.login_activity_title);
 
+        signupLinkTextView = findViewById(R.id.signup_link_text_view);
         usernameEditText = findViewById(R.id.username_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
 
         loginButton.setOnClickListener(v -> {
             login();
+        });
+
+        signupLinkTextView.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+            finish();
         });
     }
 

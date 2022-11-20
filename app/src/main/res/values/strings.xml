@@ -97,4 +97,14 @@
     <string name="on_boarding_2">We have several games and a powerful search tool for you, without registration! However, your experience is even better with an account :)</string>
     <string name="on_boarding_3">Happy learning!</string>
     <string name="button_get_started_text">Get started</string>
+    <string name="signup_link"><u>Don\'t have an account? Sign up</u></string>
+    <string name="signup_activity_title">Sign up</string>
+    <string name="login_link"><u>Already has an account? Login</u></string>
+    <string name="signup_button_text">Create account</string>
+    <string name="email_label">Email</string>
+    <string name="password_requirements_label">Your password must have at least:</string>
+    <string name="password_requirement_1">1 digit</string>
+    <string name="password_requirement_2">1 letter</string>
+    <string name="password_requirement_3">1 special character</string>
+    <string name="password_password_4">8 characters</string>
 </resources>
