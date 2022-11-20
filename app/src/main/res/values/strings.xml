@@ -31,6 +31,7 @@
     <string name="sp_file_name">MySharedPref</string>
     <string name="username_sp">username</string>
     <string name="password_sp">password</string>
+    <string name="email_sp">email</string>
     <string name="last_score_synchro_sp">last_score_synchro</string>
     <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>
@@ -107,4 +108,8 @@
     <string name="password_requirement_2">1 letter</string>
     <string name="password_requirement_3">1 special character</string>
     <string name="password_password_4">8 characters</string>
+    <string name="profile_activity_title">Profile</string>
+    <string name="update_account">Update credentials</string>
+    <string name="delete_account">Delete account</string>
+    <string name="favorite_button_description">Favorite words</string>
 </resources>

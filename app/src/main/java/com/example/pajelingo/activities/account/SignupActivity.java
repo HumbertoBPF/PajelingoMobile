@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.activities.account;
 
 import android.content.Intent;
 import android.os.Bundle;

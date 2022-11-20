@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_online"
+        android:id="@+id/action_login_logout"
         android:icon="@drawable/ic_login"
         android:title="@string/tab_icon_login_title"
         app:showAsAction="ifRoom"/>

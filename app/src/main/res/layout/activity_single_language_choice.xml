@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="@string/choose_language_label"
             android:textStyle="bold"
-            android:textColor="@color/black"
+
             android:textSize="16sp"/>
 
         <Spinner

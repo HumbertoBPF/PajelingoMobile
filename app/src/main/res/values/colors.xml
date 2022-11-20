@@ -7,7 +7,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#A1D0FF</color>
     <color name="blue_2">#6EB6FF</color>
-    <color name="danger_color">#DC3545</color>
-    <color name="success_color">#198754</color>
+    <color name="danger">#DC3545</color>
+    <color name="success">#198754</color>
+    <color name="info">#0DCAF0</color>
     <color name="raw_blue">#0000FF</color>
 </resources>

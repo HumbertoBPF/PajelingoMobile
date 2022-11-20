@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities;
+package com.example.pajelingo.activities.account;
 
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
@@ -6,6 +6,7 @@ import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -66,8 +67,11 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()){
-                    saveStateAndUserCredentials(getApplicationContext(), username, password);
+                User user = response.body();
+                if ((response.isSuccessful()) && (user != null)){
+                    Log.i("USER", user.getUsername());
+                    Log.i("USER", user.getEmail());
+                    saveStateAndUserCredentials(getApplicationContext(), user.getUsername(), user.getEmail(), password);
                     new Handler().postDelayed(() -> {
                         Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
                         dialog.dismiss();

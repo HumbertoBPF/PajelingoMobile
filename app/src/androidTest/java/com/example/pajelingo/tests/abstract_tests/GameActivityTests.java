@@ -7,8 +7,6 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
 import org.junit.After;
 import org.junit.Before;

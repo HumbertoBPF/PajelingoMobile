@@ -36,22 +36,24 @@ public class Tools{
     public static boolean isUserAuthenticated(Context context){
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         String username = sp.getString(context.getString(R.string.username_sp),null);
+        String email = sp.getString(context.getString(R.string.email_sp),null);
         String password = sp.getString(context.getString(R.string.password_sp),null);
 
-        return (username != null) && (password != null);
+        return (username != null) && (email != null) && (password != null);
     }
 
     /**
      * Saves the specified user credentials on Shared Preferences.
      * @param context application Context
      * @param username username to be saved
-     * @param password password to be saved
+     * @param email email to be saved
      */
-    public static void saveStateAndUserCredentials(Context context, String username, String password) {
+    public static void saveStateAndUserCredentials(Context context, String username, String email, String password) {
         // Save mode and credentials in SharedPreferences
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(context.getString(R.string.username_sp), username);
+        editor.putString(context.getString(R.string.email_sp), email);
         editor.putString(context.getString(R.string.password_sp), password);
         editor.apply();
     }

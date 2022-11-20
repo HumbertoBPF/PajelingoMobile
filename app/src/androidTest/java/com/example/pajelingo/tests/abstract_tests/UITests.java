@@ -12,7 +12,6 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
@@ -32,7 +31,7 @@ public abstract class UITests {
     protected void assertIsMenuActivity(boolean hasGames) {
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
         onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
-        onView(withId(R.id.action_online)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_login_logout)).check(matches(isDisplayed()));
 
         if (hasGames){
             onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Vocabulary Training", 0)));

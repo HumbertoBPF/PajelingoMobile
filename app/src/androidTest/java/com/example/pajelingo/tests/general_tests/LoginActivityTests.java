@@ -50,7 +50,7 @@ public class LoginActivityTests extends UITests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_online)).perform(click());
+        onView(withId(R.id.action_login_logout)).perform(click());
 
         onView(allOf(withId(R.id.username_label), withText(usernameLabel))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.password_label), withText(passwordLabel))).check(matches(isDisplayed()));
@@ -66,7 +66,7 @@ public class LoginActivityTests extends UITests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_online)).perform(click());
+        onView(withId(R.id.action_login_logout)).perform(click());
 
         onView(withId(R.id.username_edit_text)).perform(typeText(username), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text)).perform(typeText(password), closeSoftKeyboard());
@@ -82,7 +82,7 @@ public class LoginActivityTests extends UITests {
     public void testLoginSuccessful(){
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_online)).perform(click());
+        onView(withId(R.id.action_login_logout)).perform(click());
 
         onView(withId(R.id.username_edit_text)).perform(typeText(testUser.getUsername()), closeSoftKeyboard());
         onView(withId(R.id.password_edit_text)).perform(typeText(testUser.getPassword()), closeSoftKeyboard());
@@ -95,13 +95,13 @@ public class LoginActivityTests extends UITests {
 
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         String username = sp.getString(context.getString(R.string.username_sp),null);
-        String password = sp.getString(context.getString(R.string.password_sp),null);
+        String email = sp.getString(context.getString(R.string.email_sp),null);
 
         assert username.equals(testUser.getUsername());
-        assert password.equals(testUser.getPassword());
+        assert email.equals(testUser.getEmail());
         // Verify menu icons on app bar (ranking must be rendered after login)
         onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
-        onView(withId(R.id.action_online)).check(matches(isDisplayed()));
+        onView(withId(R.id.action_login_logout)).check(matches(isDisplayed()));
         onView(withId(R.id.action_menu)).check(matches(isDisplayed()));
     }
 

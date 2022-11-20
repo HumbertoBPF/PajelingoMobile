@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.account.LoginActivity;
 import com.example.pajelingo.activities.search_tool.SearchActivity;
 import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             askConfirmationSynchroResources();
         }else if (selectedId == R.id.action_menu){
             startActivity(new Intent(this, MenuActivity.class));
-        }else if (selectedId == R.id.action_online){
+        }else if (selectedId == R.id.action_login_logout){
             swapConnexionMode();
         }
 
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sp.edit();
             // Remove user from Shared Preferences due to logout
             editor.remove(getString(R.string.username_sp));
+            editor.remove(getString(R.string.email_sp));
             editor.remove(getString(R.string.password_sp));
             editor.apply();
             // Update menu layout
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the app is in the online mode, show the option to pass to offline mode
-        MenuItem onlineItem = menu.findItem(R.id.action_online);
+        MenuItem onlineItem = menu.findItem(R.id.action_login_logout);
         MenuItem rankingItem = menu.findItem(R.id.action_menu);
 
         if (isUserAuthenticated(this)){

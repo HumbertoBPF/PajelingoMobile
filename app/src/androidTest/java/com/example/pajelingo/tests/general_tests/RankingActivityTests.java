@@ -13,7 +13,6 @@ import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;

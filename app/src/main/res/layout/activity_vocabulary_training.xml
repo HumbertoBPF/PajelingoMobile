@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Word to translate"
             android:textSize="16sp"
-            android:textColor="@color/black"/>
+            />
 
         <EditText
             android:id="@+id/answer_input"

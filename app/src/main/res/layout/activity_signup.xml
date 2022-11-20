@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SignupActivity">
+    tools:context=".activities.account.SignupActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -40,7 +40,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+
                 android:text="@string/email_label" />
 
             <EditText
@@ -82,7 +82,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+
                 android:text="@string/username_label" />
 
             <EditText
@@ -124,7 +124,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+
                 android:text="@string/password_label"/>
 
             <EditText
@@ -149,7 +149,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp"
             android:textSize="16sp"
-            android:textColor="@color/black"
+
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/password_requirements_label"/>
 
@@ -172,7 +172,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/password_requirement_1"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                />
 
             <ImageView
                 android:id="@+id/requirement_1_check"
@@ -182,7 +182,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/requirement_1_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/success_color"
+                app:tint="@color/success"
                 android:src="@drawable/ic_check"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -205,7 +205,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/password_requirement_2"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                />
 
             <ImageView
                 android:id="@+id/requirement_2_check"
@@ -215,7 +215,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/requirement_2_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/success_color"
+                app:tint="@color/success"
                 android:src="@drawable/ic_check"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -238,7 +238,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/password_requirement_3"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                />
 
             <ImageView
                 android:id="@+id/requirement_3_check"
@@ -248,7 +248,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/requirement_3_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/success_color"
+                app:tint="@color/success"
                 android:src="@drawable/ic_check"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -271,7 +271,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="@string/password_password_4"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                />
 
             <ImageView
                 android:id="@+id/requirement_4_check"
@@ -281,7 +281,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/requirement_4_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/success_color"
+                app:tint="@color/success"
                 android:src="@drawable/ic_check"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

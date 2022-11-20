@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_edit_text"
-            android:textColor="@color/black"
+
             android:text="@string/choose_language_label"
             android:textSize="18sp"
             android:textStyle="bold"

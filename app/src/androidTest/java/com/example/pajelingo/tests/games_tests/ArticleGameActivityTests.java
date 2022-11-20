@@ -103,7 +103,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoCorrectAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 
@@ -122,7 +122,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 
@@ -141,7 +141,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 
@@ -160,7 +160,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
 
         Language randomLanguage = getRandomLanguage(context, "English");
 

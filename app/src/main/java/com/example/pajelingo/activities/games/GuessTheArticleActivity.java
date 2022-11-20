@@ -143,10 +143,10 @@ public class GuessTheArticleActivity extends GameActivity {
                     }
 
                     feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
-                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.success_color));
+                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.success));
                 }else{
                     feedback = getString(R.string.wrong_answer_message) +result.getArticleName()+" "+word.getWordName();
-                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.danger_color));
+                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.danger));
                 }
                 feedbackTextView.setText(feedback);
                 // If pressed, the user can play again
