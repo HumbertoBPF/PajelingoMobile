@@ -59,7 +59,7 @@ public class RankingActivityTests extends UITests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_menu)).perform(click());
-        onView(withId(R.id.menu_items_recycler_view)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.menu_item_rankings)).perform(click());
         onView(withId(R.id.language_spinner)).perform(click());
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
 

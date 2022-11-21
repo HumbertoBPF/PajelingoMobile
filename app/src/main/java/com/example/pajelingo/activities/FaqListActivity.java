@@ -1,20 +1,14 @@
 package com.example.pajelingo.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.MenuItemAdapter;
-import com.example.pajelingo.models.ui.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.pajelingo.R;
+import com.example.pajelingo.ui.SimpleListItem;
 
 public class FaqListActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,24 +17,20 @@ public class FaqListActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.faq_activity_title));
 
-        recyclerView = findViewById(R.id.faq_recycler_view);
+        SimpleListItem[] faqItems = {
+                findViewById(R.id.faq_1),
+                findViewById(R.id.faq_2),
+                findViewById(R.id.faq_3),
+                findViewById(R.id.faq_4)
+        };
 
-        List<MenuItem> faqItems = new ArrayList<>();
-
-        faqItems.add(faqItemFactory(getString(R.string.faq_1_title), getString(R.string.faq_1_description)));
-        faqItems.add(faqItemFactory(getString(R.string.faq_2_title), getString(R.string.faq_2_description)));
-        faqItems.add(faqItemFactory(getString(R.string.faq_3_title), getString(R.string.faq_3_description)));
-        faqItems.add(faqItemFactory(getString(R.string.faq_4_title), getString(R.string.faq_4_description)));
-
-        recyclerView.setAdapter(new MenuItemAdapter(faqItems));
-    }
-
-    private MenuItem faqItemFactory(String title, String description){
-        return new MenuItem(null, title, description, v -> {
-            Intent intent = new Intent(FaqListActivity.this, FaqActivity.class);
-            intent.putExtra("question", title);
-            intent.putExtra("answer", description);
-            startActivity(intent);
-        });
+        for (SimpleListItem faqItem: faqItems){
+            faqItem.setOnClickListener(v -> {
+                Intent intent = new Intent(FaqListActivity.this, FaqActivity.class);
+                intent.putExtra("question", faqItem.getTitle());
+                intent.putExtra("answer", faqItem.getDescription());
+                startActivity(intent);
+            });
+        }
     }
 }

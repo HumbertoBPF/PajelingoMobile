@@ -107,7 +107,7 @@
     <string name="password_requirement_1">1 digit</string>
     <string name="password_requirement_2">1 letter</string>
     <string name="password_requirement_3">1 special character</string>
-    <string name="password_password_4">8 characters</string>
+    <string name="password_requirement_4">8 characters</string>
     <string name="profile_activity_title">Profile</string>
     <string name="update_account">Update credentials</string>
     <string name="delete_account">Delete account</string>
