@@ -12,7 +12,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
+import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
+import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
 import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
@@ -55,8 +57,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(1, click()));
-        onView(allOf(withId(R.id.label_language_choice), withText(labelLanguageSpinner))).check(matches(isDisplayed()));
-        onView(withId(R.id.language_choice_spinner)).check(matches((isDisplayed())));
+        onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
         onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches((isDisplayed())));
     }
 
@@ -235,7 +236,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
      */
     private void setupArticleGame(Language language){
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.language_choice_spinner)).perform(click());
+        onView(withId(R.id.language_input)).perform(expandSpinner());
         onData(is(language)).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.play_button)).perform(click());
     }

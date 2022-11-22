@@ -21,6 +21,7 @@ import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ScoreUploader;
+import com.example.pajelingo.ui.LabeledSpinner;
 
 import java.util.List;
 
@@ -33,7 +34,8 @@ public class GuessTheArticleActivity extends GameActivity {
     protected void setup() {
         setContentView(R.layout.activity_single_language_choice);
 
-        Spinner languageSpinner = findViewById(R.id.language_choice_spinner);
+        LabeledSpinner languageInput = findViewById(R.id.language_input);
+        Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
         languageDao.getAllRecordsTask(new OnResultListener<List<Language>>() {

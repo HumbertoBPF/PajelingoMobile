@@ -12,7 +12,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
+import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
+import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
 import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
@@ -229,9 +231,9 @@ public class VocabularyGameActivityTests extends GameActivityTests {
      */
     private void setupVocabularyGame(Language baseLanguage, Language targetLanguage){
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.base_language_spinner)).perform(click());
+        onView(withId(R.id.base_language_input)).perform(expandSpinner());
         onData(is(baseLanguage)).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.target_language_spinner)).perform(click());
+        onView(withId(R.id.target_language_input)).perform(expandSpinner());
         onData(is(targetLanguage)).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.play_button)).perform(click());
     }
@@ -244,10 +246,8 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         String labelTargetLanguageSpinner = context.getString(R.string.target_language_label);
         String textPlayButton = context.getString(R.string.play_button_text);
 
-        onView(allOf(withId(R.id.label_base_language), withText(labelBaseLanguageSpinner))).check(matches(isDisplayed()));
-        onView(withId(R.id.base_language_spinner)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.label_target_language), withText(labelTargetLanguageSpinner))).check(matches(isDisplayed()));
-        onView(withId(R.id.target_language_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.base_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelBaseLanguageSpinner)));
+        onView(withId(R.id.target_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelTargetLanguageSpinner)));
         onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches(isDisplayed()));
     }
 }

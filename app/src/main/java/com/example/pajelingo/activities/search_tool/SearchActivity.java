@@ -15,6 +15,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
+import com.example.pajelingo.ui.LabeledSpinner;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private EditText searchEditText;
@@ -32,8 +33,10 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
         setTitle(R.string.dictionary_activity_title);
 
+        LabeledSpinner languageInput = findViewById(R.id.language_input);
+
         searchEditText = findViewById(R.id.search_edit_text);
-        languageSpinner = findViewById(R.id.language_spinner);
+        languageSpinner = languageInput.getSpinner();
         searchButton = findViewById(R.id.search_button);
 
         languageDao = AppDatabase.getInstance(this).getLanguageDao();

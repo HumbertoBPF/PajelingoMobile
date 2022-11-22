@@ -18,7 +18,8 @@ import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ScoreUploader;
-import com.example.pajelingo.ui.LabeledInput;
+import com.example.pajelingo.ui.LabeledEditText;
+import com.example.pajelingo.ui.LabeledSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,8 @@ public class ConjugationGameActivity extends GameActivity {
     protected void setup() {
         setContentView(R.layout.activity_single_language_choice);
 
-        Spinner languageSpinner = findViewById(R.id.language_choice_spinner);
+        LabeledSpinner languageInput = findViewById(R.id.language_input);
+        Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
         languageDao.getAllRecordsTask(result -> {
@@ -65,12 +67,12 @@ public class ConjugationGameActivity extends GameActivity {
 
         TextView verb = findViewById(R.id.verb_and_tense_text_view);
 
-        LabeledInput conjugation1 = findViewById(R.id.conjugation_1);
-        LabeledInput conjugation2 = findViewById(R.id.conjugation_2);
-        LabeledInput conjugation3 = findViewById(R.id.conjugation_3);
-        LabeledInput conjugation4 = findViewById(R.id.conjugation_4);
-        LabeledInput conjugation5 = findViewById(R.id.conjugation_5);
-        LabeledInput conjugation6 = findViewById(R.id.conjugation_6);
+        LabeledEditText conjugation1 = findViewById(R.id.conjugation_1);
+        LabeledEditText conjugation2 = findViewById(R.id.conjugation_2);
+        LabeledEditText conjugation3 = findViewById(R.id.conjugation_3);
+        LabeledEditText conjugation4 = findViewById(R.id.conjugation_4);
+        LabeledEditText conjugation5 = findViewById(R.id.conjugation_5);
+        LabeledEditText conjugation6 = findViewById(R.id.conjugation_6);
 
         Button checkButton = findViewById(R.id.check_button);
 

@@ -26,7 +26,7 @@
             android:textSize="16sp"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             app:centerText="true"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             app:centerText="true"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             app:centerText="true"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             app:centerText="true"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             app:centerText="true"
             />
 
-        <com.example.pajelingo.ui.LabeledInput
+        <com.example.pajelingo.ui.LabeledEditText
             android:id="@+id/conjugation_6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

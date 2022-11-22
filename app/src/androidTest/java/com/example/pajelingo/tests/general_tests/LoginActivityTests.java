@@ -10,7 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
-import static com.example.pajelingo.utils.CustomViewActions.fillLabeledInput;
+import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.TestTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.getRandomString;
@@ -67,8 +67,8 @@ public class LoginActivityTests extends UITests {
 
         onView(withId(R.id.action_login_logout)).perform(click());
 
-        onView(withId(R.id.username_input)).perform(fillLabeledInput(username), closeSoftKeyboard());
-        onView(withId(R.id.password_input)).perform(fillLabeledInput(password), closeSoftKeyboard());
+        onView(withId(R.id.username_input)).perform(fillLabeledEditText(username), closeSoftKeyboard());
+        onView(withId(R.id.password_input)).perform(fillLabeledEditText(password), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
         onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
@@ -83,8 +83,8 @@ public class LoginActivityTests extends UITests {
 
         onView(withId(R.id.action_login_logout)).perform(click());
 
-        onView(withId(R.id.username_input)).perform(fillLabeledInput(testUser.getUsername()), closeSoftKeyboard());
-        onView(withId(R.id.password_input)).perform(fillLabeledInput(testUser.getPassword()), closeSoftKeyboard());
+        onView(withId(R.id.username_input)).perform(fillLabeledEditText(testUser.getUsername()), closeSoftKeyboard());
+        onView(withId(R.id.password_input)).perform(fillLabeledEditText(testUser.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
         onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 5000, true));

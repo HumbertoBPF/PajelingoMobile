@@ -15,7 +15,7 @@ import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.ui.LabeledInput;
+import com.example.pajelingo.ui.LabeledView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.hamcrest.Description;
@@ -311,15 +311,15 @@ public class CustomMatchers {
     }
 
     public static Matcher<? super View> hasLabel(String label){
-        return new BoundedMatcher<View, LabeledInput>(LabeledInput.class) {
+        return new BoundedMatcher<View, LabeledView>(LabeledView.class) {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Verifying if the label of the LabeledInput is "+label);
+                description.appendText("Verifying if the label of the LabeledEditText is "+label);
             }
 
             @Override
-            protected boolean matchesSafely(LabeledInput labeledInput) {
-                return labeledInput.getLabel().toString().equals(label);
+            protected boolean matchesSafely(LabeledView labeledView) {
+                return labeledView.getLabel().toString().equals(label);
             }
         };
     }

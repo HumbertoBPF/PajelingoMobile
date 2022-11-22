@@ -18,7 +18,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
-import com.example.pajelingo.ui.LabeledInput;
+import com.example.pajelingo.ui.LabeledEditText;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
     private TextView signupLinkTextView;
-    private LabeledInput usernameInput;
-    private LabeledInput passwordInput;
+    private LabeledEditText usernameInput;
+    private LabeledEditText passwordInput;
     private Button loginButton;
 
     @Override

@@ -13,9 +13,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
+import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.TestTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.getRandomString;
@@ -57,11 +59,11 @@ public class SearchToolTests extends UITests {
     @Test
     public void testRenderingSearchActivity(){
         activityScenario = ActivityScenario.launch(MainActivity.class);
+        String labelLanguageSpinner = context.getString(R.string.choose_language_label);
 
         onView(withId(R.id.search_button)).perform(click());
         onView(withId(R.id.search_edit_text)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.language_label), withText(R.string.choose_language_label))).check(matches(isDisplayed()));
-        onView(withId(R.id.language_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
     }
 
@@ -181,7 +183,7 @@ public class SearchToolTests extends UITests {
         // Type pattern to search
         onView(withId(R.id.search_edit_text)).perform(typeText(searchPattern), closeSoftKeyboard());
         // Select language
-        onView(withId(R.id.language_spinner)).perform(click());
+        onView(withId(R.id.language_input)).perform(expandSpinner());
         onData(is(language)).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.search_button)).perform(click());
     }
