@@ -153,6 +153,12 @@ public class SearchToolTests extends UITests {
         return languages.get(getRandomInteger(0, languages.size() - 1));
     }
 
+    /**
+     * Returns a search pattern that matches or does not match words in the specified language.
+     * @param language search language.
+     * @param hasResults boolean indicating if the search pattern must match any word in the specified language.
+     * @return a search string that produces the specified result.
+     */
     private String getSearchPattern(Language language, boolean hasResults){
         int length = hasResults?1:8;
 
@@ -168,6 +174,12 @@ public class SearchToolTests extends UITests {
         return searchPattern;
     }
 
+    /**
+     * Search in the database all the words in a given language matching the specified search pattern.
+     * @param searchPattern search string.
+     * @param language concerned language.
+     * @return all the words in the specified language matching the search string.
+     */
     private List<Word> searchWords(String searchPattern, Language language){
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
 
