@@ -3,10 +3,8 @@ package com.example.pajelingo.activities.games;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,11 +14,11 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ConjugationDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ScoreUploader;
+import com.example.pajelingo.ui.LabeledInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,36 +35,27 @@ public class ConjugationGameActivity extends GameActivity {
         Spinner languageSpinner = findViewById(R.id.language_choice_spinner);
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
-        languageDao.getAllRecordsTask(new OnResultListener<List<Language>>() {
-            @Override
-            public void onResult(List<Language> result) {
-                // Verify if there are at least one language
-                if (result.isEmpty()){
-                    finishActivityNotEnoughResources();
-                    return;
-                }
-                // Fill the adapter with the name of all the languages available
-                ArrayAdapter<Language> adapter = new ArrayAdapter<>(ConjugationGameActivity.this,
-                        android.R.layout.simple_spinner_item, result);
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the baseLanguageSpinner
-                languageSpinner.setAdapter(adapter);
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String languageChosenName = languageSpinner.getSelectedItem().toString();
-                        playButton.setOnClickListener(null);
-                        languageDao.getLanguageByNameAsyncTask(languageChosenName, new OnResultListener<Language>() {
-                            @Override
-                            public void onResult(Language result) {
-                                language = result;
-                                startGame();
-                            }
-                        }).execute();
-                    }
-                });
+        languageDao.getAllRecordsTask(result -> {
+            // Verify if there are at least one language
+            if (result.isEmpty()){
+                finishActivityNotEnoughResources();
+                return;
             }
+            // Fill the adapter with the name of all the languages available
+            ArrayAdapter<Language> adapter = new ArrayAdapter<>(ConjugationGameActivity.this,
+                    android.R.layout.simple_spinner_item, result);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the baseLanguageSpinner
+            languageSpinner.setAdapter(adapter);
+            playButton.setOnClickListener(v -> {
+                String languageChosenName = languageSpinner.getSelectedItem().toString();
+                playButton.setOnClickListener(null);
+                languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
+                    language = result1;
+                    startGame();
+                }).execute();
+            });
         }).execute();
     }
 
@@ -75,69 +64,56 @@ public class ConjugationGameActivity extends GameActivity {
         setContentView(R.layout.activity_conjugation_game);
 
         TextView verb = findViewById(R.id.verb_and_tense_text_view);
-        TextView pronoun1 = findViewById(R.id.pronoun_1);
-        TextView pronoun2 = findViewById(R.id.pronoun_2);
-        TextView pronoun3 = findViewById(R.id.pronoun_3);
-        TextView pronoun4 = findViewById(R.id.pronoun_4);
-        TextView pronoun5 = findViewById(R.id.pronoun_5);
-        TextView pronoun6 = findViewById(R.id.pronoun_6);
-        EditText conjugation1 = findViewById(R.id.conjugation_1);
-        EditText conjugation2 = findViewById(R.id.conjugation_2);
-        EditText conjugation3 = findViewById(R.id.conjugation_3);
-        EditText conjugation4 = findViewById(R.id.conjugation_4);
-        EditText conjugation5 = findViewById(R.id.conjugation_5);
-        EditText conjugation6 = findViewById(R.id.conjugation_6);
+
+        LabeledInput conjugation1 = findViewById(R.id.conjugation_1);
+        LabeledInput conjugation2 = findViewById(R.id.conjugation_2);
+        LabeledInput conjugation3 = findViewById(R.id.conjugation_3);
+        LabeledInput conjugation4 = findViewById(R.id.conjugation_4);
+        LabeledInput conjugation5 = findViewById(R.id.conjugation_5);
+        LabeledInput conjugation6 = findViewById(R.id.conjugation_6);
+
         Button checkButton = findViewById(R.id.check_button);
 
-        pronoun1.setText(language.getPersonalPronoun1());
-        pronoun2.setText(language.getPersonalPronoun2());
-        pronoun3.setText(language.getPersonalPronoun3());
-        pronoun4.setText(language.getPersonalPronoun4());
-        pronoun5.setText(language.getPersonalPronoun5());
-        pronoun6.setText(language.getPersonalPronoun6());
+        conjugation1.setLabel(language.getPersonalPronoun1());
+        conjugation2.setLabel(language.getPersonalPronoun2());
+        conjugation3.setLabel(language.getPersonalPronoun3());
+        conjugation4.setLabel(language.getPersonalPronoun4());
+        conjugation5.setLabel(language.getPersonalPronoun5());
+        conjugation6.setLabel(language.getPersonalPronoun6());
 
         // We want to get only the words that are verbs
         WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
-        wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), new OnResultListener<List<Word>>() {
-            @Override
-            public void onResult(List<Word> result) {
-                // Verify if at least one word is returned
-                if (result.isEmpty()){
+        wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), result -> {
+            // Verify if at least one word is returned
+            if (result.isEmpty()){
+                finishActivityNotEnoughResources();
+                return;
+            }
+            // Pick a word that is in the category "verb" and whose language corresponds to the selected language
+            Word word = getRandomItemFromList(result);
+            ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
+            conjugationDao.getConjugationsFromVerbTask(word.getId(), result1 -> {
+                // Verify if there are at least one conjugation is returned
+                if (result1.isEmpty()){
                     finishActivityNotEnoughResources();
                     return;
                 }
-                // Pick a word that is in the category "verb" and whose language corresponds to the selected language
-                Word word = getRandomItemFromList(result);
-                ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
-                conjugationDao.getConjugationsFromVerbTask(word.getId(), new OnResultListener<List<Conjugation>>() {
-                    @Override
-                    public void onResult(List<Conjugation> result) {
-                        // Verify if there are at least one conjugation is returned
-                        if (result.isEmpty()){
-                            finishActivityNotEnoughResources();
-                            return;
-                        }
-                        // Pick a random conjugation of the chosen verb
-                        conjugation = getRandomItemFromList(result);
-                        verb.setText(word.getWordName() + " - " + conjugation.getTense());
-                        checkButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                checkButton.setOnClickListener(null);
-                                List<String> answers = new ArrayList<>();
-                                // Trim the answers since the user may accidentally insert a space before of after them
-                                answers.add(conjugation1.getText().toString().trim());
-                                answers.add(conjugation2.getText().toString().trim());
-                                answers.add(conjugation3.getText().toString().trim());
-                                answers.add(conjugation4.getText().toString().trim());
-                                answers.add(conjugation5.getText().toString().trim());
-                                answers.add(conjugation6.getText().toString().trim());
-                                verifyAnswer(answers);
-                            }
-                        });
-                    }
-                }).execute();
-            }
+                // Pick a random conjugation of the chosen verb
+                conjugation = getRandomItemFromList(result1);
+                verb.setText(word.getWordName() + " - " + conjugation.getTense());
+                checkButton.setOnClickListener(v -> {
+                    checkButton.setOnClickListener(null);
+                    List<String> answers = new ArrayList<>();
+                    // Trim the answers since the user may accidentally insert a space before of after them
+                    answers.add(conjugation1.getInput().toString().trim());
+                    answers.add(conjugation2.getInput().toString().trim());
+                    answers.add(conjugation3.getInput().toString().trim());
+                    answers.add(conjugation4.getInput().toString().trim());
+                    answers.add(conjugation5.getInput().toString().trim());
+                    answers.add(conjugation6.getInput().toString().trim());
+                    verifyAnswer(answers);
+                });
+            }).execute();
         }).execute();
 
     }
@@ -185,11 +161,6 @@ public class ConjugationGameActivity extends GameActivity {
                 language.getPersonalPronoun6() + " " + conjugation.getConjugation6();
         feedbackTextView.setText(feedback);
         // If pressed, the user can play again
-        newWordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGame();
-            }
-        });
+        newWordButton.setOnClickListener(v -> startGame());
     }
 }

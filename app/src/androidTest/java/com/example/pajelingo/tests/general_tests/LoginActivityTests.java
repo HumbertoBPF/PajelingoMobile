@@ -4,12 +4,13 @@ import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomViewActions.fillLabeledInput;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.TestTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.getRandomString;
@@ -52,10 +53,8 @@ public class LoginActivityTests extends UITests {
 
         onView(withId(R.id.action_login_logout)).perform(click());
 
-        onView(allOf(withId(R.id.username_label), withText(usernameLabel))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.password_label), withText(passwordLabel))).check(matches(isDisplayed()));
-        onView(withId(R.id.username_edit_text)).check(matches(isDisplayed()));
-        onView(withId(R.id.password_edit_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.username_input)).check(matches(isDisplayed())).check(matches(hasLabel(usernameLabel)));
+        onView(withId(R.id.password_input)).check(matches(isDisplayed())).check(matches(hasLabel(passwordLabel)));
         onView(allOf(withId(R.id.login_button), withText(buttonLoginText))).check(matches(isDisplayed()));
     }
 
@@ -68,8 +67,8 @@ public class LoginActivityTests extends UITests {
 
         onView(withId(R.id.action_login_logout)).perform(click());
 
-        onView(withId(R.id.username_edit_text)).perform(typeText(username), closeSoftKeyboard());
-        onView(withId(R.id.password_edit_text)).perform(typeText(password), closeSoftKeyboard());
+        onView(withId(R.id.username_input)).perform(fillLabeledInput(username), closeSoftKeyboard());
+        onView(withId(R.id.password_input)).perform(fillLabeledInput(password), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
         onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
@@ -84,8 +83,8 @@ public class LoginActivityTests extends UITests {
 
         onView(withId(R.id.action_login_logout)).perform(click());
 
-        onView(withId(R.id.username_edit_text)).perform(typeText(testUser.getUsername()), closeSoftKeyboard());
-        onView(withId(R.id.password_edit_text)).perform(typeText(testUser.getPassword()), closeSoftKeyboard());
+        onView(withId(R.id.username_input)).perform(fillLabeledInput(testUser.getUsername()), closeSoftKeyboard());
+        onView(withId(R.id.password_input)).perform(fillLabeledInput(testUser.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
         onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 5000, true));

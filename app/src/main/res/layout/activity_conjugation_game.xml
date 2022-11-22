@@ -24,225 +24,85 @@
             android:gravity="center"
             tools:text="Verb"
             android:textSize="16sp"
-
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_1"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/verb_and_tense_text_view"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 1"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
-            <TextView
-                android:id="@+id/pronoun_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_1"
-                tools:text="Pronoun 1"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_1"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_2"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/input_pronoun_1"
+            app:layout_constraintTop_toBottomOf="@id/conjugation_1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 2"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
-            <TextView
-                android:id="@+id/pronoun_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_2"
-                tools:text="Pronoun 2"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_3"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/input_pronoun_2"
+            app:layout_constraintTop_toBottomOf="@id/conjugation_2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 3"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
-            <TextView
-                android:id="@+id/pronoun_3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_3"
-                tools:text="Pronoun 3"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_3"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_4"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/input_pronoun_3"
+            app:layout_constraintTop_toBottomOf="@id/conjugation_3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 4"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
-            <TextView
-                android:id="@+id/pronoun_4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_4"
-                tools:text="Pronoun 4"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_4"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_5"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/input_pronoun_4"
+            app:layout_constraintTop_toBottomOf="@id/conjugation_4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 5"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
-            <TextView
-                android:id="@+id/pronoun_5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_5"
-                tools:text="Pronoun 5"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_5"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_pronoun_6"
+        <com.example.pajelingo.ui.LabeledInput
+            android:id="@+id/conjugation_6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/input_pronoun_5"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/conjugation_5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <TextView
-                android:id="@+id/pronoun_6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/conjugation_6"
-                tools:text="Pronoun 6"
-                android:textSize="16sp"
-
-                android:gravity="center"
-                />
-
-            <EditText
-                android:id="@+id/conjugation_6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/pronoun_6"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:gravity="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:labelBias="0.5"
+            tools:label="Pronoun 6"
+            app:labelBold="false"
+            app:centerText="true"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

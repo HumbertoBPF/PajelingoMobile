@@ -1,5 +1,6 @@
 package com.example.pajelingo.utils;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 import android.content.Context;
@@ -22,6 +23,7 @@ import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.ui.LabeledInput;
 
 import org.hamcrest.Matcher;
 
@@ -251,21 +253,41 @@ public class CustomViewActions {
                             throw new NullPointerException("No valid answer was found in the specified verb and conjugation lists.");
                         }
 
-                        EditText inputConjugation1 = view.findViewById(R.id.conjugation_1);
-                        EditText inputConjugation2 = view.findViewById(R.id.conjugation_2);
-                        EditText inputConjugation3 = view.findViewById(R.id.conjugation_3);
-                        EditText inputConjugation4 = view.findViewById(R.id.conjugation_4);
-                        EditText inputConjugation5 = view.findViewById(R.id.conjugation_5);
-                        EditText inputConjugation6 = view.findViewById(R.id.conjugation_6);
+                        LabeledInput conjugation1 = view.findViewById(R.id.conjugation_1);
+                        LabeledInput conjugation2 = view.findViewById(R.id.conjugation_2);
+                        LabeledInput conjugation3 = view.findViewById(R.id.conjugation_3);
+                        LabeledInput conjugation4 = view.findViewById(R.id.conjugation_4);
+                        LabeledInput conjugation5 = view.findViewById(R.id.conjugation_5);
+                        LabeledInput conjugation6 = view.findViewById(R.id.conjugation_6);
 
-                        inputConjugation1.setText(isCorrect?correctAnswer.getConjugation1(): TestTools.getRandomString(10));
-                        inputConjugation2.setText(isCorrect?correctAnswer.getConjugation2(): TestTools.getRandomString(10));
-                        inputConjugation3.setText(isCorrect?correctAnswer.getConjugation3(): TestTools.getRandomString(10));
-                        inputConjugation4.setText(isCorrect?correctAnswer.getConjugation4(): TestTools.getRandomString(10));
-                        inputConjugation5.setText(isCorrect?correctAnswer.getConjugation5(): TestTools.getRandomString(10));
-                        inputConjugation6.setText(isCorrect?correctAnswer.getConjugation6(): TestTools.getRandomString(10));
+                        conjugation1.setInput(isCorrect?correctAnswer.getConjugation1(): TestTools.getRandomString(10));
+                        conjugation2.setInput(isCorrect?correctAnswer.getConjugation2(): TestTools.getRandomString(10));
+                        conjugation3.setInput(isCorrect?correctAnswer.getConjugation3(): TestTools.getRandomString(10));
+                        conjugation4.setInput(isCorrect?correctAnswer.getConjugation4(): TestTools.getRandomString(10));
+                        conjugation5.setInput(isCorrect?correctAnswer.getConjugation5(): TestTools.getRandomString(10));
+                        conjugation6.setInput(isCorrect?correctAnswer.getConjugation6(): TestTools.getRandomString(10));
                     }).execute();
                 }).execute();
+            }
+        };
+    }
+
+    public static ViewAction fillLabeledInput(String input) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isDisplayed();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Inputs a LabeledInput with the text " + input;
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                LabeledInput labeledInput = (LabeledInput) view;
+                labeledInput.setInput(input);
             }
         };
     }

@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
+import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
@@ -79,20 +80,13 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
         String textCheckButton = context.getString(R.string.check_button_text);
         // Checking if the pronouns are all displayed
-        onView(allOf(withId(R.id.pronoun_1), withText(randomLanguage.getPersonalPronoun1()))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.pronoun_2), withText(randomLanguage.getPersonalPronoun2()))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.pronoun_3), withText(randomLanguage.getPersonalPronoun3()))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.pronoun_4), withText(randomLanguage.getPersonalPronoun4()))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.pronoun_5), withText(randomLanguage.getPersonalPronoun5()))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.pronoun_6), withText(randomLanguage.getPersonalPronoun6()))).check(matches(isDisplayed()));
-        // Checking if the inputs are all displayed
-        onView(withId(R.id.conjugation_1)).check(matches(isDisplayed()));
-        onView(withId(R.id.conjugation_2)).check(matches(isDisplayed()));
-        onView(withId(R.id.conjugation_3)).check(matches(isDisplayed()));
-        onView(withId(R.id.conjugation_4)).check(matches(isDisplayed()));
-        onView(withId(R.id.conjugation_5)).check(matches(isDisplayed()));
-        onView(withId(R.id.conjugation_6)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
+        onView(withId(R.id.conjugation_1)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun1())));
+        onView(withId(R.id.conjugation_2)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun2())));
+        onView(withId(R.id.conjugation_3)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun3())));
+        onView(withId(R.id.conjugation_4)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun4())));
+        onView(withId(R.id.conjugation_5)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun5())));
+        onView(withId(R.id.conjugation_6)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun6())));
+        onView(withId(R.id.check_button)).check(matches(isDisplayed()));
     }
 
     @Test

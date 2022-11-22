@@ -68,14 +68,12 @@ public class SimpleListItem extends ConstraintLayout {
     public void setDescription(CharSequence description){
         this.description = description;
 
-        String descriptionString = String.valueOf(description);
-
         if (description != null){
             descriptionTextView.setVisibility(VISIBLE);
             if (description.length() > 100){
-                descriptionTextView.setText(descriptionString.substring(0, 97)+"...");
+                descriptionTextView.setText(description.toString().substring(0, 97)+"...");
             }else{
-                descriptionTextView.setText(descriptionString);
+                descriptionTextView.setText(description.toString());
             }
         }else{
             descriptionTextView.setVisibility(GONE);

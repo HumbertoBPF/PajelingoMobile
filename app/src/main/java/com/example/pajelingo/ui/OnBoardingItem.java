@@ -1,4 +1,4 @@
-package com.example.pajelingo.models.ui;
+package com.example.pajelingo.ui;
 
 public class OnBoardingItem {
     private Integer imageResource;

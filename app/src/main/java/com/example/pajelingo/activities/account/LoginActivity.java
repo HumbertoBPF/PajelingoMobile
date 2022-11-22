@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +18,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.ui.LabeledInput;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
     private TextView signupLinkTextView;
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private LabeledInput usernameInput;
+    private LabeledInput passwordInput;
     private Button loginButton;
 
     @Override
@@ -41,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         setTitle(R.string.login_activity_title);
 
         signupLinkTextView = findViewById(R.id.signup_link_text_view);
-        usernameEditText = findViewById(R.id.username_edit_text);
-        passwordEditText = findViewById(R.id.password_edit_text);
+        usernameInput = findViewById(R.id.username_input);
+        passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
 
         loginButton.setOnClickListener(v -> {
@@ -60,8 +60,8 @@ public class LoginActivity extends AppCompatActivity {
                 .setMessage(R.string.login_dialog_message).setCancelable(false).create();
         dialog.show();
 
-        String username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        String username = usernameInput.getInput().toString();
+        String password = passwordInput.getInput().toString();
 
         Call<User> call = languageSchoolAPI.login(getAuthToken(username, password));
         call.enqueue(new Callback<User>() {
