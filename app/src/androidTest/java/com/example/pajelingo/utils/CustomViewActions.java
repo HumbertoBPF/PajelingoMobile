@@ -273,6 +273,11 @@ public class CustomViewActions {
         };
     }
 
+    /**
+     * Fills the EditText of a LabeledEditText with the specified string.
+     * @param input text to be input in the LabeledEditText.
+     * @return ViewAction object that performs the mentioned action.
+     */
     public static ViewAction fillLabeledEditText(String input) {
         return new ViewAction() {
             @Override
@@ -293,6 +298,10 @@ public class CustomViewActions {
         };
     }
 
+    /**
+     * Opens the item list of a LabeledSpinner spinner.
+     * @return ViewAction object that performs the referred action.
+     */
     public static ViewAction expandSpinner() {
         return new ViewAction() {
             @Override

@@ -290,6 +290,11 @@ public class CustomMatchers {
         };
     }
 
+    /**
+     * Checks if the background color of a Floating Action Button matches the specified color.
+     * @param color color resource.
+     * @return Matcher that performs the mentioned validation.
+     */
     public static Matcher<? super View> floatActionButtonHasColor(int color){
         return new BoundedMatcher<View, FloatingActionButton>(FloatingActionButton.class) {
             @Override
@@ -310,6 +315,11 @@ public class CustomMatchers {
         };
     }
 
+    /**
+     * Checks if the text in the label of a LabeledView matches the specified string.
+     * @param label string to be compared to the label text.
+     * @return Matcher that performs the mentioned validation.
+     */
     public static Matcher<? super View> hasLabel(String label){
         return new BoundedMatcher<View, LabeledView>(LabeledView.class) {
             @Override
