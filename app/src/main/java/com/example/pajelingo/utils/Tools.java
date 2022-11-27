@@ -58,6 +58,16 @@ public class Tools{
         editor.apply();
     }
 
+    public static void deleteUserCredentials(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        // Remove user from Shared Preferences due to logout
+        editor.remove(context.getString(R.string.username_sp));
+        editor.remove(context.getString(R.string.email_sp));
+        editor.remove(context.getString(R.string.password_sp));
+        editor.apply();
+    }
+
     /**
      * Generates a Basic Authentication token corresponding to the specified credentials.
      * @param username username credential

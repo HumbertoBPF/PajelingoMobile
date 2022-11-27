@@ -1,8 +1,8 @@
 package com.example.pajelingo.activities;
 
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -90,18 +90,11 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_download_resources_title)
                 .setMessage(R.string.dialog_download_resources_message)
-                .setPositiveButton(R.string.dialog_download_resources_confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        launchSynchroResources();
-                        dialog.dismiss();
-                    }
+                .setPositiveButton(R.string.dialog_download_resources_confirm, (dialog, id) -> {
+                    launchSynchroResources();
+                    dialog.dismiss();
                 })
-                .setNegativeButton(R.string.dialog_download_resources_decline, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setNegativeButton(R.string.dialog_download_resources_decline, (dialog, which) -> dialog.dismiss());
         AlertDialog confirmationDialog = builder.create();
         confirmationDialog.show();
     }
@@ -112,12 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
                 .setCancelable(false).create();
         downloadDialog.show();
-        downloadDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                loadGames();
-            }
-        });
+        downloadDialog.setOnDismissListener(dialog -> loadGames());
         new ArticleSynchro(MainActivity.this, downloadDialog).execute();
     }
 
@@ -125,12 +113,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isUserAuthenticated(this)){
             startActivity(new Intent(this, LoginActivity.class));
         }else{
-            SharedPreferences.Editor editor = sp.edit();
-            // Remove user from Shared Preferences due to logout
-            editor.remove(getString(R.string.username_sp));
-            editor.remove(getString(R.string.email_sp));
-            editor.remove(getString(R.string.password_sp));
-            editor.apply();
+            deleteUserCredentials(this);
             // Update menu layout
             onResume();
         }

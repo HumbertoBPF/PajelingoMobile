@@ -5,6 +5,11 @@
     <string name="dialog_download_resources_confirm">Launch</string>
     <string name="dialog_download_resources_decline">Cancel</string>
 
+    <string name="dialog_delete_account_title">Delete account</string>
+    <string name="dialog_delete_account_message">Are you sure that you want to delete your account? This action is permanent and irreversible</string>
+    <string name="dialog_delete_account_confirm">Yes, delete account</string>
+    <string name="dialog_delete_account_decline">Decline</string>
+
     <string name="progress_download_title">Download in progress</string>
     <string name="progress_download_initial_msg">Preparing your download</string>
 
@@ -47,6 +52,7 @@
     <string name="login_dialog_message">Verifying credentials…</string>
     <string name="warning_invalid_credientials">Invalid username or password</string>
     <string name="warning_connection_error">Connexion error, please verify your internet connexion</string>
+    <string name="warning_request_error">An error happened processing your request, please verify your internet connexion and try again</string>
     <string name="update_ranking_success_message">Rankings updated</string>
     <string name="no_resources_message">It seems that game data is missing… Do a sync (loop button on the top of the screen)
         to have access to our games.</string>
@@ -115,4 +121,9 @@
     <string name="warning_form_validation">Form validation error. Please, verify the values specified in the form.</string>
     <string name="warning_password_requirements">The password must fulfill all the listed requirements</string>
     <string name="successful_signup_message">Account created successfully</string>
+    <string name="confirm_deletion_text">Confirm that you want to delete your account by typing <b>\"permanently delete\"</b> in the input below:</string>
+    <string name="confirm_deletion_activity_title">Confirm deletion</string>
+    <string name="confirm_deletion_string">permanently delete</string>
+    <string name="warning_confirm_deletion">The text that you typed does not match <b>\"permanently delete\"</b></string>
+    <string name="account_deletion_success">Account successfully deleted</string>
 </resources>
