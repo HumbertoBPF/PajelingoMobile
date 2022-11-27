@@ -1,4 +1,4 @@
-package com.example.pajelingo.tests.general_tests;
+package com.example.pajelingo.tests.search_tests;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -19,9 +19,9 @@ import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.TestTools.getRandomInteger;
-import static com.example.pajelingo.utils.TestTools.getRandomString;
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
+import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -162,12 +162,12 @@ public class SearchToolTests extends UITests {
     private String getSearchPattern(Language language, boolean hasResults){
         int length = hasResults?1:8;
 
-        String searchPattern = getRandomString(length);
+        String searchPattern = getRandomWord(length);
         List<Word> words = new ArrayList<>();
 
         while (words.isEmpty() == hasResults){
             Log.i("searchPattern", searchPattern);
-            searchPattern = getRandomString(length);
+            searchPattern = getRandomWord(length);
             words = searchWords(searchPattern, language);
         }
 

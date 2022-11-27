@@ -1,6 +1,6 @@
 package com.example.pajelingo.tests.abstract_tests;
 
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import com.example.pajelingo.R;

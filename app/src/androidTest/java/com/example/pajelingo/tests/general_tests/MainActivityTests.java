@@ -7,7 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 
 import androidx.test.core.app.ActivityScenario;
 

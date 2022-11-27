@@ -25,7 +25,7 @@ public class PasswordRequirement extends ConstraintLayout {
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PasswordRequirement, 0, 0);
         CharSequence text = typedArray.getText(R.styleable.PasswordRequirement_requirementText);
-        boolean isChecked = typedArray.getBoolean(R.styleable.PasswordRequirement_isChecked, true);
+        boolean isChecked = typedArray.getBoolean(R.styleable.PasswordRequirement_isChecked, false);
         typedArray.recycle();
 
         initComponents();
@@ -39,15 +39,23 @@ public class PasswordRequirement extends ConstraintLayout {
         requirementImageView = findViewById(R.id.requirement_image_view);
     }
 
-    public void setText(CharSequence text){
+    public void setText(CharSequence text) {
         requirementTextView.setText(text);
     }
 
-    public void setChecked(boolean isChecked){
-        if (!isChecked){
+    public CharSequence getText(){
+        return requirementTextView.getText();
+    }
+
+    public void setChecked(boolean isChecked) {
+        if (!isChecked) {
             requirementImageView.setVisibility(GONE);
-        }else{
+        } else {
             requirementImageView.setVisibility(VISIBLE);
         }
+    }
+
+    public boolean isChecked() {
+        return requirementImageView.getVisibility() == VISIBLE;
     }
 }

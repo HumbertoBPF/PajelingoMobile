@@ -6,7 +6,6 @@ import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                 .setMessage(R.string.login_dialog_message).setCancelable(false).create();
         dialog.show();
 
-        String username = usernameInput.getInput().toString();
-        String password = passwordInput.getInput().toString();
+        String username = usernameInput.getEditText().getText().toString();
+        String password = passwordInput.getEditText().getText().toString();
 
         Call<User> call = languageSchoolAPI.login(getAuthToken(username, password));
         call.enqueue(new Callback<User>() {
@@ -69,8 +68,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
                 if ((response.isSuccessful()) && (user != null)){
-                    Log.i("USER", user.getUsername());
-                    Log.i("USER", user.getEmail());
                     saveStateAndUserCredentials(getApplicationContext(), user.getUsername(), user.getEmail(), password);
                     new Handler().postDelayed(() -> {
                         Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
@@ -81,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 401) {
                         dialog.setMessage(getString(R.string.warning_invalid_credientials));
                     } else {
-                        dialog.setMessage(getString(R.string.warning_fail_login));
+                        dialog.setMessage(getString(R.string.warning_connection_error));
                     }
                     dismissDialogDelayed(dialog);
                 }
@@ -89,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                dialog.setMessage(getString(R.string.warning_fail_login));
+                dialog.setMessage(getString(R.string.warning_connection_error));
                 dismissDialogDelayed(dialog);
             }
         });

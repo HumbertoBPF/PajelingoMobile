@@ -46,7 +46,7 @@
     <string name="login_dialog_title">Please, wait</string>
     <string name="login_dialog_message">Verifying credentials…</string>
     <string name="warning_invalid_credientials">Invalid username or password</string>
-    <string name="warning_fail_login">Connexion error, please verify your internet connexion</string>
+    <string name="warning_connection_error">Connexion error, please verify your internet connexion</string>
     <string name="update_ranking_success_message">Rankings updated</string>
     <string name="no_resources_message">It seems that game data is missing… Do a sync (loop button on the top of the screen)
         to have access to our games.</string>
@@ -103,13 +103,16 @@
     <string name="login_link"><u>Already has an account? Login</u></string>
     <string name="signup_button_text">Create account</string>
     <string name="email_label">Email</string>
-    <string name="password_requirements_label">Your password must have at least:</string>
+    <string name="password_requirements_label">Your password must have:</string>
     <string name="password_requirement_1">1 digit</string>
     <string name="password_requirement_2">1 letter</string>
     <string name="password_requirement_3">1 special character</string>
-    <string name="password_requirement_4">8 characters</string>
+    <string name="password_requirement_4">Between 8 and 30 characters</string>
     <string name="profile_activity_title">Profile</string>
     <string name="update_account">Update credentials</string>
     <string name="delete_account">Delete account</string>
     <string name="favorite_button_description">Favorite words</string>
+    <string name="warning_form_validation">Form validation error. Please, verify the values specified in the form.</string>
+    <string name="warning_password_requirements">The password must fulfill all the listed requirements</string>
+    <string name="successful_signup_message">Account created successfully</string>
 </resources>

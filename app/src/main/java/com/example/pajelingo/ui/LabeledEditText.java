@@ -3,6 +3,7 @@ package com.example.pajelingo.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.EditText;
@@ -13,7 +14,7 @@ import com.example.pajelingo.R;
 
 public class LabeledEditText extends LabeledView {
     private Guideline guideline;
-    private EditText fieldInputEditText;
+    private EditText editText;
 
     public LabeledEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,6 +29,7 @@ public class LabeledEditText extends LabeledView {
         float labelBias = typedArray.getFloat(R.styleable.LabeledEditText_labelBias, 0.25f);
         boolean labelBold = typedArray.getBoolean(R.styleable.LabeledEditText_labelBold, true);
         boolean centerText = typedArray.getBoolean(R.styleable.LabeledEditText_centerText, false);
+        int type = typedArray.getInteger(R.styleable.LabeledEditText_type,0);
         typedArray.recycle();
 
         initComponents();
@@ -44,24 +46,29 @@ public class LabeledEditText extends LabeledView {
 
         if (centerText){
             labelTextView.setGravity(Gravity.CENTER);
-            fieldInputEditText.setGravity(Gravity.CENTER);
+            editText.setGravity(Gravity.CENTER);
         }else{
             labelTextView.setGravity(Gravity.NO_GRAVITY);
-            fieldInputEditText.setGravity(Gravity.NO_GRAVITY);
+            editText.setGravity(Gravity.NO_GRAVITY);
+        }
+
+        switch (type){
+            case 1:
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                break;
+            case 2:
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                break;
         }
     }
 
     private void initComponents() {
         guideline = findViewById(R.id.guideline);
-        labelTextView = findViewById(R.id.field_label_text_view);
-        fieldInputEditText = findViewById(R.id.field_input_edit_text);
+        labelTextView = findViewById(R.id.label);
+        editText = findViewById(R.id.edit_text);
     }
 
-    public void setInput(CharSequence input){
-        fieldInputEditText.setText(input);
-    }
-
-    public CharSequence getInput(){
-        return fieldInputEditText.getText();
+    public EditText getEditText() {
+        return editText;
     }
 }

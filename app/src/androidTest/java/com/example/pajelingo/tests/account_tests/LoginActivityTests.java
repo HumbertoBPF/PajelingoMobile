@@ -1,4 +1,4 @@
-package com.example.pajelingo.tests.general_tests;
+package com.example.pajelingo.tests.account_tests;
 
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
@@ -12,8 +12,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.TestTools.getRandomInteger;
-import static com.example.pajelingo.utils.TestTools.getRandomString;
+import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
+import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
@@ -24,7 +24,6 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
-import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.After;
@@ -34,8 +33,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class LoginActivityTests extends UITests {
-    private final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
-
     @Before
     public void setUp() throws IOException {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
@@ -60,8 +57,8 @@ public class LoginActivityTests extends UITests {
 
     @Test
     public void testLoginFailed(){
-        String username = getRandomString(getRandomInteger(1, 18));
-        String password = getRandomString(getRandomInteger(6, 30));
+        String username = getRandomWord(getRandomInteger(1, 18));
+        String password = getRandomWord(getRandomInteger(8, 30));
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 

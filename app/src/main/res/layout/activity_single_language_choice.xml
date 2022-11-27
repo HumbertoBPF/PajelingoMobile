@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:spinnerLabel="@string/choose_language_label"
+        android:layout_marginHorizontal="8dp"
         />
 
     <Button

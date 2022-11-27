@@ -16,9 +16,9 @@ import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
+import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
-import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -229,7 +229,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
      * @param baseLanguage base language (the translation provided by the player must be in this language).
      * @param targetLanguage target language (the word to be translated are in this language).
      */
-    private void setupVocabularyGame(Language baseLanguage, Language targetLanguage){
+    private void setupVocabularyGame(Language baseLanguage, Language targetLanguage) {
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.base_language_input)).perform(expandSpinner());
         onData(is(baseLanguage)).inRoot(isPlatformPopup()).perform(click());

@@ -7,8 +7,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPosition;
-import static com.example.pajelingo.utils.TestTools.getRandomInteger;
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;

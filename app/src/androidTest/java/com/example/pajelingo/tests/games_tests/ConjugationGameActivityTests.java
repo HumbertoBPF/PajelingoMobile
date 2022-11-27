@@ -15,9 +15,9 @@ import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
+import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
+import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.TestTools.assertScoreValue;
-import static com.example.pajelingo.utils.TestTools.getRandomLanguage;
-import static com.example.pajelingo.utils.TestTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -86,7 +86,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         onView(withId(R.id.conjugation_4)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun4())));
         onView(withId(R.id.conjugation_5)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun5())));
         onView(withId(R.id.conjugation_6)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun6())));
-        onView(withId(R.id.check_button)).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -239,7 +239,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
      * Sets the language and launches the game.
      * @param language language that must be set.
      */
-    private void setupConjugationGame(Language language){
+    private void setupConjugationGame(Language language) {
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
         onView(withId(R.id.language_input)).perform(expandSpinner());
         onData(is(language)).inRoot(isPlatformPopup()).perform(click());

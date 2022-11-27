@@ -1,4 +1,4 @@
-package com.example.pajelingo.tests.onboarding;
+package com.example.pajelingo.tests.general_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -111,7 +111,6 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.get_started_button)).perform(click());
         // Verifies if the user is in the MainActivity
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.games_recycler_view)).check(matches(isDisplayed()));
 
         assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
     }

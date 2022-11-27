@@ -16,6 +16,11 @@
         <attr name="labelBias" format="float" />
         <attr name="labelBold" format="boolean" />
         <attr name="centerText" format="boolean" />
+        <attr name="type" format="enum">
+            <enum name="text" value="0"/>
+            <enum name="password" value="1"/>
+            <enum name="email" value="2"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="LabeledSpinner">

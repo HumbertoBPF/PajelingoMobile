@@ -107,12 +107,12 @@ public class ConjugationGameActivity extends GameActivity {
                     checkButton.setOnClickListener(null);
                     List<String> answers = new ArrayList<>();
                     // Trim the answers since the user may accidentally insert a space before of after them
-                    answers.add(conjugation1.getInput().toString().trim());
-                    answers.add(conjugation2.getInput().toString().trim());
-                    answers.add(conjugation3.getInput().toString().trim());
-                    answers.add(conjugation4.getInput().toString().trim());
-                    answers.add(conjugation5.getInput().toString().trim());
-                    answers.add(conjugation6.getInput().toString().trim());
+                    answers.add(conjugation1.getEditText().getText().toString().trim());
+                    answers.add(conjugation2.getEditText().getText().toString().trim());
+                    answers.add(conjugation3.getEditText().getText().toString().trim());
+                    answers.add(conjugation4.getEditText().getText().toString().trim());
+                    answers.add(conjugation5.getEditText().getText().toString().trim());
+                    answers.add(conjugation6.getEditText().getText().toString().trim());
                     verifyAnswer(answers);
                 });
             }).execute();

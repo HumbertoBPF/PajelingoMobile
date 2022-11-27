@@ -1,7 +1,11 @@
 package com.example.pajelingo.utils;
 
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 
 import android.content.Context;
 import android.view.View;
@@ -108,7 +112,7 @@ public class CustomViewActions {
                 if (isCorrect){
                     setCorrectAnswer();
                 }else{
-                    this.answerEditText.setText(TestTools.getRandomString(5));
+                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomWord(5));
                 }
             }
 
@@ -175,7 +179,7 @@ public class CustomViewActions {
                 if (isCorrect){
                     setCorrectAnswer();
                 }else{
-                    answerEditText.setText(TestTools.getRandomString(10));
+                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomWord(10));
                 }
             }
 
@@ -261,12 +265,12 @@ public class CustomViewActions {
                         LabeledEditText conjugation5 = view.findViewById(R.id.conjugation_5);
                         LabeledEditText conjugation6 = view.findViewById(R.id.conjugation_6);
 
-                        conjugation1.setInput(isCorrect?correctAnswer.getConjugation1(): TestTools.getRandomString(10));
-                        conjugation2.setInput(isCorrect?correctAnswer.getConjugation2(): TestTools.getRandomString(10));
-                        conjugation3.setInput(isCorrect?correctAnswer.getConjugation3(): TestTools.getRandomString(10));
-                        conjugation4.setInput(isCorrect?correctAnswer.getConjugation4(): TestTools.getRandomString(10));
-                        conjugation5.setInput(isCorrect?correctAnswer.getConjugation5(): TestTools.getRandomString(10));
-                        conjugation6.setInput(isCorrect?correctAnswer.getConjugation6(): TestTools.getRandomString(10));
+                        conjugation1.getEditText().setText(isCorrect?correctAnswer.getConjugation1(): getRandomWord(10));
+                        conjugation2.getEditText().setText(isCorrect?correctAnswer.getConjugation2(): getRandomWord(10));
+                        conjugation3.getEditText().setText(isCorrect?correctAnswer.getConjugation3(): getRandomWord(10));
+                        conjugation4.getEditText().setText(isCorrect?correctAnswer.getConjugation4(): getRandomWord(10));
+                        conjugation5.getEditText().setText(isCorrect?correctAnswer.getConjugation5(): getRandomWord(10));
+                        conjugation6.getEditText().setText(isCorrect?correctAnswer.getConjugation6(): getRandomWord(10));
                     }).execute();
                 }).execute();
             }
@@ -293,7 +297,7 @@ public class CustomViewActions {
             @Override
             public void perform(final UiController uiController, final View view) {
                 LabeledEditText labeledInput = (LabeledEditText) view;
-                labeledInput.setInput(input);
+                typeTextAndCloseSoftKeyboard(uiController, labeledInput.getEditText(), input);
             }
         };
     }
@@ -317,8 +321,13 @@ public class CustomViewActions {
             @Override
             public void perform(final UiController uiController, final View view) {
                 LabeledSpinner labeledSpinner = (LabeledSpinner) view;
-                labeledSpinner.getSpinner().performClick();
+                click().perform(uiController, labeledSpinner.getSpinner());
             }
         };
+    }
+
+    private static void typeTextAndCloseSoftKeyboard(UiController uiController, EditText editText, String text) {
+        typeText(text).perform(uiController, editText);
+        closeSoftKeyboard().perform(uiController, editText);
     }
 }

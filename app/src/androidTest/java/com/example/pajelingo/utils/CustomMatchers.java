@@ -16,6 +16,7 @@ import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.ui.LabeledView;
+import com.example.pajelingo.ui.PasswordRequirement;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.hamcrest.Description;
@@ -147,6 +148,8 @@ public class CustomMatchers {
 
             @Override
             protected boolean matchesSafely(RecyclerView item) {
+                String searchPatternLowercase = searchPattern.toLowerCase();
+
                 SearchResultsAdapter adapter = (SearchResultsAdapter) item.getAdapter();
 
                 if (adapter == null){
@@ -160,7 +163,7 @@ public class CustomMatchers {
                     String word = adapter.getItem(i).getWordName().toLowerCase();
 
                     // Verify if results contain the search pattern
-                    if (!word.contains(searchPattern)) {
+                    if (!word.contains(searchPatternLowercase)) {
                         return false;
                     }
                     // Verify if the words are in the alphabetic order
@@ -330,6 +333,34 @@ public class CustomMatchers {
             @Override
             protected boolean matchesSafely(LabeledView labeledView) {
                 return labeledView.getLabel().toString().equals(label);
+            }
+        };
+    }
+
+    public static Matcher<? super View> hasRequirementText(String text){
+        return new BoundedMatcher<View, PasswordRequirement>(PasswordRequirement.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the text of the PasswordRequirement view is "+text);
+            }
+
+            @Override
+            protected boolean matchesSafely(PasswordRequirement passwordRequirement) {
+                return passwordRequirement.getText().toString().equals(text);
+            }
+        };
+    }
+
+    public static Matcher<? super View> isChecked(boolean isChecked){
+        return new BoundedMatcher<View, PasswordRequirement>(PasswordRequirement.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the text of the PasswordRequirement view is checked");
+            }
+
+            @Override
+            protected boolean matchesSafely(PasswordRequirement passwordRequirement) {
+                return passwordRequirement.isChecked() == isChecked;
             }
         };
     }

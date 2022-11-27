@@ -9,6 +9,7 @@ import android.util.Base64;
 import com.example.pajelingo.R;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -49,7 +50,6 @@ public class Tools{
      * @param email email to be saved
      */
     public static void saveStateAndUserCredentials(Context context, String username, String email, String password) {
-        // Save mode and credentials in SharedPreferences
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(context.getString(R.string.username_sp), username);
@@ -69,4 +69,49 @@ public class Tools{
         return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP);
     }
 
+    /**
+     * Validates a password string. A password must fulfill the following requirements:
+     * <br><br>
+     * - It must have at least one digit<br>
+     * - It must have at least one letter<br>
+     * - It must have at least one special character<br>
+     * - Its length must be between 8 and 30<br>
+     * <br>
+     * @param password password to be validated
+     * @return a HashMap with 4 String keys: hasDigit, hasLetter, hasSpecialCharacter, hasValidLength.
+     * Each key has a boolean value indicating if the requirements mentioned above are fulfilled.
+     */
+    public static HashMap<String, Boolean> validatePassword(String password){
+        int inputLength = password.length();
+
+        HashMap<String, Boolean> passwordMap = new HashMap<>();
+        passwordMap.put("hasDigit", false);
+        passwordMap.put("hasLetter", false);
+        passwordMap.put("hasSpecialCharacter", false);
+        passwordMap.put("hasValidLength", ((inputLength >= 8) && (inputLength <= 30)));
+
+        for (int i = 0;i < inputLength;i++){
+            char c = password.charAt(i);
+
+            if (Character.isDigit(c)){
+                passwordMap.put("hasDigit", true);
+            }
+
+            if (Character.isLetter(c)){
+                passwordMap.put("hasLetter", true);
+            }
+
+            if (!Character.isDigit(c) && !Character.isLetter(c) && !Character.isWhitespace(c)){
+                passwordMap.put("hasSpecialCharacter", true);
+            }
+
+            if (Boolean.TRUE.equals(passwordMap.get("hasDigit")) &&
+                    Boolean.TRUE.equals(passwordMap.get("hasLetter")) &&
+                    Boolean.TRUE.equals(passwordMap.get("hasSpecialCharacter"))){
+                break;
+            }
+        }
+
+        return passwordMap;
+    }
 }
