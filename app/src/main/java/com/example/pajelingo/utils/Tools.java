@@ -58,6 +58,10 @@ public class Tools{
         editor.apply();
     }
 
+    /**
+     * Deletes the user credentials from Shared Preferences.
+     * @param context application Context
+     */
     public static void deleteUserCredentials(Context context) {
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();

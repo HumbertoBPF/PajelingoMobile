@@ -15,6 +15,10 @@ import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjango
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertNull;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -102,6 +106,22 @@ public class ProfileActivityTests extends UITests {
         Thread.sleep(5000);
 
         assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), true);
+    }
+
+    @Test
+    public void testLogout(){
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+        onView(withId(R.id.action_login_logout)).perform(click());
+
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), Context.MODE_PRIVATE);
+
+        String email = sp.getString(context.getString(R.string.email_sp), null);
+        String username = sp.getString(context.getString(R.string.username_sp), null);
+        String password = sp.getString(context.getString(R.string.password_sp), null);
+
+        assertNull(email);
+        assertNull(username);
+        assertNull(password);
     }
 
     private void browseToProfileActivity() {
