@@ -1,5 +1,6 @@
 package com.example.pajelingo.utils;
 
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -327,6 +328,7 @@ public class CustomViewActions {
     }
 
     private static void typeTextAndCloseSoftKeyboard(UiController uiController, EditText editText, String text) {
+        clearText().perform(uiController, editText);
         typeText(text).perform(uiController, editText);
         closeSoftKeyboard().perform(uiController, editText);
     }

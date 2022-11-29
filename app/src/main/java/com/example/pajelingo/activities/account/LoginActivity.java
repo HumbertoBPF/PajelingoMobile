@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         signupLinkTextView.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+            startActivity(new Intent(LoginActivity.this, FormUserActivity.class));
             finish();
         });
     }

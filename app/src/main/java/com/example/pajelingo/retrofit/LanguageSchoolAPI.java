@@ -50,21 +50,24 @@ public interface LanguageSchoolAPI {
 
     @GET("score")
     Call<List<Score>> getScore(@Header("Authorization") String authString,
-                                @Query("language") String languageName,
-                                @Query("game") Long gameId);
+                               @Query("language") String languageName,
+                               @Query("game") Long gameId);
 
     @POST("score/")
     Call<Score> createScore(@Header("Authorization") String authString, @Body Score score);
 
     @PUT("score/{score_id}")
     Call<Score> incrementScore(@Header("Authorization") String authString,
-                                          @Path("score_id") Long scoreId);
+                               @Path("score_id") Long scoreId);
 
     @GET("user/")
     Call<User> login(@Header("Authorization") String authString);
 
     @POST("user/")
     Call<User> signup(@Body User user);
+
+    @PUT("user/")
+    Call<User> updateAccount(@Header("Authorization") String authString, @Body User user);
 
     @DELETE("user/")
     Call<Void> deleteAccount(@Header("Authorization") String authString);

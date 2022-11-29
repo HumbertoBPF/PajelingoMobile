@@ -144,5 +144,6 @@ public class ProfileActivityTests extends UITests {
     @After
     public void tearDown() throws IOException {
         languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

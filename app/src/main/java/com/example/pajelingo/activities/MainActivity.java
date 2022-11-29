@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
+import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -123,9 +123,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the app is in the online mode, show the option to pass to offline mode
         MenuItem onlineItem = menu.findItem(R.id.action_login_logout);
-        MenuItem rankingItem = menu.findItem(R.id.action_menu);
 
-        if (isUserAuthenticated(this)){
+        if (!isUserAuthenticated(this)){
             onlineItem.setIcon(R.drawable.ic_login);
             onlineItem.setTitle(R.string.tab_icon_login_title);
         }else{

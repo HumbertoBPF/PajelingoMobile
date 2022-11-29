@@ -1,6 +1,8 @@
 package com.example.pajelingo.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private final String email;
     private final String username;
     private final String password;

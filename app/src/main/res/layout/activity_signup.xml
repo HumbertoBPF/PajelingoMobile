@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.account.SignupActivity">
+    tools:context=".activities.account.FormUserActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -94,13 +94,24 @@
             app:layout_constraintTop_toBottomOf="@id/requirement_3"
             app:requirementText="@string/password_requirement_4"/>
 
+        <com.example.pajelingo.ui.LabeledEditText
+            android:id="@+id/password_confirmation_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/requirement_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:label="@string/password_confirmation_label"
+            android:layout_marginTop="16dp"
+            app:type="password"/>
+
         <Button
-            android:id="@+id/signup_button"
+            android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requirement_4"
+            app:layout_constraintTop_toBottomOf="@id/password_confirmation_input"
             android:layout_marginTop="16dp"
             android:text="@string/signup_button_text"/>
 
@@ -110,7 +121,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signup_button"
+            app:layout_constraintTop_toBottomOf="@id/submit_button"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:textSize="16sp"

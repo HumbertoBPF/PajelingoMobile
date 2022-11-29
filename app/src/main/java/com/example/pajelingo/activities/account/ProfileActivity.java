@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.User;
 import com.google.android.material.button.MaterialButton;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -30,15 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
         emailCredentialTextView = findViewById(R.id.email_credential_text_view);
         editAccountButton = findViewById(R.id.edit_account_button);
         deleteAccountButton = findViewById(R.id.delete_account_button);
-
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
-
-        usernameCredentialTextView.setText(getString(R.string.username_label)+": "+sp.getString(getString(R.string.username_sp),  ""));
-        emailCredentialTextView.setText(getString(R.string.email_label)+": "+sp.getString(getString(R.string.email_sp), ""));
-
-        editAccountButton.setOnClickListener(v -> {
-
-        });
 
         deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
     }
@@ -60,9 +52,27 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateUserCredentials();
         // Verifies if the user credentials were deleted while he was out from this activity
         if (!isUserAuthenticated(this)){
             finish();
         }
+    }
+
+    private void updateUserCredentials() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
+
+        String username = sp.getString(getString(R.string.username_sp),  "");
+        String email = sp.getString(getString(R.string.email_sp), "");
+
+        usernameCredentialTextView.setText(getString(R.string.username_label)+": "+username);
+        emailCredentialTextView.setText(getString(R.string.email_label)+": "+email);
+
+        editAccountButton.setOnClickListener(v -> {
+            User authenticatedUser = new User(email, username, null);
+            Intent intent = new Intent(ProfileActivity.this, FormUserActivity.class);
+            intent.putExtra("authenticatedUser", authenticatedUser);
+            startActivity(intent);
+        });
     }
 }

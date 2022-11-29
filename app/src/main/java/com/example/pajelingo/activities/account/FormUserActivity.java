@@ -1,11 +1,15 @@
 package com.example.pajelingo.activities.account;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.Tools.validatePassword;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,13 +33,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignupActivity extends AppCompatActivity {
+public class FormUserActivity extends AppCompatActivity {
 
     private TextView loginLinkTextView;
     private LabeledEditText emailInput;
     private LabeledEditText usernameInput;
     private LabeledEditText passwordInput;
-    private Button signupButton;
+    private LabeledEditText passwordConfirmationInput;
+    private Button submitButton;
     private PasswordRequirement passwordRequirement1;
     private PasswordRequirement passwordRequirement2;
     private PasswordRequirement passwordRequirement3;
@@ -46,59 +51,109 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        setTitle(getString(R.string.signup_activity_title));
-
         loginLinkTextView = findViewById(R.id.login_link_text_view);
         emailInput = findViewById(R.id.email_input);
         usernameInput = findViewById(R.id.username_input);
         passwordInput = findViewById(R.id.password_input);
-        signupButton = findViewById(R.id.signup_button);
+        passwordConfirmationInput = findViewById(R.id.password_confirmation_input);
+        submitButton = findViewById(R.id.submit_button);
         passwordRequirement1 = findViewById(R.id.requirement_1);
         passwordRequirement2 = findViewById(R.id.requirement_2);
         passwordRequirement3 = findViewById(R.id.requirement_3);
         passwordRequirement4 = findViewById(R.id.requirement_4);
 
-        loginLinkTextView.setOnClickListener(v -> {
-            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-            finish();
-        });
-
         addPasswordListener();
 
-        signupButton.setOnClickListener(v -> signup());
+        Intent intent = getIntent();
+        User authenticatedUser = (User) intent.getSerializableExtra("authenticatedUser");
+
+        if (authenticatedUser != null){
+            setTitle(getString(R.string.update_account_activity_title));
+
+            emailInput.getEditText().setText(authenticatedUser.getEmail());
+            usernameInput.getEditText().setText(authenticatedUser.getUsername());
+
+            loginLinkTextView.setVisibility(View.GONE);
+
+            submitButton.setText(R.string.update_account_button_text);
+            submitButton.setOnClickListener(v -> submit(false));
+        }else{
+            setTitle(getString(R.string.signup_activity_title));
+
+            loginLinkTextView.setOnClickListener(v -> {
+                startActivity(new Intent(FormUserActivity.this, LoginActivity.class));
+                finish();
+            });
+
+            submitButton.setOnClickListener(v -> submit(true));
+        }
     }
 
-    private void signup() {
+    private void submit(boolean isSignup) {
         String email = emailInput.getEditText().getText().toString();
         String username = usernameInput.getEditText().getText().toString();
         String password = passwordInput.getEditText().getText().toString();
 
-        if (!(passwordRequirement1.isChecked() &&
-                passwordRequirement2.isChecked() &&
-                passwordRequirement3.isChecked() &&
-                passwordRequirement4.isChecked())){
-            Toast.makeText(SignupActivity.this, R.string.warning_password_requirements, Toast.LENGTH_SHORT).show();
+        if (!isInputValid()) {
             return;
         }
 
+        if (isSignup){
+            signup(email, username, password);
+        }else{
+            update(email, username, password);
+        }
+    }
+
+    private void signup(String email, String username, String password) {
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 201){
-                    Toast.makeText(SignupActivity.this, R.string.successful_signup_message, Toast.LENGTH_SHORT).show();
+                if (response.code() == 201) {
+                    Toast.makeText(FormUserActivity.this, R.string.successful_signup_message, Toast.LENGTH_SHORT).show();
                     finish();
-                }else if (response.code() == 400){
+                }else if (response.code() == 400) {
                     String error = getValidationErrorMessage(response);
-                    Toast.makeText(SignupActivity.this, error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FormUserActivity.this, error, Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(SignupActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void update(String email, String username, String password) {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
+
+        String currentUsername = sp.getString(getString(R.string.username_sp), "");
+        String currentPassword = sp.getString(getString(R.string.password_sp), "");
+
+        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(currentUsername, currentPassword),
+                new User(email, username, password));
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
+                    saveStateAndUserCredentials(FormUserActivity.this, email, username, password);
+                    finish();
+                }else if (response.code() == 400) {
+                    String error = getValidationErrorMessage(response);
+                    Toast.makeText(FormUserActivity.this, error, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -125,6 +180,26 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isInputValid() {
+        String password = passwordInput.getEditText().getText().toString();
+        String passwordConfirmation = passwordConfirmationInput.getEditText().getText().toString();
+
+        if (!(passwordRequirement1.isChecked() &&
+                passwordRequirement2.isChecked() &&
+                passwordRequirement3.isChecked() &&
+                passwordRequirement4.isChecked())){
+            Toast.makeText(FormUserActivity.this, R.string.warning_password_requirements, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!password.equals(passwordConfirmation)){
+            Toast.makeText(FormUserActivity.this, R.string.warning_password_confirmation, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private String getValidationErrorMessage(Response<User> response) {

@@ -15,6 +15,7 @@ import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LabeledView;
 import com.example.pajelingo.ui.PasswordRequirement;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -327,12 +328,26 @@ public class CustomMatchers {
         return new BoundedMatcher<View, LabeledView>(LabeledView.class) {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Verifying if the label of the LabeledEditText is "+label);
+                description.appendText("Verifying if the label of the LabeledView is "+label);
             }
 
             @Override
             protected boolean matchesSafely(LabeledView labeledView) {
                 return labeledView.getLabel().toString().equals(label);
+            }
+        };
+    }
+
+    public static Matcher<? super View> hasInput(String text){
+        return new BoundedMatcher<View, LabeledEditText>(LabeledEditText.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the label of the LabeledEditText is "+text);
+            }
+
+            @Override
+            protected boolean matchesSafely(LabeledEditText labeledView) {
+                return labeledView.getEditText().getText().toString().equals(text);
             }
         };
     }

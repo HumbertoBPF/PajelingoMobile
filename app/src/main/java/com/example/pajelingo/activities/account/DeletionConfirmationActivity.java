@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

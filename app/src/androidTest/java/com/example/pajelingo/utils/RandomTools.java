@@ -143,4 +143,16 @@ public class RandomTools {
 
         return password + getRandomString(length - password.length(), hasLetter, hasDigit, hasSpecialCharacter);
     }
+
+    public static String getRandomEmail(){
+        return getRandomWord(10) + "@test.com";
+    }
+
+    public static String getRandomUsername(){
+        return getRandomWord(10);
+    }
+
+    public static String getRandomPassword(){
+        return getRandomString(5, true, true, true) + "1@a";
+    }
 }

@@ -105,9 +105,11 @@
     <string name="on_boarding_3">Happy learning!</string>
     <string name="button_get_started_text">Get started</string>
     <string name="signup_link"><u>Don\'t have an account? Sign up</u></string>
+    <string name="update_account_activity_title">Update account</string>
     <string name="signup_activity_title">Sign up</string>
     <string name="login_link"><u>Already has an account? Login</u></string>
     <string name="signup_button_text">Create account</string>
+    <string name="update_account_button_text">Update account</string>
     <string name="email_label">Email</string>
     <string name="password_requirements_label">Your password must have:</string>
     <string name="password_requirement_1">1 digit</string>
@@ -126,4 +128,7 @@
     <string name="confirm_deletion_string">permanently delete</string>
     <string name="warning_confirm_deletion">The text that you typed does not match <b>\"permanently delete\"</b></string>
     <string name="account_deletion_success">Account successfully deleted</string>
+    <string name="password_confirmation_label">Repeat the password</string>
+    <string name="successful_update_message">Account successfully updated</string>
+    <string name="warning_password_confirmation">The passwords are not equal</string>
 </resources>
