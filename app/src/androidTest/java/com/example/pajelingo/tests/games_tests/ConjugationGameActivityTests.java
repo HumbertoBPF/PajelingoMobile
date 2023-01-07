@@ -113,7 +113,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoCorrectAnswersWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -132,7 +132,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -151,7 +151,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -170,7 +170,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoWrongAnswersWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 

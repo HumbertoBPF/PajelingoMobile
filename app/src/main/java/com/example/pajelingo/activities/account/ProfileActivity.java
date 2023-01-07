@@ -1,10 +1,12 @@
 package com.example.pajelingo.activities.account;
 
+import static com.example.pajelingo.utils.Tools.getPictureFromBase64String;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +19,7 @@ import com.google.android.material.button.MaterialButton;
 public class ProfileActivity extends AppCompatActivity {
     private TextView usernameCredentialTextView;
     private TextView emailCredentialTextView;
+    private ImageView profilePictureImageView;
     private MaterialButton editAccountButton;
     private MaterialButton deleteAccountButton;
 
@@ -29,10 +32,21 @@ public class ProfileActivity extends AppCompatActivity {
 
         usernameCredentialTextView = findViewById(R.id.username_credential_text_view);
         emailCredentialTextView = findViewById(R.id.email_credential_text_view);
+        profilePictureImageView = findViewById(R.id.profile_picture_image_view);
         editAccountButton = findViewById(R.id.edit_account_button);
         deleteAccountButton = findViewById(R.id.delete_account_button);
 
         deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
+
+        setProfilePicture();
+    }
+
+    private void setProfilePicture() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
+        String picture = sp.getString(getString(R.string.picture_sp), null);
+        if (picture != null){
+            profilePictureImageView.setImageBitmap(getPictureFromBase64String(picture));
+        }
     }
 
     private void askConfirmationDeletion() {
@@ -69,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         emailCredentialTextView.setText(getString(R.string.email_label)+": "+email);
 
         editAccountButton.setOnClickListener(v -> {
-            User authenticatedUser = new User(email, username, null);
+            User authenticatedUser = new User(email, username, null, null);
             Intent intent = new Intent(ProfileActivity.this, FormUserActivity.class);
             intent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(intent);

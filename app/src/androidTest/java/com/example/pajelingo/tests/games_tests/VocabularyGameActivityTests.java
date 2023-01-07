@@ -110,7 +110,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoCorrectAnswersWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
@@ -130,7 +130,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
@@ -150,7 +150,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
@@ -170,7 +170,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());

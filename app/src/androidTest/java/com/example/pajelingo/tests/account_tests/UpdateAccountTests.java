@@ -36,7 +36,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
         super.setUp();
         languageSchoolAPI.signup(testUser).execute();
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
     }
 
     @Override

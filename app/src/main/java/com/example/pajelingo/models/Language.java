@@ -1,6 +1,7 @@
 package com.example.pajelingo.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -26,6 +27,11 @@ public class Language {
     private String personalPronoun5;
     @SerializedName(value = "personal_pronoun_6")
     private String personalPronoun6;
+    @Ignore
+    @SerializedName(value = "flag_image")
+    private String flagImage;
+    @SerializedName(value = "flag_image_uri")
+    private String flagImageUri;
 
     public Language(){
 
@@ -35,8 +41,9 @@ public class Language {
         this.languageName = languageName;
     }
 
-    public Language(String languageName, String personalPronoun1, String personalPronoun2, String personalPronoun3,
-                    String personalPronoun4, String personalPronoun5, String personalPronoun6) {
+    public Language(String languageName, String personalPronoun1, String personalPronoun2,
+                    String personalPronoun3, String personalPronoun4, String personalPronoun5,
+                    String personalPronoun6, String flagImage, String flagImageUri) {
         this.languageName = languageName;
         this.personalPronoun1 = personalPronoun1;
         this.personalPronoun2 = personalPronoun2;
@@ -44,6 +51,8 @@ public class Language {
         this.personalPronoun4 = personalPronoun4;
         this.personalPronoun5 = personalPronoun5;
         this.personalPronoun6 = personalPronoun6;
+        this.flagImage = flagImage;
+        this.flagImageUri = flagImageUri;
     }
 
     public Long getId() {
@@ -108,6 +117,22 @@ public class Language {
 
     public void setPersonalPronoun6(String personalPronoun6) {
         this.personalPronoun6 = personalPronoun6;
+    }
+
+    public String getFlagImage() {
+        return flagImage;
+    }
+
+    public void setFlagImage(String flagImage) {
+        this.flagImage = flagImage;
+    }
+
+    public String getFlagImageUri() {
+        return flagImageUri;
+    }
+
+    public void setFlagImageUri(String flagImageUri) {
+        this.flagImageUri = flagImageUri;
     }
 
     @Override

@@ -68,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
                 if ((response.isSuccessful()) && (user != null)){
-                    saveStateAndUserCredentials(getApplicationContext(), user.getUsername(), user.getEmail(), password);
+                    user.setPassword(password);
+                    saveStateAndUserCredentials(getApplicationContext(), user);
                     new Handler().postDelayed(() -> {
                         Toast.makeText(LoginActivity.this, "Welcome, "+username, Toast.LENGTH_LONG).show();
                         dialog.dismiss();

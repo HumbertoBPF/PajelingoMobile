@@ -22,13 +22,15 @@ public class Word implements Serializable {
     private String category;
     @SerializedName(value = "synonyms")
     private List<Long> idsSynonyms;
+    private String image;
 
-    public Word(String wordName, String language, Long idArticle, String category, List<Long> idsSynonyms) {
+    public Word(String wordName, String language, Long idArticle, String category, List<Long> idsSynonyms, String image) {
         this.wordName = wordName;
         this.language = language;
         this.idArticle = idArticle;
         this.category = category;
         this.idsSynonyms = idsSynonyms;
+        this.image = image;
     }
 
     public Long getId() {
@@ -77,5 +79,13 @@ public class Word implements Serializable {
 
     public void setIdsSynonyms(List<Long> idsSynonyms) {
         this.idsSynonyms = idsSynonyms;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

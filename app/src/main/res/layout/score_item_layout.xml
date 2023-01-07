@@ -37,7 +37,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="8dp"
             android:textSize="18sp"
-
             android:gravity="center"
             tools:text="1"
             />
@@ -51,7 +50,6 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_2"
             app:layout_constraintBottom_toBottomOf="parent"
             android:textSize="18sp"
-
             android:layout_marginVertical="8dp"
             android:gravity="center"
             tools:text="HumbertoBPF"/>
@@ -67,7 +65,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="8dp"
             android:textSize="18sp"
-
             android:gravity="center"
             tools:text="231"
             />

@@ -4,6 +4,7 @@ import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Category;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Game;
+import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
@@ -52,6 +53,9 @@ public interface LanguageSchoolAPI {
     Call<List<Score>> getScore(@Header("Authorization") String authString,
                                @Query("language") String languageName,
                                @Query("game") Long gameId);
+
+    @GET("public-images/")
+    Call<Image> getPublicImage(@Query("url") String url);
 
     @POST("score/")
     Call<Score> createScore(@Header("Authorization") String authString, @Body Score score);

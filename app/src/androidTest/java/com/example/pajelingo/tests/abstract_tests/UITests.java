@@ -27,7 +27,7 @@ public abstract class UITests {
     public ActivityScenario activityScenario;
     protected final Context context = ApplicationProvider.getApplicationContext();
     protected final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
-    protected final User testUser = new User(getRandomEmail(), getRandomUsername(), getRandomPassword());
+    protected final User testUser = new User(getRandomEmail(), getRandomUsername(), getRandomPassword(), null);
 
     /**
      * Asserts that the activity currently rendered is the MainActivity.

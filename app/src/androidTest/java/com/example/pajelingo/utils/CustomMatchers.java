@@ -3,7 +3,9 @@ package com.example.pajelingo.utils;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,10 +93,8 @@ public class CustomMatchers {
                 View itemView = viewHolder.itemView;
 
                 TextView wordNameTextView = itemView.findViewById(R.id.word_name_text_view);
-                TextView languageTextView = itemView.findViewById(R.id.language_text_view);
-
-                return wordNameTextView.getText().toString().equals(word.getWordName()) &&
-                        languageTextView.getText().toString().equals(word.getLanguage());
+                // TODO check if the flag image is properly rendered
+                return wordNameTextView.getText().toString().equals(word.getWordName());
             }
         };
     }
@@ -253,6 +253,7 @@ public class CustomMatchers {
             @Override
             protected boolean matchesSafely(TextView item) {
                 String feedbackMessage = item.getText().toString();
+                Log.i("FEEDBACK MESSAGE", feedbackMessage);
                 String startText = isCorrectAnswer?"Correct :)":"Wrong answer";
                 return feedbackMessage.startsWith(startText);
             }

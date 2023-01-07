@@ -38,7 +38,7 @@ public class ProfileActivityTests extends UITests {
     public void setUp() throws IOException {
         languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         languageSchoolAPI.signup(testUser).execute();
-        saveStateAndUserCredentials(context, testUser.getUsername(), testUser.getEmail(), testUser.getPassword());
+        saveStateAndUserCredentials(context, testUser);
     }
 
     @Test

@@ -2,12 +2,22 @@ package com.example.pajelingo.utils;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.example.pajelingo.database.settings.AppDatabase.NAME_DB;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.example.pajelingo.R;
+import androidx.appcompat.app.AlertDialog;
 
+import com.example.pajelingo.R;
+import com.example.pajelingo.activities.MainActivity;
+import com.example.pajelingo.models.User;
+import com.example.pajelingo.synchronization.ArticleSynchro;
+
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -46,15 +56,15 @@ public class Tools{
     /**
      * Saves the specified user credentials on Shared Preferences.
      * @param context application Context
-     * @param username username to be saved
-     * @param email email to be saved
+     * @param user User whose credentials must be saved
      */
-    public static void saveStateAndUserCredentials(Context context, String username, String email, String password) {
+    public static void saveStateAndUserCredentials(Context context, User user) {
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(context.getString(R.string.username_sp), username);
-        editor.putString(context.getString(R.string.email_sp), email);
-        editor.putString(context.getString(R.string.password_sp), password);
+        editor.putString(context.getString(R.string.username_sp), user.getUsername());
+        editor.putString(context.getString(R.string.email_sp), user.getEmail());
+        editor.putString(context.getString(R.string.password_sp), user.getPassword());
+        editor.putString(context.getString(R.string.picture_sp), user.getPicture());
         editor.apply();
     }
 
@@ -127,5 +137,50 @@ public class Tools{
         }
 
         return passwordMap;
+    }
+
+    /**
+     * Deletes the content of the specified folder, that is its sub folders and files.
+     * @param file File instance corresponding to the file whose content must be deleted.
+     */
+    public static void clearFolder(File file){
+        // Specified file can't be null
+        if (file == null){
+            return;
+        }
+
+        File[] subFiles = file.listFiles();
+        // Check if the file has subFiles
+        if (subFiles != null) {
+            for (File subFile: subFiles){
+                clearFolder(subFile);
+                subFile.delete();
+            }
+        }
+    }
+
+    /**
+     * Launches the synchronization of resources, which is implemented through a chain of
+     * responsibility design pattern.
+     * @param context application's context.
+     * @param dialog AlertDialog instance that must be launched while the synchronization takes
+     *               place.
+     */
+    public static void launchSynchroResources(Context context, AlertDialog dialog){
+        // Delete database and internal storage files before synchronization
+        context.deleteDatabase(NAME_DB);
+        clearFolder(context.getFilesDir());
+        new ArticleSynchro(context, dialog).execute();
+    }
+
+    /**
+     * Gets a Bitmap from a base 64 string. The Bitmap instance can be used, for instance, to
+     * display or save the picture as a file.
+     * @param base64String base 64 string encoding a picture.
+     * @return a Bitmap instance representing the encoded picture.
+     */
+    public static Bitmap getPictureFromBase64String(String base64String){
+        byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes,0, bytes.length);
     }
 }

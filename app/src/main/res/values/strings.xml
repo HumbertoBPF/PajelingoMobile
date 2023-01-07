@@ -37,6 +37,7 @@
     <string name="username_sp">username</string>
     <string name="password_sp">password</string>
     <string name="email_sp">email</string>
+    <string name="picture_sp">picture</string>
     <string name="last_score_synchro_sp">last_score_synchro</string>
     <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>

@@ -2,6 +2,7 @@ package com.example.pajelingo.activities;
 
 import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.launchSynchroResources;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +23,6 @@ import com.example.pajelingo.activities.search_tool.SearchActivity;
 import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.synchronization.ArticleSynchro;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,23 +90,19 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_download_resources_title)
                 .setMessage(R.string.dialog_download_resources_message)
-                .setPositiveButton(R.string.dialog_download_resources_confirm, (dialog, id) -> {
-                    launchSynchroResources();
-                    dialog.dismiss();
+                .setPositiveButton(R.string.dialog_download_resources_confirm, (confirmationDialog, id) -> {
+                    // When the user confirms, launches the synchro steps by using a chain of responsibility design pattern
+                    AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
+                            .setCancelable(false).create();
+                    downloadDialog.show();
+                    downloadDialog.setOnDismissListener(dialog2 -> loadGames());
+                    launchSynchroResources(MainActivity.this, downloadDialog);
+                    confirmationDialog.dismiss();
                 })
                 .setNegativeButton(R.string.dialog_download_resources_decline, (dialog, which) -> dialog.dismiss());
         AlertDialog confirmationDialog = builder.create();
         confirmationDialog.show();
-    }
-
-    private void launchSynchroResources() {
-        // When the user confirms, launches the synchro steps by using a chain of responsibility design pattern
-        AlertDialog downloadDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.progress_download_title).setMessage(R.string.progress_download_initial_msg)
-                .setCancelable(false).create();
-        downloadDialog.show();
-        downloadDialog.setOnDismissListener(dialog -> loadGames());
-        new ArticleSynchro(MainActivity.this, downloadDialog).execute();
     }
 
     private void swapConnexionMode() {

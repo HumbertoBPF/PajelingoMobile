@@ -14,7 +14,7 @@ import org.junit.Before;
 import java.io.IOException;
 
 public abstract class GameActivityTests extends UITests {
-    protected final User testUser = new User("test.android@test.com", "TestAndroid", "test-android");
+    protected final User testUser = new User("test.android@test.com", "TestAndroid", "test-@ndro1d2", null);
     protected Game game;
 
     @Before

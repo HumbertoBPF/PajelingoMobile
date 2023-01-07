@@ -106,7 +106,7 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void signup(String email, String username, String password) {
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password));
+        Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -135,13 +135,15 @@ public class FormUserActivity extends AppCompatActivity {
         String currentPassword = sp.getString(getString(R.string.password_sp), "");
 
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(currentUsername, currentPassword),
-                new User(email, username, password));
+                new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
+                User user = response.body();
+                if ((response.code() == 200) && (user != null)) {
                     Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
-                    saveStateAndUserCredentials(FormUserActivity.this, email, username, password);
+                    user.setPassword(password);
+                    saveStateAndUserCredentials(FormUserActivity.this, user);
                     finish();
                 }else if (response.code() == 400) {
                     String error = getValidationErrorMessage(response);

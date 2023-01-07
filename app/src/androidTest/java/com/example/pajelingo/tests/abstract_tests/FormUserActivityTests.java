@@ -26,7 +26,7 @@ import org.junit.Before;
 import java.io.IOException;
 
 public abstract class FormUserActivityTests extends UITests{
-    protected final User existingUser = new User("test.android.2@test.com", "TestAndroid2", "test-@ndro1d2");
+    protected final User existingUser = new User("test.android.2@test.com", "TestAndroid2", "test-@ndro1d2", null);
 
     @Before
     public void setUp() throws IOException {
