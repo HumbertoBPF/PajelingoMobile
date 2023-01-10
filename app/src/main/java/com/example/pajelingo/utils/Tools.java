@@ -1,7 +1,6 @@
 package com.example.pajelingo.utils;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import static com.example.pajelingo.database.settings.AppDatabase.NAME_DB;
 
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.util.Base64;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 
@@ -79,6 +77,7 @@ public class Tools{
         editor.remove(context.getString(R.string.username_sp));
         editor.remove(context.getString(R.string.email_sp));
         editor.remove(context.getString(R.string.password_sp));
+        editor.remove(context.getString(R.string.picture_sp));
         editor.apply();
     }
 

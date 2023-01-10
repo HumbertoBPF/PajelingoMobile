@@ -132,4 +132,19 @@
     <string name="password_confirmation_label">Repeat the password</string>
     <string name="successful_update_message">Account successfully updated</string>
     <string name="warning_password_confirmation">The passwords are not equal</string>
+    <string name="or">or</string>
+    <string name="reset_password_link"><u>I forgot my password</u></string>
+    <string name="reset_button_button_text">Reset password</string>
+    <string name="reset_password_instructions">Inform the email associated with your account</string>
+    <string name="reset_password_loading_dialog_title">Please, wait</string>
+    <string name="reset_password_loading_dialog_message">Requesting password reset…</string>
+    <string name="reset_password_feedback_dialog_title">Check your email</string>
+    <string name="reset_password_feedback_dialog_message">Check the specified email to reset your account. If there is an email associated with a
+        Pajelingo account you should have received an email with a reset link.</string>
+    <string name="reset_password_error_dialog_title">Error</string>
+    <string name="reset_password_positive_button_text">Ok</string>
+    <string name="warning_email_required">Email is required</string>
+    <string name="warning_email_format_required">Input needs to be an email</string>
+    <string name="update_account_dialog_message">Updating your account…</string>
+    <string name="creating_account_dialog_message">Creating account…</string>
 </resources>

@@ -6,7 +6,6 @@ import static com.example.pajelingo.utils.Tools.getAuthToken;
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Game;
-import com.example.pajelingo.models.User;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +13,6 @@ import org.junit.Before;
 import java.io.IOException;
 
 public abstract class GameActivityTests extends UITests {
-    protected final User testUser = new User("test.android@test.com", "TestAndroid", "test-@ndro1d2", null);
     protected Game game;
 
     @Before

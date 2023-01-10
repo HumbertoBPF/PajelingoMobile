@@ -7,6 +7,7 @@ import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
+import com.example.pajelingo.models.ResetEmail;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.models.Word;
@@ -75,4 +76,7 @@ public interface LanguageSchoolAPI {
 
     @DELETE("user/")
     Call<Void> deleteAccount(@Header("Authorization") String authString);
+
+    @POST("request-reset-account/")
+    Call<Void> resetAccount(@Body ResetEmail resetEmail);
 }

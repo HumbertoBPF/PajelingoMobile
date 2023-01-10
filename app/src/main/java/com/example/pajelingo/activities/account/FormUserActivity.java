@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
@@ -106,10 +107,15 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void signup(String email, String username, String password) {
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.login_dialog_title)
+                .setMessage(R.string.creating_account_dialog_message).setCancelable(false).create();
+        dialog.show();
+
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                dialog.dismiss();
                 if (response.code() == 201) {
                     Toast.makeText(FormUserActivity.this, R.string.successful_signup_message, Toast.LENGTH_SHORT).show();
                     finish();
@@ -123,6 +129,7 @@ public class FormUserActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -134,11 +141,16 @@ public class FormUserActivity extends AppCompatActivity {
         String currentUsername = sp.getString(getString(R.string.username_sp), "");
         String currentPassword = sp.getString(getString(R.string.password_sp), "");
 
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.login_dialog_title)
+                .setMessage(R.string.update_account_dialog_message).setCancelable(false).create();
+        dialog.show();
+
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(currentUsername, currentPassword),
                 new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                dialog.dismiss();
                 User user = response.body();
                 if ((response.code() == 200) && (user != null)) {
                     Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
@@ -155,6 +167,7 @@ public class FormUserActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });

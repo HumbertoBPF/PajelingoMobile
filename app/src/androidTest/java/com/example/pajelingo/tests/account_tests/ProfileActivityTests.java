@@ -118,10 +118,12 @@ public class ProfileActivityTests extends UITests {
         String email = sp.getString(context.getString(R.string.email_sp), null);
         String username = sp.getString(context.getString(R.string.username_sp), null);
         String password = sp.getString(context.getString(R.string.password_sp), null);
+        String picture = sp.getString(context.getString(R.string.picture_sp), null);
 
         assertNull(email);
         assertNull(username);
         assertNull(password);
+        assertNull(picture);
     }
 
     private void browseToProfileActivity() {

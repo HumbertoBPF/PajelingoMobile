@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
     private TextView signupLinkTextView;
+    private TextView resetPasswordLinkTextView;
     private LabeledEditText usernameInput;
     private LabeledEditText passwordInput;
     private Button loginButton;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         setTitle(R.string.login_activity_title);
 
         signupLinkTextView = findViewById(R.id.signup_link_text_view);
+        resetPasswordLinkTextView = findViewById(R.id.reset_password_link_text_view);
         usernameInput = findViewById(R.id.username_input);
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
@@ -50,6 +52,11 @@ public class LoginActivity extends AppCompatActivity {
 
         signupLinkTextView.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, FormUserActivity.class));
+            finish();
+        });
+
+        resetPasswordLinkTextView.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RequestResetPasswordActivity.class));
             finish();
         });
     }

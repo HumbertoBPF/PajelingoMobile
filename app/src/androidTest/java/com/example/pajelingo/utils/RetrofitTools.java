@@ -2,6 +2,8 @@ package com.example.pajelingo.utils;
 
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 
+import android.util.Log;
+
 import com.example.pajelingo.daos.BaseDao;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
