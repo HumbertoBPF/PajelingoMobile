@@ -16,15 +16,14 @@ import retrofit2.Response;
 
 public class TestTools {
     /**
-     * Verifies that the specified score of a user has a certain value.
+     * Gets the score value matching the specified filters.
      * @param user user owner of the score
      * @param language language of the score
      * @param gameId id of the concerned game
-     * @param value value to be asserted
      * @throws IOException thrown when some error related with HTTP communication occurs
      * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    public static void assertScoreValue(User user, Language language, Long gameId, Long value) throws IOException, InterruptedException {
+    public static Long getScore(User user, Language language, Long gameId) throws IOException, InterruptedException {
         Thread.sleep(3000);
 
         Response<List<Score>> responseScore =
@@ -33,12 +32,13 @@ public class TestTools {
         List<Score> scores = responseScore.body();
 
         assert scores != null;
-        if (value.equals(0L)){
-            assert scores.size() == 0;
-        }else{
-            assert scores.size() == 1;
-            assert scores.get(0).getScore().equals(value);
+
+        if (scores.size() == 0){
+            return 0L;
         }
+
+        assert scores.size() == 1;
+        return scores.get(0).getScore();
     }
 
     /**

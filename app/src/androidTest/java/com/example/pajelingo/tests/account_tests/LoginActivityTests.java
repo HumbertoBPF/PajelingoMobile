@@ -14,7 +14,6 @@ import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
 
@@ -36,8 +35,6 @@ public class LoginActivityTests extends UITests {
     @Before
     public void setUp() throws IOException {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPI.signup(testUser).execute();
     }
 
     @Test
@@ -104,7 +101,6 @@ public class LoginActivityTests extends UITests {
     @After
     public void tearDown() throws IOException {
         super.tearDown();
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
     

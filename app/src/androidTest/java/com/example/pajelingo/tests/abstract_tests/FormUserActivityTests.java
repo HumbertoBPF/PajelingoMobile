@@ -9,32 +9,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasRequirementText;
 import static com.example.pajelingo.utils.CustomMatchers.isChecked;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
-import static com.example.pajelingo.utils.RandomTools.getInvalidPassword;
-import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
-import static com.example.pajelingo.utils.RandomTools.getRandomUsername;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static org.hamcrest.CoreMatchers.allOf;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.models.User;
-
-import org.junit.After;
-import org.junit.Before;
 
 import java.io.IOException;
 
 public abstract class FormUserActivityTests extends UITests{
-    protected final User existingUser = new User("test.android.2@test.com", "TestAndroid2", "test-@ndro1d2", null);
-
-    @Before
-    public void setUp() throws IOException {
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPI.deleteAccount(getAuthToken(existingUser.getUsername(), existingUser.getPassword())).execute();
-        languageSchoolAPI.signup(existingUser).execute();
-    }
-
     /**
      * Fills the form with the specified credentials.
      * @param email email credential
@@ -83,83 +66,40 @@ public abstract class FormUserActivityTests extends UITests{
      * @param email email input
      * @param username username input
      * @param password password input
-     * @throws IOException thrown when some error related with HTTP communication occurs
-     * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    protected void testSuccessfulSubmission(String email, String username, String password) throws IOException, InterruptedException {
+    protected void testSuccessfulSubmission(String email, String username, String password) {
         browseToForm();
 
         fillForm(email, username, password, password);
-
         assertPasswordRequirements(true, true, true, true);
 
         onView(withId(R.id.submit_button)).perform(click());
-
-        assertUserExistsInDjangoApp(email,username, password, true);
-        // Delete the created user
-        languageSchoolAPI.deleteAccount(getAuthToken(username, password)).execute();
     }
 
     /**
-     * Inputs the specified credentials and waits for an authentication error (401 HTTP code) when
-     * trying to find the user in the Django API database.
+     * Fills the user form and asserts that the input is invalid.
      * @param email email input
      * @param username username input
-     * @param passwordsMatch if the password and confirmation password match
+     * @param password password input
+     * @param passwordsMatch if the password and its confirmation match
+     * @param hasLetter if the password contains a letter
+     * @param hasDigit if the password contains a digit
+     * @param hasSpecialCharacter if the password contains a special character
+     * @param hasValidLength if the password has a valid length
      * @throws IOException thrown when some error related with HTTP communication occurs
      * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    protected void testFailedSubmissionWithValidPassword(String email, String username, boolean passwordsMatch) throws IOException, InterruptedException {
-        String password = getRandomString(5, true, true, true) + "1@a";
-        String passwordConfirmation;
-
-        if (passwordsMatch) {
-            passwordConfirmation = password;
-        }else{
-            passwordConfirmation = getRandomString(password.length(), true, true, true);
-        }
-
+    protected void testInvalidSubmission(String email, String username, String password, boolean passwordsMatch, boolean hasLetter,
+                                         boolean hasDigit, boolean hasSpecialCharacter, boolean hasValidLength) throws IOException, InterruptedException {
         browseToForm();
+
+        String passwordConfirmation = passwordsMatch?password:getRandomString(password.length(), true, true, true);
+
         fillForm(email, username, password, passwordConfirmation);
-
-        assertPasswordRequirements(true, true, true, true);
-
-        onView(withId(R.id.submit_button)).perform(click());
-
-        assertUserExistsInDjangoApp(email, username, password, false);
-    }
-
-    /**
-     * Inputs random valid email and username credentials, generates an invalid password and waits
-     * for an authentication error (401 HTTP code) when trying to find the user in the Django API
-     * database.
-     * @param length length of the password to be generated
-     * @param hasLetter if the generated password must contain letters
-     * @param hasDigit if the generated password must contain digits
-     * @param hasSpecialCharacter if the generated password must contain special characters
-     * @throws IOException thrown when some error related with HTTP communication occurs
-     * @throws InterruptedException thrown when some error related with main thread manipulation occurs
-     */
-    protected void testFailedSubmissionWithInvalidPassword(int length, boolean hasLetter,
-                                                         boolean hasDigit, boolean hasSpecialCharacter) throws IOException, InterruptedException {
-        String email = getRandomEmail();
-        String username = getRandomUsername();
-        String password = getInvalidPassword(length, hasLetter, hasDigit, hasSpecialCharacter);
-
-        browseToForm();
-
-        fillForm(email, username, password, password);
-
-        assertPasswordRequirements(hasLetter, hasDigit, hasSpecialCharacter, ((length >= 8) && (length<=30)));
+        assertPasswordRequirements(hasLetter, hasDigit, hasSpecialCharacter, hasValidLength);
 
         onView(withId(R.id.submit_button)).perform(click());
 
         assertUserExistsInDjangoApp(email, username, password, false);
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
-        languageSchoolAPI.deleteAccount(getAuthToken(existingUser.getUsername(), existingUser.getPassword())).execute();
     }
 }

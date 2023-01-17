@@ -5,8 +5,8 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
+import static org.hamcrest.Matchers.not;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -23,20 +23,17 @@ import java.io.IOException;
 public class MenuActivityTests extends UITests {
     @Before
     public void setUp() throws IOException {
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPI.signup(testUser).execute();
-        saveStateAndUserCredentials(context, testUser);
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 
     @Test
     public void testRenderingMenuForAuthenticatedUser(){
         saveStateAndUserCredentials(context, testUser);
-
         assertMenu(true);
     }
 
     @Test
-    public void testRenderingMenuForNonAuthenticatedUser(){
+    public void testRenderingMenuForNonAuthenticatedUser() {
         assertMenu(false);
     }
 
@@ -51,13 +48,15 @@ public class MenuActivityTests extends UITests {
 
         if (isAuthenticated){
             onView(withId(R.id.menu_item_profile)).check(matches(isDisplayed()));
+        }else{
+            onView(withId(R.id.menu_item_profile)).check(matches(not(isDisplayed())));
         }
         onView(withId(R.id.menu_item_faq)).check(matches(isDisplayed()));
         onView(withId(R.id.menu_item_rankings)).check(matches(isDisplayed()));
     }
 
     @After
-    public void tearDown() throws IOException {
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+    public void tearDown(){
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

@@ -18,8 +18,6 @@ public abstract class GameActivityTests extends UITests {
     @Before
     public void setUp() throws IOException {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPI.signup(testUser).execute();
 
         saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
         saveEntitiesFromAPI(languageSchoolAPI.getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
@@ -28,7 +26,6 @@ public abstract class GameActivityTests extends UITests {
     @After
     public void tearDown() throws IOException {
         super.tearDown();
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

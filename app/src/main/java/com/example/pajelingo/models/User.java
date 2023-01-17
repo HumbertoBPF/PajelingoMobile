@@ -3,8 +3,8 @@ package com.example.pajelingo.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private final String email;
-    private final String username;
+    private String email;
+    private String username;
     private String password;
     private final String picture;
 
@@ -19,8 +19,16 @@ public class User implements Serializable {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

@@ -18,7 +18,7 @@ import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
-import static com.example.pajelingo.utils.TestTools.assertScoreValue;
+import static com.example.pajelingo.utils.TestTools.getScore;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -119,13 +119,18 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
+        Long score1 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
+
+        Long score2 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score2.equals(score1 + 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
-
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
-        assertScoreValue(testUser, targetLanguage, game.getId(), 2L);
+
+        Long score3 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score3.equals(score2 + 1L);
     }
 
     @Test
@@ -139,13 +144,18 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
+        Long score1 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
+
+        Long score2 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score2.equals(score1);
 
         onView(withId(R.id.new_word_button)).perform(click());
-
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
-        assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
+
+        Long score3 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score3.equals(score2 + 1L);
     }
 
     @Test
@@ -159,13 +169,18 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
+        Long score1 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, true);
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 1L);
+
+        Long score2 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score2.equals(score1 + 1L);
 
         onView(withId(R.id.new_word_button)).perform(click());
-
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
-        assertScoreValue(testUser, targetLanguage, game.getId(), 1L);
+
+        Long score3 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score3.equals(score2);
     }
 
     @Test
@@ -179,13 +194,18 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
+        Long score1 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
-        assertScoreValue(testUser, Objects.requireNonNull(targetLanguage), game.getId(), 0L);
+
+        Long score2 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score2.equals(score1);
 
         onView(withId(R.id.new_word_button)).perform(click());
-
         inputAnswerAndCheckFeedback(baseLanguage, targetLanguage, false);
-        assertScoreValue(testUser, targetLanguage, game.getId(), 0L);
+
+        Long score3 = getScore(testUser, Objects.requireNonNull(targetLanguage), game.getId());
+        assert score3.equals(score2);
     }
 
     @Test

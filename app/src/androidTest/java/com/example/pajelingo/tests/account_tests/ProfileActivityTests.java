@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertNull;
@@ -24,6 +23,7 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
+import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.After;
@@ -33,22 +33,25 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class ProfileActivityTests extends UITests {
+    private final User userToDelete =
+            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null);
 
     @Before
     public void setUp() throws IOException {
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
-        languageSchoolAPI.signup(testUser).execute();
-        saveStateAndUserCredentials(context, testUser);
+        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 
     @Test
     public void testRenderingProfileActivity(){
+        saveStateAndUserCredentials(context, testUser);
         browseToProfileActivity();
         assertViewsProfileActivity();
     }
 
     @Test
     public void testRenderingProfileActivityDeleteAccountDialog(){
+        saveStateAndUserCredentials(context, testUser);
+
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
 
@@ -61,6 +64,8 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testRenderingDeletionConfirmationActivity(){
+        saveStateAndUserCredentials(context, testUser);
+
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
         onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
@@ -72,6 +77,8 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testDeclineProfileActivityDeleteAccountDialog(){
+        saveStateAndUserCredentials(context, testUser);
+
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
         onView(withText(R.string.dialog_delete_account_decline)).perform(click());
@@ -81,6 +88,8 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testDeleteAccountSuccessful() throws IOException, InterruptedException {
+        saveStateAndUserCredentials(context, userToDelete);
+
         browseToProfileActivity();
 
         onView(withId(R.id.delete_account_button)).perform(click());
@@ -91,11 +100,13 @@ public class ProfileActivityTests extends UITests {
         Thread.sleep(5000);
 
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
-        assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), false);
+        assertUserExistsInDjangoApp(userToDelete.getEmail(), userToDelete.getUsername(), userToDelete.getPassword(), false);
     }
 
     @Test
     public void testDeleteAccountFailedConfirmText() throws IOException, InterruptedException {
+        saveStateAndUserCredentials(context, testUser);
+
         browseToProfileActivity();
 
         onView(withId(R.id.delete_account_button)).perform(click());
@@ -110,6 +121,8 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testLogout(){
+        saveStateAndUserCredentials(context, testUser);
+
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.action_login_logout)).perform(click());
 
@@ -144,8 +157,7 @@ public class ProfileActivityTests extends UITests {
     }
 
     @After
-    public void tearDown() throws IOException {
-        languageSchoolAPI.deleteAccount(getAuthToken(testUser.getUsername(), testUser.getPassword())).execute();
+    public void tearDown() {
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

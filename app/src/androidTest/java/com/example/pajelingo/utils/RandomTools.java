@@ -112,7 +112,7 @@ public class RandomTools {
      * @param hasSpecialCharacter boolean indicating if the password has special characters.
      * @return an invalid password as defined above.
      */
-    public static String getInvalidPassword(int length, boolean hasLetter, boolean hasDigit, boolean hasSpecialCharacter){
+    public static String getRandomInvalidPassword(int length, boolean hasLetter, boolean hasDigit, boolean hasSpecialCharacter){
         boolean hasValidLength = ((length >= 8) && (length<=30));
 
         if (hasDigit && hasLetter && hasSpecialCharacter && hasValidLength){
@@ -152,7 +152,7 @@ public class RandomTools {
         return getRandomWord(10);
     }
 
-    public static String getRandomPassword(){
-        return getRandomString(5, true, true, true) + "1@a";
+    public static String getRandomValidPassword(){
+        return getRandomString(getRandomInteger(5, 27), true, true, true) + "1@a";
     }
 }
