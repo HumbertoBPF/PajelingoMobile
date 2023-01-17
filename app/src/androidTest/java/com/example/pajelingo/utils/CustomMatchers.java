@@ -5,7 +5,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;

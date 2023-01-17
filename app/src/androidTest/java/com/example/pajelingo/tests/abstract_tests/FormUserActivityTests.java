@@ -4,11 +4,13 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasRequirementText;
 import static com.example.pajelingo.utils.CustomMatchers.isChecked;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
+import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -74,6 +76,9 @@ public abstract class FormUserActivityTests extends UITests{
         assertPasswordRequirements(true, true, true, true);
 
         onView(withId(R.id.submit_button)).perform(click());
+
+        onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
     }
 
     /**
