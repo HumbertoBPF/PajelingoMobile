@@ -215,7 +215,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -229,7 +229,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         setupVocabularyGame(baseLanguage, targetLanguage);
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     /**

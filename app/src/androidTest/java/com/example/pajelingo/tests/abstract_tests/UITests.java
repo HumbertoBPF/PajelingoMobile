@@ -48,7 +48,7 @@ public abstract class UITests {
      * Asserts that the activity currently rendered is the MainActivity.
      * @param hasGames if the games are rendered (otherwise, a data warning is displayed).
      */
-    protected void assertIsMenuActivity(boolean hasGames) {
+    protected void assertIsMainActivity(boolean hasGames) {
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
         onView(withId(R.id.action_synchro)).check(matches(isDisplayed()));
         onView(withId(R.id.action_login_logout)).check(matches(isDisplayed()));

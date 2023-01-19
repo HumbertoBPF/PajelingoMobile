@@ -133,7 +133,7 @@
     <string name="warning_password_confirmation">The passwords are not equal</string>
     <string name="or">or</string>
     <string name="reset_password_link"><u>I forgot my password</u></string>
-    <string name="reset_button_button_text">Reset password</string>
+    <string name="reset_button_text">Reset password</string>
     <string name="reset_password_instructions">Inform the email associated with your account</string>
     <string name="reset_password_loading_dialog_title">Please, wait</string>
     <string name="reset_password_loading_dialog_message">Requesting password reset…</string>

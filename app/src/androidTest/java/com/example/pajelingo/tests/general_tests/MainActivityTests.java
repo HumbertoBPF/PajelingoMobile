@@ -21,7 +21,7 @@ public class MainActivityTests extends UITests {
     @Test
     public void testRenderingMainActivity(){
         activityScenario = ActivityScenario.launch(MainActivity.class);
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -43,13 +43,13 @@ public class MainActivityTests extends UITests {
         onView(isRoot()).perform(waitForView(withText(R.string.dialog_download_resources_title), 5000, true));
         onView(withText(R.string.dialog_download_resources_decline)).perform(click());
         onView(withText(R.string.progress_download_title)).check(doesNotExist());
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
     public void testMainActivityWithNoData(){
         AppDatabase.getInstance(context).clearAllTables();
         activityScenario = ActivityScenario.launch(MainActivity.class);
-        assertIsMenuActivity(false);
+        assertIsMainActivity(false);
     }
 }

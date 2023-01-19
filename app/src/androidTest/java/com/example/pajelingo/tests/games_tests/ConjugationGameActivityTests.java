@@ -213,7 +213,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -226,7 +226,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         setupConjugationGame(randomLanguage);
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -240,7 +240,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         setupConjugationGame(randomLanguage);
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     /**

@@ -204,7 +204,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -217,7 +217,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         setupArticleGame(randomLanguage);
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     @Test
@@ -235,7 +235,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
         onView(withId(R.id.check_button)).perform(click());
-        assertIsMenuActivity(true);
+        assertIsMainActivity(true);
     }
 
     /**
