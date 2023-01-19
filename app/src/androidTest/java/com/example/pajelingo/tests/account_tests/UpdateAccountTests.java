@@ -26,8 +26,6 @@ import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.FormUserActivityTests;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -38,11 +36,6 @@ public class UpdateAccountTests extends FormUserActivityTests {
     private final User user2 = new User("update-test-android2@test.com", "update-test-android2", "upd4te-str0ng-p4ssw0rd2", null);
     private final User user3 = new User("update-test-android3@test.com", "update-test-android3", "upd4te-str0ng-p4ssw0rd3", null);
     private final User user4 = new User("update-test-android4@test.com", "update-test-android4", "upd4te-str0ng-p4ssw0rd4", null);
-
-    @Before
-    public void setUp() throws IOException {
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-    }
 
     @Override
     protected void browseToForm() {
@@ -234,11 +227,5 @@ public class UpdateAccountTests extends FormUserActivityTests {
     private void testSuccessfulAccountUpdate(String email, String username, String password) throws IOException, InterruptedException {
         testSuccessfulSubmission(email, username, password);
         assertUserExistsInDjangoApp(email, username, password, true);
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

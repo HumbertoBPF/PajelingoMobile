@@ -22,6 +22,7 @@ import static com.example.pajelingo.utils.TestTools.getScore;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -44,8 +45,6 @@ public class ArticleGameActivityTests extends GameActivityTests {
     @Override
     public void setUp() throws IOException {
         super.setUp();
-        saveEntitiesFromAPI(languageSchoolAPI.getArticles(), AppDatabase.getInstance(context).getArticleDao());
-        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
         game = AppDatabase.getInstance(context).getGameDao().getGameByName("Guess the Article");
     }
 
@@ -117,13 +116,13 @@ public class ArticleGameActivityTests extends GameActivityTests {
         inputAnswerAndCheckFeedback(randomLanguage, true);
 
         Long score2 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score2.equals(score1 + 1L);
+        assertEquals(score1 + 1L, score2.longValue());
 
         onView(withId(R.id.new_word_button)).perform(click());
         inputAnswerAndCheckFeedback(randomLanguage, true);
 
         Long score3 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score3.equals(score2 + 1L);
+        assertEquals(score2 + 1L, score3.longValue());
     }
 
     @Test
@@ -141,13 +140,13 @@ public class ArticleGameActivityTests extends GameActivityTests {
         inputAnswerAndCheckFeedback(randomLanguage, false);
 
         Long score2 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score2.equals(score1);
+        assertEquals(score1, score2);
 
         onView(withId(R.id.new_word_button)).perform(click());
         inputAnswerAndCheckFeedback(randomLanguage, true);
 
         Long score3 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score3.equals(score2 + 1L);
+        assertEquals(score2 + 1L, score3.longValue());
     }
 
     @Test
@@ -165,13 +164,13 @@ public class ArticleGameActivityTests extends GameActivityTests {
         inputAnswerAndCheckFeedback(randomLanguage, true);
 
         Long score2 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score2.equals(score1 + 1L);
+        assertEquals(score1 + 1L, score2.longValue());
 
         onView(withId(R.id.new_word_button)).perform(click());
         inputAnswerAndCheckFeedback(randomLanguage, false);
 
         Long score3 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score3.equals(score2);
+        assertEquals(score2, score3);
     }
 
     @Test
@@ -189,13 +188,13 @@ public class ArticleGameActivityTests extends GameActivityTests {
         inputAnswerAndCheckFeedback(randomLanguage, false);
 
         Long score2 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score2.equals(score1);
+        assertEquals(score1, score2);
 
         onView(withId(R.id.new_word_button)).perform(click());
         inputAnswerAndCheckFeedback(randomLanguage, false);
 
         Long score3 = getScore(testUser, Objects.requireNonNull(randomLanguage), game.getId());
-        assert score3.equals(score2);
+        assertEquals(score2, score3);
     }
 
     @Test

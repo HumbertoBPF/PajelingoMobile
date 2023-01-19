@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
-import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -16,18 +15,9 @@ import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
 public class MainActivityTests extends UITests {
-
-    @Before
-    public void setUp() throws IOException {
-        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
-    }
-
     @Test
     public void testRenderingMainActivity(){
         activityScenario = ActivityScenario.launch(MainActivity.class);

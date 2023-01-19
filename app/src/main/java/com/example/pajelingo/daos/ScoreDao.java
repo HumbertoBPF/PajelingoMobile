@@ -16,17 +16,18 @@ public abstract class ScoreDao extends BaseDao<Score> {
         super("Score");
     }
     // Perform a group by to compute the total score
-    @Query("SELECT id, user, language, game, sum(score) AS score FROM Score GROUP BY user ORDER BY score DESC;")
-    public abstract List<Score> getAllScoresSorted();
-
     @Query("SELECT id, user, language, game, sum(score) AS score FROM Score WHERE language=:languageName GROUP BY user ORDER BY score DESC;")
-    public abstract List<Score> getAllScoresSorted(String languageName);
+    public abstract List<Score> getTotalScoresByLanguage(String languageName);
 
-    public AsyncTask<Void,Void,List<Score>> getAllScoresSortedTask(OnResultListener<List<Score>> onResultListener){
+    @Query("SELECT id, user, language, game, score AS score FROM Score WHERE (language=:languageName) AND (user=:username) ORDER BY game ASC;")
+    public abstract List<Score> getScoresByUserAndByLanguage(String username, String languageName);
+
+    public AsyncTask<Void,Void,List<Score>> getTotalScoresByLanguage(String languageName,
+                                                                     OnResultListener<List<Score>> onResultListener){
         return new AsyncTask<Void, Void, List<Score>>() {
             @Override
             protected List<Score> doInBackground(Void... voids) {
-                return getAllScoresSorted();
+                return getTotalScoresByLanguage(languageName);
             }
 
             @Override
@@ -37,12 +38,12 @@ public abstract class ScoreDao extends BaseDao<Score> {
         };
     }
 
-    public AsyncTask<Void,Void,List<Score>> getAllScoresSortedTask(String languageName,
-                                                                   OnResultListener<List<Score>> onResultListener){
+    public AsyncTask<Void,Void,List<Score>> getScoresByUserAndByLanguage(String username, String languageName,
+                                                                         OnResultListener<List<Score>> onResultListener){
         return new AsyncTask<Void, Void, List<Score>>() {
             @Override
             protected List<Score> doInBackground(Void... voids) {
-                return getAllScoresSorted(languageName);
+                return getScoresByUserAndByLanguage(username, languageName);
             }
 
             @Override

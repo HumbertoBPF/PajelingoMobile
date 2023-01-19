@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.ScoreAdapter;
+import com.example.pajelingo.adapters.RankingAdapter;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -37,32 +37,22 @@ public class RankingActivity extends AppCompatActivity implements AdapterView.On
         scoreDao = AppDatabase.getInstance(this).getScoreDao();
 
         languageDao.getAllRecordsTask(result -> {
-            result.add(new Language(getString(R.string.general_ranking_spinner_text)));
             ArrayAdapter<Language> adapter = new ArrayAdapter<>(RankingActivity.this,
                     android.R.layout.simple_spinner_item, result);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             languageSpinner.setAdapter(adapter);
             languageSpinner.setOnItemSelectedListener(RankingActivity.this);
-        }).execute();
-
-        showGeneralRanking();
-    }
-
-    private void showGeneralRanking() {
-        scoreDao.getAllScoresSortedTask(result -> {
-            int lastPosition = languageSpinner.getAdapter().getCount();
-            languageSpinner.setSelection(lastPosition - 1);
-            rankingRecyclerView.setAdapter(new ScoreAdapter(result));
+            applyFilter();
         }).execute();
     }
 
     private void applyFilter() {
-        String selectedLanguage = languageSpinner.getSelectedItem().toString();
-        if (selectedLanguage.equals(getString(R.string.general_ranking_spinner_text))){
-            showGeneralRanking();
-        }else{
-            scoreDao.getAllScoresSortedTask(selectedLanguage,
-                    result -> rankingRecyclerView.setAdapter(new ScoreAdapter(result))).execute();
+        Object selectedItem = languageSpinner.getSelectedItem();
+
+        if (selectedItem != null){
+            String selectedLanguage = languageSpinner.getSelectedItem().toString();
+            scoreDao.getTotalScoresByLanguage(selectedLanguage,
+                    result -> rankingRecyclerView.setAdapter(new RankingAdapter(result))).execute();
         }
     }
 

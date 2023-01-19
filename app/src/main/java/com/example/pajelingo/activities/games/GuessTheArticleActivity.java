@@ -16,14 +16,10 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.Article;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ScoreUploader;
 import com.example.pajelingo.ui.LabeledSpinner;
-
-import java.util.List;
 
 public class GuessTheArticleActivity extends GameActivity {
 
@@ -38,47 +34,41 @@ public class GuessTheArticleActivity extends GameActivity {
         Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
-        languageDao.getAllRecordsTask(new OnResultListener<List<Language>>() {
-            @Override
-            public void onResult(List<Language> result) {
-                // Verify if there are at least one language
-                if (result.isEmpty()){
-                    finishActivityNotEnoughResources();
-                    return;
-                }
-                // Remove English from the list of results
-                int indexEnglish = -1;
-                for (int i = 0;i< result.size();i++){
-                    if (result.get(i).getLanguageName().equals("English")){
-                        indexEnglish = i;
-                        break;
-                    }
-                }
-                if (indexEnglish != -1){
-                    result.remove(indexEnglish);
-                }
-                // Fill the adapter with the name of all the languages available
-                ArrayAdapter<Language> adapter = new ArrayAdapter<>(GuessTheArticleActivity.this,
-                        android.R.layout.simple_spinner_item, result);
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the baseLanguageSpinner
-                languageSpinner.setAdapter(adapter);
-                playButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String languageChosenName = languageSpinner.getSelectedItem().toString();
-                        playButton.setOnClickListener(null);
-                        languageDao.getLanguageByNameAsyncTask(languageChosenName, new OnResultListener<Language>() {
-                            @Override
-                            public void onResult(Language result) {
-                                language = result;
-                                startGame();
-                            }
-                        }).execute();
-                    }
-                });
+        languageDao.getAllRecordsTask(result -> {
+            // Verify if there are at least one language
+            if (result.isEmpty()){
+                finishActivityNotEnoughResources();
+                return;
             }
+            // Remove English from the list of results
+            int indexEnglish = -1;
+            for (int i = 0;i< result.size();i++){
+                if (result.get(i).getLanguageName().equals("English")){
+                    indexEnglish = i;
+                    break;
+                }
+            }
+            if (indexEnglish != -1){
+                result.remove(indexEnglish);
+            }
+            // Fill the adapter with the name of all the languages available
+            ArrayAdapter<Language> adapter = new ArrayAdapter<>(GuessTheArticleActivity.this,
+                    android.R.layout.simple_spinner_item, result);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the baseLanguageSpinner
+            languageSpinner.setAdapter(adapter);
+            playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String languageChosenName = languageSpinner.getSelectedItem().toString();
+                    playButton.setOnClickListener(null);
+                    languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
+                        language = result1;
+                        startGame();
+                    }).execute();
+                }
+            });
         }).execute();
     }
 
@@ -91,27 +81,24 @@ public class GuessTheArticleActivity extends GameActivity {
         Button checkButton = findViewById(R.id.check_button);
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), new OnResultListener<List<Word>>() {
-            @Override
-            public void onResult(List<Word> result) {
-                // Verify if there are at least one word
-                if (result.isEmpty()){
-                    finishActivityNotEnoughResources();
-                    return;
-                }
-                word = getRandomItemFromList(result);
-                wordTextView.setText(word.getWordName());
-
-                checkButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        checkButton.setOnClickListener(null);
-                        // Trim the answer since the user may accidentally insert a space before of after the article
-                        String userAnswer = answerInputEditText.getText().toString().trim();
-                        verifyAnswer(userAnswer);
-                    }
-                });
+        wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), result -> {
+            // Verify if there are at least one word
+            if (result.isEmpty()){
+                finishActivityNotEnoughResources();
+                return;
             }
+            word = getRandomItemFromList(result);
+            wordTextView.setText(word.getWordName());
+
+            checkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkButton.setOnClickListener(null);
+                    // Trim the answer since the user may accidentally insert a space before of after the article
+                    String userAnswer = answerInputEditText.getText().toString().trim();
+                    verifyAnswer(userAnswer);
+                }
+            });
         }).execute();
     }
 
@@ -125,40 +112,37 @@ public class GuessTheArticleActivity extends GameActivity {
 
         ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
         // Gets the article related to the word and verifies user's answer
-        articleDao.getRecordByIdTask(word.getIdArticle(), new OnResultListener<Article>() {
-            @Override
-            public void onResult(Article result) {
-                // Verify if an article is returned
-                if (result == null){
-                    finishActivityNotEnoughResources();
-                    return;
-                }
-                String answerString = (String) answer;
-
-                String feedback;
-                if (answerString.equals(result.getArticleName())){
-
-                    if (isUserAuthenticated(GuessTheArticleActivity.this)){
-                        ScoreUploader uploader = new ScoreUploader(GuessTheArticleActivity.this,
-                                language, game.getId());
-                        uploader.upload();
-                    }
-
-                    feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
-                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.success));
-                }else{
-                    feedback = getString(R.string.wrong_answer_message) +result.getArticleName()+" "+word.getWordName();
-                    feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.danger));
-                }
-                feedbackTextView.setText(feedback);
-                // If pressed, the user can play again
-                newWordButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startGame();
-                    }
-                });
+        articleDao.getRecordByIdTask(word.getIdArticle(), result -> {
+            // Verify if an article is returned
+            if (result == null){
+                finishActivityNotEnoughResources();
+                return;
             }
+            String answerString = (String) answer;
+
+            String feedback;
+            if (answerString.equals(result.getArticleName())){
+
+                if (isUserAuthenticated(GuessTheArticleActivity.this)){
+                    ScoreUploader uploader = new ScoreUploader(GuessTheArticleActivity.this,
+                            language, game.getId());
+                    uploader.upload();
+                }
+
+                feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
+                feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.success));
+            }else{
+                feedback = getString(R.string.wrong_answer_message) +result.getArticleName()+" "+word.getWordName();
+                feedbackCardView.setCardBackgroundColor(getResources().getColor(R.color.danger));
+            }
+            feedbackTextView.setText(feedback);
+            // If pressed, the user can play again
+            newWordButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startGame();
+                }
+            });
         }).execute();
     }
 }

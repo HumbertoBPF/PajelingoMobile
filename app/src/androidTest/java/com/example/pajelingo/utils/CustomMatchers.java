@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.SearchResultsAdapter;
 import com.example.pajelingo.models.Conjugation;
+import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Word;
@@ -260,18 +261,19 @@ public class CustomMatchers {
     }
 
     /**
-     * Verifies if the item at the specified position of a RecyclerView contains the specified score.
+     * Verifies if the item at the specified position of a ranking recycler view contains the
+     * specified score.
      * @param score score that is expected to be at the specified position.
      * @param position position of the concerned item.
      * @return Matcher that performs the mentioned validation.
      */
-    public static Matcher<? super View> isScoreAtPosition(Score score, int position){
+    public static Matcher<? super View> isScoreAtPositionInRanking(Score score, int position){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Verifying if the item at position ")
+                description.appendText("Verifying if the item at the position ")
                         .appendValue(position)
-                        .appendText(" corresponds to the specified score.");
+                        .appendText(" of the ranking corresponds to the specified score.");
             }
 
             @Override
@@ -290,6 +292,53 @@ public class CustomMatchers {
                 return positionTextView.getText().toString().equals(String.valueOf(position+1)) &&
                         usernameTextView.getText().toString().equals(score.getUser()) &&
                         scoreTextView.getText().toString().equals(String.valueOf(score.getScore()));
+            }
+        };
+    }
+
+    /**
+     * Verifies if the item at the specified position of an account score list recycler view
+     * contains the specified score.
+     * @param score score that is expected to be at the specified position.
+     * @param game game referred by the specified score.
+     * @param position position of the concerned item.
+     * @return Matcher that performs the mentioned validation.
+     */
+    public static Matcher<? super View> isScoreAtPositionInProfile(Score score, Game game, int position){
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the item at position ")
+                        .appendValue(position)
+                        .appendText(" of the profile score list corresponds to the specified score.");
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                RecyclerView.ViewHolder viewHolder = item.findViewHolderForAdapterPosition(position);
+
+                if (viewHolder == null){
+                    throw new IndexOutOfBoundsException("View at position "+position+" not found.");
+                }
+
+                View itemView = viewHolder.itemView;
+
+                TextView gameTextView = itemView.findViewById(R.id.game_text_view);
+                TextView scoreTextView = itemView.findViewById(R.id.score_text_view);
+
+                if (!gameTextView.getText().toString().equals(game.getGameName())){
+                    throw new AssertionError("The game names do not match.\n" +
+                            "Expected: "+game.getGameName()+"\n" +
+                            "Actual: "+gameTextView.getText().toString());
+                }
+
+                if (!scoreTextView.getText().toString().equals(score.getScore().toString())){
+                    throw new AssertionError("The score values do not match.\n" +
+                            "Expected: "+score.getScore()+"\n" +
+                            "Actual: "+scoreTextView.getText().toString());
+                }
+
+                return true;
             }
         };
     }

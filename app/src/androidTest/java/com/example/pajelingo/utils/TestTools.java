@@ -1,6 +1,8 @@
 package com.example.pajelingo.utils;
 
 import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
@@ -31,13 +33,13 @@ public class TestTools {
                         .getScore(getAuthToken(user.getUsername(), user.getPassword()), language.getLanguageName(), gameId).execute();
         List<Score> scores = responseScore.body();
 
-        assert scores != null;
+        assertNotNull(scores);
 
         if (scores.size() == 0){
             return 0L;
         }
 
-        assert scores.size() == 1;
+        assertEquals(1, scores.size());
         return scores.get(0).getScore();
     }
 
@@ -78,5 +80,4 @@ public class TestTools {
 
         return null;
     }
-
 }

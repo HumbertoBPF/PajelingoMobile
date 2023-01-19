@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.floatActionButtonHasColor;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertFalse;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,27 +23,18 @@ import com.example.pajelingo.activities.OnBoardingActivity;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class OnBoardingActivityTests extends UITests {
     private final SharedPreferences sp
             = context.getSharedPreferences(context.getString(R.string.sp_file_name), Context.MODE_PRIVATE);
-
-    @Before
-    public void setUp(){
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-    }
 
     @Test
     public void testFirstPageOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
 
         assertIsFirstOnBoardingPage();
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -52,7 +44,7 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.next_button)).perform(click());
 
         assertIsIntermediaryOnBoardingPage(R.string.on_boarding_2);
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -63,7 +55,7 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.next_button)).perform(click());
 
         assertIsLastOnBoardingPage();
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -75,7 +67,7 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.back_button)).perform(click());
 
         assertIsIntermediaryOnBoardingPage(R.string.on_boarding_2);
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -86,7 +78,7 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.back_button)).perform(click());
 
         assertIsFirstOnBoardingPage();
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -99,7 +91,7 @@ public class OnBoardingActivityTests extends UITests {
         onView(withId(R.id.back_button)).perform(click());
 
         assertIsFirstOnBoardingPage();
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     @Test
@@ -112,7 +104,7 @@ public class OnBoardingActivityTests extends UITests {
         // Verifies if the user is in the MainActivity
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
 
-        assert !sp.getBoolean(context.getString(R.string.is_first_access), false);
+        assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
     }
 
     private void assertIsFirstOnBoardingPage() {
@@ -146,11 +138,4 @@ public class OnBoardingActivityTests extends UITests {
                 .check(matches(isEnabledMatcher))
                 .check(matches(floatActionButtonHasColor(context.getResources().getColor(colorResourceId))));
     }
-
-    @After
-    public void tearDown() throws IOException {
-        super.tearDown();
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-    }
-
 }

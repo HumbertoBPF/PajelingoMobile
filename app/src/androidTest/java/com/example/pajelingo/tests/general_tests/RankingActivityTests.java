@@ -6,54 +6,32 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPosition;
-import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
-import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInRanking;
+import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
-import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class RankingActivityTests extends UITests {
-
-    @Before
-    public void setUp() throws IOException {
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-        saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
-        saveEntitiesFromAPI(languageSchoolAPI.getLanguages(), AppDatabase.getInstance(context).getLanguageDao());
-        saveEntitiesFromAPI(languageSchoolAPI.getScores(), AppDatabase.getInstance(context).getScoreDao());
-    }
-
     @Test
     public void testSelectGame(){
-        LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
-        List<Language> languages = languageDao.getAllRecords();
-        languages.add(new Language(context.getString(R.string.general_ranking_spinner_text)));
-
-        Language randomLanguage = languages.get(getRandomInteger(0, languages.size() - 1));
+        Language randomLanguage = getRandomLanguage(context);
 
         ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
-        List<Score> scores;
-
-        if (randomLanguage.getLanguageName().equals(context.getString(R.string.general_ranking_spinner_text))){
-            scores = scoreDao.getAllScoresSorted();
-        }else{
-            scores = scoreDao.getAllScoresSorted(randomLanguage.getLanguageName());
-        }
+        List<Score> scores = scoreDao.getTotalScoresByLanguage(Objects.requireNonNull(randomLanguage).getLanguageName());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
@@ -63,7 +41,7 @@ public class RankingActivityTests extends UITests {
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
 
         for (int i=0;i<scores.size();i++){
-            onView(withId(R.id.ranking_recycler_view)).check(matches(isScoreAtPosition(scores.get(i), i)));
+            onView(withId(R.id.ranking_recycler_view)).check(matches(isScoreAtPositionInRanking(scores.get(i), i)));
         }
     }
 }

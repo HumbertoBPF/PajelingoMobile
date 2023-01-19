@@ -1,5 +1,6 @@
 package com.example.pajelingo.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,28 +10,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.daos.GameDao;
+import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Score;
 
 import java.util.List;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
+    private final GameDao gameDao;
+    private final List<Score> scores;
 
-    private List<Score> scores;
-
-    public ScoreAdapter(List<Score> scores) {
+    public ScoreAdapter(Context context, List<Score> scores) {
+        this.gameDao = AppDatabase.getInstance(context).getGameDao();
         this.scores = scores;
     }
 
     @NonNull
     @Override
-    public ScoreAdapter.ScoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ScoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.score_item_layout, parent, false);
         return new ScoreViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ScoreAdapter.ScoreViewHolder holder, int position) {
-        holder.bind(scores.get(position), position);
+    public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
+        holder.bind(scores.get(position));
     }
 
     @Override
@@ -39,23 +43,19 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     }
 
     class ScoreViewHolder extends RecyclerView.ViewHolder{
-
-        private TextView positionTextView;
-        private TextView usernameTextView;
-        private TextView scoreTextView;
+        private final TextView gameTextView;
+        private final TextView scoreTextView;
 
         public ScoreViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.positionTextView = itemView.findViewById(R.id.position_text_view);
-            this.usernameTextView = itemView.findViewById(R.id.username_text_view);
-            this.scoreTextView = itemView.findViewById(R.id.score_text_view);
+            gameTextView = itemView.findViewById(R.id.game_text_view);
+            scoreTextView = itemView.findViewById(R.id.score_text_view);
         }
 
-        public void bind(Score score, int position){
-            this.positionTextView.setText((position+1)+"");
-            this.usernameTextView.setText(score.getUser());
-            this.scoreTextView.setText(score.getScore().toString());
+        public void bind(Score score){
+            gameDao.getRecordByIdTask(score.getGame(),
+                    result -> gameTextView.setText(result.getGameName())).execute();
+            scoreTextView.setText(score.getScore().toString());
         }
-
     }
 }

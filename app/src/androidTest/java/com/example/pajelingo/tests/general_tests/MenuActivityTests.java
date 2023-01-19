@@ -14,18 +14,9 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
 public class MenuActivityTests extends UITests {
-    @Before
-    public void setUp() throws IOException {
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
-    }
-
     @Test
     public void testRenderingMenuForAuthenticatedUser(){
         saveStateAndUserCredentials(context, testUser);
@@ -53,10 +44,5 @@ public class MenuActivityTests extends UITests {
         }
         onView(withId(R.id.menu_item_faq)).check(matches(isDisplayed()));
         onView(withId(R.id.menu_item_rankings)).check(matches(isDisplayed()));
-    }
-
-    @After
-    public void tearDown(){
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

@@ -1,19 +1,24 @@
 package com.example.pajelingo.tests.account_tests;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInProfile;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 
 import android.content.Context;
@@ -23,29 +28,53 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
+import com.example.pajelingo.daos.GameDao;
+import com.example.pajelingo.daos.LanguageDao;
+import com.example.pajelingo.daos.ScoreDao;
+import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Game;
+import com.example.pajelingo.models.Language;
+import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 public class ProfileActivityTests extends UITests {
     private final User userToDelete =
             new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null);
 
-    @Before
-    public void setUp() throws IOException {
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
+    @Test
+    public void testRenderingProfileActivity() {
+        LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
+
+        saveStateAndUserCredentials(context, testUser);
+
+        List<Language> languages = languageDao.getAllRecords();
+        Language defaultLanguage = languages.get(0);
+
+        browseToProfileActivity();
+        assertViewsProfileActivity();
+
+        assertScoreHistory(defaultLanguage);
     }
 
     @Test
-    public void testRenderingProfileActivity(){
+    public void testFilterScoreByLanguageOnProfileActivity() {
         saveStateAndUserCredentials(context, testUser);
+
+        Language randomLanguage = getRandomLanguage(context);
+
         browseToProfileActivity();
-        assertViewsProfileActivity();
+
+        onView(withId(R.id.language_spinner)).perform(click());
+        onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
+
+        assertScoreHistory(randomLanguage);
     }
 
     @Test
@@ -156,8 +185,22 @@ public class ProfileActivityTests extends UITests {
         onView(allOf(withId(R.id.delete_account_button), withText(R.string.delete_account))).check(matches(isDisplayed()));
     }
 
-    @After
-    public void tearDown() {
-        context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
+    /**
+     * Verifies that the scores shown on the ProfileActivity match the scores of the authenticated
+     * user in the specified language.
+     * @param language selected language filter
+     */
+    private void assertScoreHistory(Language language) {
+        ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
+        GameDao gameDao = AppDatabase.getInstance(context).getGameDao();
+
+        List<Score> scores = scoreDao.getScoresByUserAndByLanguage(testUser.getUsername(),
+                Objects.requireNonNull(language).getLanguageName());
+
+        for (int i = 0;i < scores.size();i++){
+            Score score = scores.get(i);
+            Game game = gameDao.getRecordById(score.getGame());
+            onView(withId(R.id.score_recycler_view)).check(matches(isScoreAtPositionInProfile(score, game, i)));
+        }
     }
 }

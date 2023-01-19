@@ -21,7 +21,6 @@ import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
-import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -40,22 +39,13 @@ import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class SearchToolTests extends UITests {
-    @Before
-    public void setUp() throws IOException {
-        saveEntitiesFromAPI(languageSchoolAPI.getWords(), AppDatabase.getInstance(context).getWordDao());
-        saveEntitiesFromAPI(languageSchoolAPI.getArticles(), AppDatabase.getInstance(context).getArticleDao());
-        saveEntitiesFromAPI(languageSchoolAPI.getMeanings(), AppDatabase.getInstance(context).getMeaningDao());
-    }
-
     @Test
     public void testRenderingSearchActivity(){
         activityScenario = ActivityScenario.launch(MainActivity.class);

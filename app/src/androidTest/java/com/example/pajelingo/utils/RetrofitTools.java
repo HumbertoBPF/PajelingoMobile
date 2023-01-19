@@ -1,6 +1,7 @@
 package com.example.pajelingo.utils;
 
 import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static org.junit.Assert.assertEquals;
 
 import com.example.pajelingo.daos.BaseDao;
 import com.example.pajelingo.models.User;
@@ -54,8 +55,8 @@ public class RetrofitTools {
                 Assert.fail("No user object was returned.");
             }
 
-            Assert.assertEquals(responseUser.getEmail(), email);
-            Assert.assertEquals(responseUser.getUsername(), username);
+            assertEquals(responseUser.getEmail(), email);
+            assertEquals(responseUser.getUsername(), username);
         }else{
             if (response.code() != 401){
                 Assert.fail("Login endpoint did not return 401. It returned "+response.code()+" instead.");

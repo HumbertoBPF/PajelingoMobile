@@ -6,22 +6,39 @@ import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.adapters.ScoreAdapter;
+import com.example.pajelingo.daos.LanguageDao;
+import com.example.pajelingo.daos.ScoreDao;
+import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.User;
 import com.google.android.material.button.MaterialButton;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private SharedPreferences sp;
+
     private TextView usernameCredentialTextView;
     private TextView emailCredentialTextView;
     private ImageView profilePictureImageView;
     private MaterialButton editAccountButton;
     private MaterialButton deleteAccountButton;
+    private Spinner languageSpinner;
+    private RecyclerView scoreRecyclerView;
+
+    private LanguageDao languageDao;
+    private ScoreDao scoreDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +47,27 @@ public class ProfileActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.profile_activity_title));
 
+        sp =  getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
+
         usernameCredentialTextView = findViewById(R.id.username_credential_text_view);
         emailCredentialTextView = findViewById(R.id.email_credential_text_view);
         profilePictureImageView = findViewById(R.id.profile_picture_image_view);
         editAccountButton = findViewById(R.id.edit_account_button);
         deleteAccountButton = findViewById(R.id.delete_account_button);
+        languageSpinner = findViewById(R.id.language_spinner);
+        scoreRecyclerView = findViewById(R.id.score_recycler_view);
+
+        languageDao = AppDatabase.getInstance(this).getLanguageDao();
+        scoreDao = AppDatabase.getInstance(this).getScoreDao();
+
+        languageDao.getAllRecordsTask(result -> {
+            ArrayAdapter<Language> adapter = new ArrayAdapter<>(ProfileActivity.this,
+                    android.R.layout.simple_spinner_item, result);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            languageSpinner.setAdapter(adapter);
+            languageSpinner.setOnItemSelectedListener(ProfileActivity.this);
+            applyLanguageFilter();
+        }).execute();
 
         deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
 
@@ -42,7 +75,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setProfilePicture() {
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
         String picture = sp.getString(getString(R.string.picture_sp), null);
         if (picture != null){
             profilePictureImageView.setImageBitmap(getPictureFromBase64String(picture));
@@ -63,6 +95,17 @@ public class ProfileActivity extends AppCompatActivity {
         confirmationDialog.show();
     }
 
+    private void applyLanguageFilter(){
+        Object selectedItem = languageSpinner.getSelectedItem();
+
+        if (selectedItem != null){
+            String username = sp.getString(getString(R.string.username_sp), null);
+            String selectedLanguage = languageSpinner.getSelectedItem().toString();
+            scoreDao.getScoresByUserAndByLanguage(username, selectedLanguage,
+                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(this, result))).execute();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -74,8 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateUserCredentials() {
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
-
         String username = sp.getString(getString(R.string.username_sp),  "");
         String email = sp.getString(getString(R.string.email_sp), "");
 
@@ -88,5 +129,15 @@ public class ProfileActivity extends AppCompatActivity {
             intent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        applyLanguageFilter();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
