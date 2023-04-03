@@ -8,18 +8,24 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.GameAnswerFeedback;
+import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tools{
 
@@ -46,9 +52,16 @@ public class Tools{
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         String username = sp.getString(context.getString(R.string.username_sp),null);
         String email = sp.getString(context.getString(R.string.email_sp),null);
-        String password = sp.getString(context.getString(R.string.password_sp),null);
+        String token = sp.getString(context.getString(R.string.token_sp),null);
 
-        return (username != null) && (email != null) && (password != null);
+        return (username != null) && (email != null) && (token != null);
+    }
+
+    public static void saveToken(Context context, Token token){
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(context.getString(R.string.token_sp), token.getToken());
+        editor.apply();
     }
 
     /**
@@ -61,7 +74,6 @@ public class Tools{
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(context.getString(R.string.username_sp), user.getUsername());
         editor.putString(context.getString(R.string.email_sp), user.getEmail());
-        editor.putString(context.getString(R.string.password_sp), user.getPassword());
         editor.putString(context.getString(R.string.picture_sp), user.getPicture());
         editor.apply();
     }
@@ -74,22 +86,21 @@ public class Tools{
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         // Remove user from Shared Preferences due to logout
+        editor.remove(context.getString(R.string.token_sp));
         editor.remove(context.getString(R.string.username_sp));
         editor.remove(context.getString(R.string.email_sp));
-        editor.remove(context.getString(R.string.password_sp));
         editor.remove(context.getString(R.string.picture_sp));
         editor.apply();
     }
 
     /**
-     * Generates a Basic Authentication token corresponding to the specified credentials.
-     * @param username username credential
-     * @param password password credential
+     * Generates a Token Authentication string to be provided as authorization header.
      * @return Basic Authentication token
      */
-    public static String getAuthToken(String username, String password) {
-        byte[] data = (username + ":" + password).getBytes(StandardCharsets.UTF_8);
-        return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP);
+    public static String getAuthToken(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), MODE_PRIVATE);
+        String token = sp.getString(context.getString(R.string.token_sp), "");
+        return "Token " + token;
     }
 
     /**
@@ -181,5 +192,25 @@ public class Tools{
     public static Bitmap getPictureFromBase64String(String base64String){
         byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+    }
+
+    public static void handleGameAnswerFeedback(Context context, Call<GameAnswerFeedback> call) {
+        call.enqueue(new Callback<GameAnswerFeedback>() {
+            @Override
+            public void onResponse(retrofit2.Call<GameAnswerFeedback> call, Response<GameAnswerFeedback> response) {
+                GameAnswerFeedback gameAnswerFeedback = response.body();
+
+                if ((response.isSuccessful()) && (gameAnswerFeedback != null)) {
+                    Toast.makeText(context, "Your current score is " + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<GameAnswerFeedback> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

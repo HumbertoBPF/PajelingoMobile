@@ -616,6 +616,7 @@
                   <entry key="Tests" value="360" />
                   <entry key="samsung" value="120" />
                   <entry key="samsung&#10; SM-A202F" value="120" />
+                  <entry key="samsung&#10; SM-A536E" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

@@ -36,12 +36,7 @@ public class DeletionConfirmationActivity extends AppCompatActivity {
             String confirmationText = confirmDeletionEditText.getText().toString();
 
             if (confirmationText.equals(getString(R.string.confirm_deletion_string))){
-                SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
-
-                String username = sp.getString(getString(R.string.username_sp), "");
-                String password = sp.getString(getString(R.string.password_sp), "");
-
-                Call<Void> call = LanguageSchoolAPIHelper.getApiObject().deleteAccount(getAuthToken(username, password));
+                Call<Void> call = LanguageSchoolAPIHelper.getApiObject().deleteAccount(getAuthToken(DeletionConfirmationActivity.this));
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {

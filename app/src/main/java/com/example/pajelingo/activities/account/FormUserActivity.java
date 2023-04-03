@@ -136,16 +136,11 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void update(String email, String username, String password) {
-        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
-
-        String currentUsername = sp.getString(getString(R.string.username_sp), "");
-        String currentPassword = sp.getString(getString(R.string.password_sp), "");
-
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.login_dialog_title)
                 .setMessage(R.string.update_account_dialog_message).setCancelable(false).create();
         dialog.show();
 
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(currentUsername, currentPassword),
+        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(FormUserActivity.this),
                 new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override

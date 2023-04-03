@@ -9,10 +9,10 @@ public class Score {
     private Long id;
     private String user;
     private String language;
-    private Long game;
+    private String game;
     private Long score;
 
-    public Score(String user, String language, Long game, Long score) {
+    public Score(String user, String language, String game, Long score) {
         this.user = user;
         this.language = language;
         this.game = game;
@@ -43,11 +43,11 @@ public class Score {
         this.language = language;
     }
 
-    public Long getGame() {
+    public String getGame() {
         return game;
     }
 
-    public void setGame(Long game) {
+    public void setGame(String game) {
         this.game = game;
     }
 

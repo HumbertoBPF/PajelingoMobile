@@ -1,6 +1,8 @@
 package com.example.pajelingo.activities.games;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
+import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.widget.ArrayAdapter;
@@ -15,14 +17,17 @@ import com.example.pajelingo.daos.ConjugationDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Conjugation;
+import com.example.pajelingo.models.ConjugationGameAnswer;
+import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.synchronization.ScoreUploader;
 import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LabeledSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
 
 public class ConjugationGameActivity extends GameActivity {
 
@@ -143,9 +148,13 @@ public class ConjugationGameActivity extends GameActivity {
         conjugation.getConjugation3().equals(answerConjugation3) && conjugation.getConjugation4().equals(answerConjugation4) &&
         conjugation.getConjugation5().equals(answerConjugation5) && conjugation.getConjugation6().equals(answerConjugation6)){
 
-            if (isUserAuthenticated(this)){
-                ScoreUploader uploader = new ScoreUploader(this, language, game.getId());
-                uploader.upload();
+            if (isUserAuthenticated(ConjugationGameActivity.this)) {
+                ConjugationGameAnswer conjugationGameAnswer = new ConjugationGameAnswer(conjugation.getWordId(),
+                        conjugation.getTense(), answerConjugation1, answerConjugation2, answerConjugation3,
+                        answerConjugation4, answerConjugation5, answerConjugation6);
+                Call<GameAnswerFeedback> call =
+                        this.languageSchoolAPI.submitConjugationGameAnswer(getAuthToken(ConjugationGameActivity.this), conjugationGameAnswer);
+                handleGameAnswerFeedback(ConjugationGameActivity.this, call);
             }
 
             feedback = getString(R.string.correct_answer_message);

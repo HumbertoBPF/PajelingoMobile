@@ -11,7 +11,7 @@ import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 public class ScoresSynchro extends ResourcesSynchro<Score> {
 
     public ScoresSynchro(Context context, AlertDialog downloadDialog) {
-        super("meaning", AppDatabase.getInstance(context).getScoreDao(),
+        super("score", AppDatabase.getInstance(context).getScoreDao(),
                 () -> LanguageSchoolAPIHelper.getApiObject().getScores(), null, downloadDialog);
     }
 

@@ -53,8 +53,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         }
 
         public void bind(Score score){
-            gameDao.getRecordByIdTask(score.getGame(),
-                    result -> gameTextView.setText(result.getGameName())).execute();
+            gameTextView.setText(score.getGame());
             scoreTextView.setText(score.getScore().toString());
         }
     }

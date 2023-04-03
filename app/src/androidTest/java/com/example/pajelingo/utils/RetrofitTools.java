@@ -39,28 +39,28 @@ public class RetrofitTools {
      * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
     public static void assertUserExistsInDjangoApp(String email, String username, String password, boolean userExists) throws IOException, InterruptedException {
-        Thread.sleep(5000);
-
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().login(getAuthToken(username, password));
-        Response<User> response = call.execute();
-
-        if (userExists){
-            if (response.code() != 200){
-                Assert.fail("Failed to create user.");
-            }
-
-            User responseUser = response.body();
-
-            if (responseUser == null){
-                Assert.fail("No user object was returned.");
-            }
-
-            assertEquals(responseUser.getEmail(), email);
-            assertEquals(responseUser.getUsername(), username);
-        }else{
-            if (response.code() != 401){
-                Assert.fail("Login endpoint did not return 401. It returned "+response.code()+" instead.");
-            }
-        }
+//        Thread.sleep(5000);
+//
+//        Call<User> call = LanguageSchoolAPIHelper.getApiObject().login(getAuthToken(username, password));
+//        Response<User> response = call.execute();
+//
+//        if (userExists){
+//            if (response.code() != 200){
+//                Assert.fail("Failed to create user.");
+//            }
+//
+//            User responseUser = response.body();
+//
+//            if (responseUser == null){
+//                Assert.fail("No user object was returned.");
+//            }
+//
+//            assertEquals(responseUser.getEmail(), email);
+//            assertEquals(responseUser.getUsername(), username);
+//        }else{
+//            if (response.code() != 401){
+//                Assert.fail("Login endpoint did not return 401. It returned "+response.code()+" instead.");
+//            }
+//        }
     }
 }

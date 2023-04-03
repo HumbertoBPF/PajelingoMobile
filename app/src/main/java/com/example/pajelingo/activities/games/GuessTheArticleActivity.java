@@ -1,9 +1,10 @@
 package com.example.pajelingo.activities.games;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
+import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,10 +17,13 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.ArticleGameAnswer;
+import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.synchronization.ScoreUploader;
 import com.example.pajelingo.ui.LabeledSpinner;
+
+import retrofit2.Call;
 
 public class GuessTheArticleActivity extends GameActivity {
 
@@ -58,16 +62,13 @@ public class GuessTheArticleActivity extends GameActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Apply the adapter to the baseLanguageSpinner
             languageSpinner.setAdapter(adapter);
-            playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String languageChosenName = languageSpinner.getSelectedItem().toString();
-                    playButton.setOnClickListener(null);
-                    languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
-                        language = result1;
-                        startGame();
-                    }).execute();
-                }
+            playButton.setOnClickListener(v -> {
+                String languageChosenName = languageSpinner.getSelectedItem().toString();
+                playButton.setOnClickListener(null);
+                languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
+                    language = result1;
+                    startGame();
+                }).execute();
             });
         }).execute();
     }
@@ -90,14 +91,11 @@ public class GuessTheArticleActivity extends GameActivity {
             word = getRandomItemFromList(result);
             wordTextView.setText(word.getWordName());
 
-            checkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkButton.setOnClickListener(null);
-                    // Trim the answer since the user may accidentally insert a space before of after the article
-                    String userAnswer = answerInputEditText.getText().toString().trim();
-                    verifyAnswer(userAnswer);
-                }
+            checkButton.setOnClickListener(v -> {
+                checkButton.setOnClickListener(null);
+                // Trim the answer since the user may accidentally insert a space before of after the article
+                String userAnswer = answerInputEditText.getText().toString().trim();
+                verifyAnswer(userAnswer);
             });
         }).execute();
     }
@@ -121,12 +119,14 @@ public class GuessTheArticleActivity extends GameActivity {
             String answerString = (String) answer;
 
             String feedback;
+
             if (answerString.equals(result.getArticleName())){
 
                 if (isUserAuthenticated(GuessTheArticleActivity.this)){
-                    ScoreUploader uploader = new ScoreUploader(GuessTheArticleActivity.this,
-                            language, game.getId());
-                    uploader.upload();
+                    ArticleGameAnswer articleGameAnswer = new ArticleGameAnswer(word.getId(), answerString);
+                    Call<GameAnswerFeedback> call =
+                            this.languageSchoolAPI.submitArticleGameAnswer(getAuthToken(GuessTheArticleActivity.this), articleGameAnswer);
+                    handleGameAnswerFeedback(GuessTheArticleActivity.this, call);
                 }
 
                 feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();
@@ -137,12 +137,7 @@ public class GuessTheArticleActivity extends GameActivity {
             }
             feedbackTextView.setText(feedback);
             // If pressed, the user can play again
-            newWordButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startGame();
-                }
-            });
+            newWordButton.setOnClickListener(v -> startGame());
         }).execute();
     }
 }

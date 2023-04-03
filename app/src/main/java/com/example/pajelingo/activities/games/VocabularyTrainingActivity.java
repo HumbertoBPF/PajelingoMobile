@@ -1,6 +1,8 @@
 package com.example.pajelingo.activities.games;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
+import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.widget.ArrayAdapter;
@@ -16,10 +18,13 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.async_tasks.SynonymsByLanguageTask;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Language;
+import com.example.pajelingo.models.VocabularyGameAnswer;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.synchronization.ScoreUploader;
 import com.example.pajelingo.ui.LabeledSpinner;
+
+import retrofit2.Call;
 
 public class VocabularyTrainingActivity extends GameActivity {
 
@@ -133,9 +138,11 @@ public class VocabularyTrainingActivity extends GameActivity {
             if (isAnswerCorrect){
 
                 if (isUserAuthenticated(VocabularyTrainingActivity.this)){
-                    ScoreUploader uploader = new ScoreUploader(VocabularyTrainingActivity.this,
-                            targetLanguage, game.getId());
-                    uploader.upload();
+                    VocabularyGameAnswer vocabularyGameAnswer = new VocabularyGameAnswer(wordToTranslate.getId(),
+                            baseLanguage.getLanguageName(), userTranslation);
+                    Call<GameAnswerFeedback> call =
+                            this.languageSchoolAPI.submitVocabularyGameAnswer(getAuthToken(VocabularyTrainingActivity.this), vocabularyGameAnswer);
+                    handleGameAnswerFeedback(VocabularyTrainingActivity.this, call);
                 }
 
                 feedback = getString(R.string.correct_answer_message);

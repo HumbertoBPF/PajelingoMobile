@@ -159,12 +159,12 @@ public class ProfileActivityTests extends UITests {
 
         String email = sp.getString(context.getString(R.string.email_sp), null);
         String username = sp.getString(context.getString(R.string.username_sp), null);
-        String password = sp.getString(context.getString(R.string.password_sp), null);
+        String token = sp.getString(context.getString(R.string.token_sp), null);
         String picture = sp.getString(context.getString(R.string.picture_sp), null);
 
         assertNull(email);
         assertNull(username);
-        assertNull(password);
+        assertNull(token);
         assertNull(picture);
     }
 
@@ -199,7 +199,7 @@ public class ProfileActivityTests extends UITests {
 
         for (int i = 0;i < scores.size();i++){
             Score score = scores.get(i);
-            Game game = gameDao.getRecordById(score.getGame());
+            Game game = gameDao.getGameByName(score.getGame());
             onView(withId(R.id.score_recycler_view)).check(matches(isScoreAtPositionInProfile(score, game, i)));
         }
     }
