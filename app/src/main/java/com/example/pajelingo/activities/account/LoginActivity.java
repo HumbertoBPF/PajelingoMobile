@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     }, 2000);
                 }else {
-                    if (response.code() == 400) {
+                    if (response.code() == 401) {
                         dialog.setMessage(getString(R.string.warning_invalid_credientials));
                     } else {
                         dialog.setMessage(getString(R.string.warning_connection_error));

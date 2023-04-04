@@ -84,6 +84,11 @@ public interface LanguageSchoolAPI {
     Call<GameAnswerFeedback> submitConjugationGameAnswer(@Header("Authorization") String authString,
                                                          @Body ConjugationGameAnswer conjugationGameAnswer);
 
+    @GET("score")
+    Call<List<Score>> getScore(@Header("Authorization") String authString,
+                               @Query("language") String languageName,
+                               @Query("game") Long gameId);
+
     @POST("request-reset-account/")
     Call<Void> resetAccount(@Body ResetEmail resetEmail);
 }

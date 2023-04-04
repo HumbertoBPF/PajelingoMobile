@@ -15,7 +15,7 @@ import static com.example.pajelingo.utils.RandomTools.getRandomUsername;
 import static com.example.pajelingo.utils.RandomTools.getRandomValidPassword;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.not;
 
@@ -47,8 +47,8 @@ public class UpdateAccountTests extends FormUserActivityTests {
     }
 
     @Test
-    public void testRenderingAccountUpdateForm(){
-        saveStateAndUserCredentials(context, user0);
+    public void testRenderingAccountUpdateForm() throws IOException {
+        authenticateUser(context, user4);
 
         String emailLabel = context.getString(R.string.email_label);
         String usernameLabel = context.getString(R.string.username_label);
@@ -59,10 +59,10 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
         onView(withId(R.id.email_input)).check(matches(isDisplayed()))
                 .check(matches(hasLabel(emailLabel)))
-                .check(matches(hasInput(user0.getEmail())));
+                .check(matches(hasInput(user4.getEmail())));
         onView(withId(R.id.username_input)).check(matches(isDisplayed()))
                 .check(matches(hasLabel(usernameLabel)))
-                .check(matches(hasInput(user0.getUsername())));
+                .check(matches(hasInput(user4.getUsername())));
         onView(withId(R.id.password_input)).check(matches(isDisplayed())).check(matches(hasLabel(passwordLabel)));
         onView(withId(R.id.password_confirmation_input)).check(matches(isDisplayed())).check(matches(hasLabel(passwordConfirmationLabel)));
 
@@ -74,80 +74,80 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testSuccessfulAccountUpdateWithOnlyRandomCredentials() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user0);
+        authenticateUser(context, user0);
         testSuccessfulAccountUpdate(getRandomEmail(), getRandomUsername(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameEmail() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user1);
+        authenticateUser(context, user1);
         testSuccessfulAccountUpdate(user1.getEmail(), getRandomUsername(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameUsername() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user2);
+        authenticateUser(context, user2);
         testSuccessfulAccountUpdate(getRandomEmail(), user2.getUsername(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameEmailAndUsername() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user3);
+        authenticateUser(context, user3);
         testSuccessfulAccountUpdate(user3.getEmail(), user3.getUsername(), getRandomValidPassword());
     }
 
     @Test
     public void testFailedAccountUpdateWithoutEmail() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission("", getRandomUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWithoutUsername() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), "", getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWithoutPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(), "", true,
                 false, false, false, false);
     }
 
     @Test
     public void testFailedAccountUpdateEmailWithSpace() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomWord(getRandomInteger(1, 5)) + " " + getRandomEmail(), getRandomUsername(),
                 getRandomValidPassword(), true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateUsernameWithSpace() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomWord(getRandomInteger(1, 5)) + " " + getRandomUsername(),
                 getRandomValidPassword(), true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateNonAvailableEmail() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateNonAvailableUsername() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWith3CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(3, true, true, true), true,
                 true, true, true, false);
@@ -155,7 +155,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateWith4CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(4, true, true, true), true,
                 true, true, true, false);
@@ -163,7 +163,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateWith5CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(5, true, true, true), true,
                 true, true, true, false);
@@ -171,7 +171,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateWith6CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(6, true, true, true), true,
                 true, true, true, false);
@@ -179,7 +179,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateWith7CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(7, true, true, true), true,
                 true, true, true, false);
@@ -187,7 +187,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateWith31CharactersPassword() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(31, true, true, true), true,
                 true, true, true, false);
@@ -195,7 +195,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateNoDigit() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true), true,
                 true, false, true, true);
@@ -203,7 +203,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateNoSpecialCharacter() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false), true,
                 true, true, false, true);
@@ -211,7 +211,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdateNoLetter() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true), true,
                 false, true, true, true);
@@ -219,7 +219,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     @Test
     public void testFailedAccountUpdatePasswordsDoNotMatch() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, user4);
+        authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomValidPassword(), false,
                 true, true, true, true);
     }

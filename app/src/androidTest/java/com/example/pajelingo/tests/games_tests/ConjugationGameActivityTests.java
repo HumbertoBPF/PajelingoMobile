@@ -17,6 +17,7 @@ import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static com.example.pajelingo.utils.TestTools.getScore;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
@@ -112,7 +113,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoCorrectAnswersWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -136,7 +137,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -160,7 +161,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 

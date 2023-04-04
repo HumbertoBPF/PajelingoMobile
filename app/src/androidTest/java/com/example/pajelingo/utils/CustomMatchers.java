@@ -278,8 +278,8 @@ public class CustomMatchers {
 
             @Override
             protected boolean matchesSafely(RecyclerView item) {
+                item.getAdapter();
                 RecyclerView.ViewHolder viewHolder = item.findViewHolderForAdapterPosition(position);
-
                 if (viewHolder == null){
                     throw new IndexOutOfBoundsException("View at position "+position+" not found.");
                 }

@@ -1,9 +1,9 @@
 package com.example.pajelingo.utils;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static org.junit.Assert.assertEquals;
 
 import com.example.pajelingo.daos.BaseDao;
+import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
@@ -39,28 +39,36 @@ public class RetrofitTools {
      * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
     public static void assertUserExistsInDjangoApp(String email, String username, String password, boolean userExists) throws IOException, InterruptedException {
-//        Thread.sleep(5000);
-//
-//        Call<User> call = LanguageSchoolAPIHelper.getApiObject().login(getAuthToken(username, password));
-//        Response<User> response = call.execute();
-//
-//        if (userExists){
-//            if (response.code() != 200){
-//                Assert.fail("Failed to create user.");
-//            }
-//
-//            User responseUser = response.body();
-//
-//            if (responseUser == null){
-//                Assert.fail("No user object was returned.");
-//            }
-//
-//            assertEquals(responseUser.getEmail(), email);
-//            assertEquals(responseUser.getUsername(), username);
-//        }else{
-//            if (response.code() != 401){
-//                Assert.fail("Login endpoint did not return 401. It returned "+response.code()+" instead.");
-//            }
-//        }
+        Thread.sleep(5000);
+
+        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", username, password, null));
+        Response<Token> tokenResponse = tokenCall.execute();
+        Token token = tokenResponse.body();
+
+        if (userExists){
+            if (token == null) {
+                Assert.fail("Failed to get user token");
+            }
+
+            Call<User> userCall = LanguageSchoolAPIHelper.getApiObject().login("Token " + token.getToken());
+            Response<User> userResponse = userCall.execute();
+
+            if (userResponse.code() != 200){
+                Assert.fail("Failed to create user.");
+            }
+
+            User responseUser = userResponse.body();
+
+            if (responseUser == null){
+                Assert.fail("No user object was returned.");
+            }
+
+            assertEquals(responseUser.getEmail(), email);
+            assertEquals(responseUser.getUsername(), username);
+        }else{
+            if (tokenResponse.code() != 400){
+                Assert.fail("Login endpoint did not return 400. It returned "+tokenResponse.code()+" instead.");
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static com.example.pajelingo.utils.TestTools.getScore;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
@@ -110,7 +111,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoCorrectAnswersWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
@@ -135,7 +136,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
@@ -160,7 +161,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());

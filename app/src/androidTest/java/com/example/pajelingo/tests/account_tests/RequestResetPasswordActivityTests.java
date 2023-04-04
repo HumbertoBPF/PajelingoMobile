@@ -50,16 +50,17 @@ public class RequestResetPasswordActivityTests extends UITests {
     }
 
     @Test
-    public void testRequestResetPasswordWithValidEmailInput(){
+    public void testRequestResetPasswordWithValidEmailInput() throws InterruptedException {
         browseToRequestResetPasswordActivity();
 
         String randomEmail = getRandomEmail();
         onView(withId(R.id.email_edit_text)).perform(typeText(randomEmail), closeSoftKeyboard());
         onView(withId(R.id.reset_password_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 5000, true));
+        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 10000, true));
         onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
         // Check that the feedback dialog is displayed and dismiss it
+        Thread.sleep(5000);
         onView(withText(R.string.reset_password_feedback_dialog_title)).check(matches(isDisplayed()));
         onView(withText(R.string.reset_password_feedback_dialog_message)).check(matches(isDisplayed()));
         onView(withText(R.string.reset_password_positive_button_text)).perform(click());

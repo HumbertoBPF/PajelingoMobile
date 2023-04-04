@@ -5,8 +5,8 @@ import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.Tools.validatePassword;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -100,13 +100,13 @@ public class FormUserActivity extends AppCompatActivity {
         }
 
         if (isSignup){
-            signup(email, username, password);
+            submitSignup(email, username, password);
         }else{
-            update(email, username, password);
+            submitUpdate(email, username, password);
         }
     }
 
-    private void signup(String email, String username, String password) {
+    private void submitSignup(String email, String username, String password) {
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.login_dialog_title)
                 .setMessage(R.string.creating_account_dialog_message).setCancelable(false).create();
         dialog.show();
@@ -135,13 +135,18 @@ public class FormUserActivity extends AppCompatActivity {
         });
     }
 
-    private void update(String email, String username, String password) {
+    private void submitUpdate(String email, String username, String password) {
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.login_dialog_title)
                 .setMessage(R.string.update_account_dialog_message).setCancelable(false).create();
         dialog.show();
 
+        new Handler().postDelayed(() -> requestUpdateAccount(dialog, email, username, password), 3000);
+    }
+
+    private void requestUpdateAccount(AlertDialog dialog, String email, String username, String password) {
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(FormUserActivity.this),
                 new User(email, username, password, null));
+
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

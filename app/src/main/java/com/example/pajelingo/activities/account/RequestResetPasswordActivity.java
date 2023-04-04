@@ -40,15 +40,22 @@ public class RequestResetPasswordActivity extends AppCompatActivity {
             }else if (!EMAIL_ADDRESS.matcher(email).matches()){
                 Toast.makeText(RequestResetPasswordActivity.this, R.string.warning_email_format_required, Toast.LENGTH_SHORT).show();
             }else{
-                requestResetAccount(email);
+                submitRequestResetAccount(email);
             }
         });
     }
 
-    private void requestResetAccount(CharSequence email) {
+    private void submitRequestResetAccount(CharSequence email) {
         AlertDialog loadingDialog = new AlertDialog.Builder(RequestResetPasswordActivity.this).setTitle(R.string.reset_password_loading_dialog_title)
                 .setMessage(R.string.reset_password_loading_dialog_message)
                 .setCancelable(false).create();
+
+        loadingDialog.show();
+
+        new Handler().postDelayed(() -> requestResetAccount(email, loadingDialog), 3000);
+    }
+
+    private void requestResetAccount(CharSequence email, AlertDialog loadingDialog) {
         AlertDialog feedbackDialog = new AlertDialog.Builder(RequestResetPasswordActivity.this).setTitle(R.string.reset_password_feedback_dialog_title)
                 .setMessage(R.string.reset_password_feedback_dialog_message)
                 .setPositiveButton(R.string.reset_password_positive_button_text, (dialog, which) -> {
@@ -56,8 +63,6 @@ public class RequestResetPasswordActivity extends AppCompatActivity {
                     finish();
                 })
                 .setCancelable(false).create();
-
-        loadingDialog.show();
 
         new Handler().postDelayed(() -> {
             Call<Void> call = LanguageSchoolAPIHelper.getApiObject().resetAccount(new ResetEmail(email.toString()));

@@ -16,7 +16,7 @@ import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RandomTools.getRandomWord;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
@@ -49,10 +49,10 @@ public class ProfileActivityTests extends UITests {
             new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null);
 
     @Test
-    public void testRenderingProfileActivity() {
+    public void testRenderingProfileActivity() throws IOException {
         LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
 
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         List<Language> languages = languageDao.getAllRecords();
         Language defaultLanguage = languages.get(0);
@@ -64,8 +64,8 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testFilterScoreByLanguageOnProfileActivity() {
-        saveStateAndUserCredentials(context, testUser);
+    public void testFilterScoreByLanguageOnProfileActivity() throws IOException {
+        authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
 
@@ -78,8 +78,8 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testRenderingProfileActivityDeleteAccountDialog(){
-        saveStateAndUserCredentials(context, testUser);
+    public void testRenderingProfileActivityDeleteAccountDialog() throws IOException {
+        authenticateUser(context, testUser);
 
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
@@ -92,8 +92,8 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testRenderingDeletionConfirmationActivity(){
-        saveStateAndUserCredentials(context, testUser);
+    public void testRenderingDeletionConfirmationActivity() throws IOException {
+        authenticateUser(context, testUser);
 
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
@@ -105,8 +105,8 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testDeclineProfileActivityDeleteAccountDialog(){
-        saveStateAndUserCredentials(context, testUser);
+    public void testDeclineProfileActivityDeleteAccountDialog() throws IOException {
+        authenticateUser(context, testUser);
 
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
@@ -117,7 +117,7 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testDeleteAccountSuccessful() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, userToDelete);
+        authenticateUser(context, userToDelete);
 
         browseToProfileActivity();
 
@@ -134,7 +134,7 @@ public class ProfileActivityTests extends UITests {
 
     @Test
     public void testDeleteAccountFailedConfirmText() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        authenticateUser(context, testUser);
 
         browseToProfileActivity();
 
@@ -149,8 +149,8 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testLogout(){
-        saveStateAndUserCredentials(context, testUser);
+    public void testLogout() throws IOException {
+        authenticateUser(context, testUser);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
         onView(withId(R.id.action_login_logout)).perform(click());

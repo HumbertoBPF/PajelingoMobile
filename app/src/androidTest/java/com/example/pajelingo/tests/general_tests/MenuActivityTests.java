@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.not;
 
@@ -16,10 +17,12 @@ import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class MenuActivityTests extends UITests {
     @Test
-    public void testRenderingMenuForAuthenticatedUser(){
-        saveStateAndUserCredentials(context, testUser);
+    public void testRenderingMenuForAuthenticatedUser() throws IOException {
+        authenticateUser(context, testUser);
         assertMenu(true);
     }
 
