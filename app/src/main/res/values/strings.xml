@@ -147,8 +147,8 @@
     <string name="update_account_dialog_message">Updating your account…</string>
     <string name="creating_account_dialog_message">Creating account…</string>
     <string name="score_header_text">Your performance in our games:</string>
-    <string name="remove_from_favorite_words">Remove from favorite words</string>
-    <string name="add_to_favorite_words">Add to favorite words</string>
+    <string name="remove_from_favorite_words">Remove from favorites</string>
+    <string name="add_to_favorite_words">Add to favorites</string>
     <string name="error_removing_word_from_favorites">Error when trying to remove word from favorites.</string>
     <string name="error_adding_word_to_favorites">Error when trying to add word to favorites.</string>
 </resources>

@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         app:backgroundTint="@color/blue"
         android:tint="@android:color/white"
-        app:tint="@android:color/white"
+        app:tint="@color/danger"
         android:src="@drawable/ic_favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/favorite_word_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,9 +47,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:icon="@drawable/ic_favorite"
+                app:iconTint="@color/danger"
                 android:backgroundTint="@color/info"
                 android:layout_marginVertical="8dp"
-                android:text="Favorite word"/>
+                android:text="@string/add_to_favorite_words"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

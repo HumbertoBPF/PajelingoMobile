@@ -5,7 +5,6 @@ import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.getPictureFromBase64String;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class MeaningActivity extends AppCompatActivity {
 
     private ImageView meaningImageView;
     private RecyclerView meaningsRecyclerView;
-    private Button favoriteWordButton;
+    private MaterialButton favoriteWordButton;
 
     private LanguageSchoolAPI languageSchoolAPI;
 
@@ -64,18 +64,20 @@ public class MeaningActivity extends AppCompatActivity {
                 result -> meaningsRecyclerView.setAdapter(new MeaningAdapter(result))).execute();
 
         setWordImage();
-        setFavoriteWordButtonText();
+        setFavoriteWordButtonLayout();
 
         favoriteWordButton.setOnClickListener(v -> {
             toggleFavoriteWord();
         });
     }
 
-    private void setFavoriteWordButtonText() {
+    private void setFavoriteWordButtonLayout() {
         if (word.getFavorite()) {
             favoriteWordButton.setText(R.string.remove_from_favorite_words);
+            favoriteWordButton.setIconResource(R.drawable.ic_favorite_border);
         }else{
             favoriteWordButton.setText(R.string.add_to_favorite_words);
+            favoriteWordButton.setIconResource(R.drawable.ic_favorite);
         }
     }
 
@@ -94,7 +96,7 @@ public class MeaningActivity extends AppCompatActivity {
                     wordList.add(returnedWord);
                     wordDao.getSaveAsyncTask(wordList, result -> {
                         word = returnedWord;
-                        setFavoriteWordButtonText();
+                        setFavoriteWordButtonLayout();
                     }).execute();
                 }else {
                     displayFavoriteWordError(MeaningActivity.this, word);
