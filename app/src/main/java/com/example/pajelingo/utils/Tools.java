@@ -16,6 +16,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
+import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 
 import java.io.File;
@@ -212,5 +213,13 @@ public class Tools{
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void displayFavoriteWordError(Context context, Word word) {
+        if (word.getFavorite()) {
+            Toast.makeText(context, R.string.error_removing_word_from_favorites, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, R.string.error_adding_word_to_favorites, Toast.LENGTH_SHORT).show();
+        }
     }
 }

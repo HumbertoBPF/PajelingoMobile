@@ -5,6 +5,7 @@ import com.example.pajelingo.models.ArticleGameAnswer;
 import com.example.pajelingo.models.Category;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.ConjugationGameAnswer;
+import com.example.pajelingo.models.FavoriteWordPayload;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Image;
@@ -26,6 +27,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface LanguageSchoolAPI {
@@ -50,6 +52,14 @@ public interface LanguageSchoolAPI {
 
     @GET("words")
     Call<List<Word>> getWords();
+
+    @GET("words")
+    Call<List<Word>> getWords(@Header("Authorization") String authString);
+
+    @PUT("words/{pk}/favorite-word")
+    Call<Word> favoriteWord(@Header("Authorization") String authString,
+                            @Body FavoriteWordPayload isFavorite,
+                            @Path("pk") long customerId);
 
     @GET("scores")
     Call<List<Score>> getScores();

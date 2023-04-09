@@ -23,14 +23,17 @@ public class Word implements Serializable {
     @SerializedName(value = "synonyms")
     private List<Long> idsSynonyms;
     private String image;
+    @SerializedName(value = "is_favorite")
+    private Boolean isFavorite;
 
-    public Word(String wordName, String language, Long idArticle, String category, List<Long> idsSynonyms, String image) {
+    public Word(String wordName, String language, Long idArticle, String category, List<Long> idsSynonyms, String image, Boolean isFavorite) {
         this.wordName = wordName;
         this.language = language;
         this.idArticle = idArticle;
         this.category = category;
         this.idsSynonyms = idsSynonyms;
         this.image = image;
+        this.isFavorite = isFavorite;
     }
 
     public Long getId() {
@@ -87,5 +90,13 @@ public class Word implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 }

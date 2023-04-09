@@ -15,11 +15,18 @@
         android:background="@drawable/selector_blue">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/guideline_25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.25"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_75"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75"/>
 
         <ImageView
             android:id="@+id/language_image_view"
@@ -28,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_25"
             android:adjustViewBounds="true"
             android:layout_marginStart="8dp"
             android:layout_marginVertical="8dp"
@@ -40,14 +47,26 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/language_image_view"
             app:layout_constraintBottom_toBottomOf="@id/language_image_view"
-            app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_25"
+            app:layout_constraintEnd_toStartOf="@id/guideline_75"
             android:layout_margin="8dp"
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"
             tools:text="Name word"
             android:textColor="@color/white"
+            />
+
+        <ImageView
+            android:id="@+id/ic_heart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_75"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/danger"
+            android:src="@drawable/ic_favorite"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

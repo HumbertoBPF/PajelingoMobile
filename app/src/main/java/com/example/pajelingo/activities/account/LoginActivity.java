@@ -15,11 +15,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.daos.WordDao;
+import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
+import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
-import com.example.pajelingo.models.Token;
 import com.example.pajelingo.ui.LabeledEditText;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,12 +40,16 @@ public class LoginActivity extends AppCompatActivity {
     private LabeledEditText passwordInput;
     private Button loginButton;
 
+    private WordDao wordDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         setTitle(R.string.login_activity_title);
+
+        wordDao = AppDatabase.getInstance(this).getWordDao();
 
         signupLinkTextView = findViewById(R.id.signup_link_text_view);
         resetPasswordLinkTextView = findViewById(R.id.reset_password_link_text_view);
@@ -82,17 +91,15 @@ public class LoginActivity extends AppCompatActivity {
                     getUserData(dialog);
                 }else {
                     if (response.code() == 400) {
-                        dialog.setMessage(getString(R.string.warning_invalid_credientials));
+                        onErrorRequest(dialog);
                     } else {
-                        dialog.setMessage(getString(R.string.warning_connection_error));
+                        dismissDialogDelayed(dialog);
                     }
-                    dismissDialogDelayed(dialog);
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                dialog.setMessage(getString(R.string.warning_connection_error));
                 dismissDialogDelayed(dialog);
             }
         });
@@ -107,28 +114,62 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
                 if ((response.isSuccessful()) && (user != null)){
-                    saveStateAndUserCredentials(getApplicationContext(), user);
-                    new Handler().postDelayed(() -> {
-                        Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                        finish();
-                    }, 2000);
+                    getWords(dialog, user);
                 }else {
                     if (response.code() == 401) {
-                        dialog.setMessage(getString(R.string.warning_invalid_credientials));
+                        onErrorRequest(dialog);
                     } else {
-                        dialog.setMessage(getString(R.string.warning_connection_error));
+                        onErrorInternetConnection(dialog);
                     }
-                    dismissDialogDelayed(dialog);
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                dialog.setMessage(getString(R.string.warning_connection_error));
-                dismissDialogDelayed(dialog);
+                onErrorInternetConnection(dialog);
             }
         });
+    }
+
+    private void getWords(AlertDialog dialog, User user) {
+        Call<List<Word>> call = languageSchoolAPI.getWords(getAuthToken(LoginActivity.this));
+        call.enqueue(new Callback<List<Word>>() {
+            @Override
+            public void onResponse(Call<List<Word>> call, Response<List<Word>> response) {
+                List<Word> words = response.body();
+                if ((response.isSuccessful()) && (words != null)){
+                    wordDao.getSaveAsyncTask(words, result -> {
+                        new Handler().postDelayed(() -> {
+                            saveStateAndUserCredentials(getApplicationContext(), user);
+                            Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                            finish();
+                        }, 2000);
+                    }).execute();
+                }else {
+                    if (response.code() == 401) {
+                        onErrorRequest(dialog);
+                    } else {
+                        dismissDialogDelayed(dialog);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Word>> call, Throwable t) {
+                onErrorInternetConnection(dialog);
+            }
+        });
+    }
+
+    private void onErrorRequest(AlertDialog dialog) {
+        dialog.setMessage(getString(R.string.warning_invalid_credientials));
+        dismissDialogDelayed(dialog);
+    }
+
+    private void onErrorInternetConnection(AlertDialog dialog) {
+        dialog.setMessage(getString(R.string.warning_connection_error));
+        dismissDialogDelayed(dialog);
     }
 
     private void dismissDialogDelayed(AlertDialog dialog){
