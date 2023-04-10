@@ -12,6 +12,12 @@
         android:theme="@style/Theme.Pajelingo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.account.FavoriteWordsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.WordListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.account.RequestResetPasswordActivity"
             android:exported="false">
             <meta-data

@@ -61,6 +61,7 @@
     <string name="no_button_text">No</string>
     <string name="default_last_synchro_date">not found</string>
     <string name="dictionary_activity_title">Dictionary</string>
+    <string name="favorite_words_activity_title">Favorite words</string>
     <string name="ranking_activity_title">Rankings</string>
     <string name="login_activity_title">Login</string>
     <string name="loading_message">We are loading your results, please wait…</string>

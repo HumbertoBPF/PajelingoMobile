@@ -25,6 +25,7 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.User;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private SharedPreferences sp;
@@ -36,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
     private MaterialButton deleteAccountButton;
     private Spinner languageSpinner;
     private RecyclerView scoreRecyclerView;
+    private FloatingActionButton favoriteButton;
 
     private LanguageDao languageDao;
     private ScoreDao scoreDao;
@@ -56,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
         deleteAccountButton = findViewById(R.id.delete_account_button);
         languageSpinner = findViewById(R.id.language_spinner);
         scoreRecyclerView = findViewById(R.id.score_recycler_view);
+        favoriteButton = findViewById(R.id.favorite_button);
 
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
         scoreDao = AppDatabase.getInstance(this).getScoreDao();
@@ -72,6 +75,10 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
         deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
 
         setProfilePicture();
+
+        favoriteButton.setOnClickListener(v -> {
+            startActivity(new Intent(this, FavoriteWordsActivity.class));
+        });
     }
 
     private void setProfilePicture() {
