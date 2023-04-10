@@ -62,7 +62,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.search_tool.SearchActivity"
+            android:name=".activities.search_tool.SearchWithFiltersActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -85,7 +85,7 @@
             android:name=".activities.search_tool.MeaningActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.search_tool.SearchResultsActivity"
+            android:name=".activities.search_tool.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".activities.SplashScreen"
