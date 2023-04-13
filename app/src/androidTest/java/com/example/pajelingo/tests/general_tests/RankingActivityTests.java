@@ -7,6 +7,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static com.example.pajelingo.utils.CustomMatchers.hasLength;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInRanking;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static org.hamcrest.Matchers.is;
@@ -40,6 +41,8 @@ public class RankingActivityTests extends UITests {
         onView(withId(R.id.menu_item_rankings)).perform(click());
         onView(withId(R.id.language_spinner)).perform(click());
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
+
+        onView(withId(R.id.ranking_recycler_view)).check(matches(hasLength(scores.size())));
 
         for (int i=0;i<scores.size();i++){
             onView(withId(R.id.ranking_recycler_view))

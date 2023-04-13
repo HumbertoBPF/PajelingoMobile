@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.hasLength;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInProfile;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
@@ -196,6 +197,8 @@ public class ProfileActivityTests extends UITests {
 
         List<Score> scores = scoreDao.getScoresByUserAndByLanguage(testUser.getUsername(),
                 Objects.requireNonNull(language).getLanguageName());
+
+        onView(withId(R.id.score_recycler_view)).check(matches(hasLength(scores.size())));
 
         for (int i = 0;i < scores.size();i++){
             Score score = scores.get(i);
