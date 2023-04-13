@@ -14,6 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomMatchers.hasLength;
 import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
@@ -164,7 +165,9 @@ public class SearchToolTests extends UITests {
         performSearch(searchPattern, randomLanguage);
         assertLoadingPage();
         // Checking that the results are correctly displayed
-        onView(withId(R.id.search_recycler_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.search_recycler_view))
+                .check(matches(isDisplayed()))
+                .check(matches(hasLength(words.size())));
         onView(withId(R.id.search_recycler_view)).check(matches(searchResultsMatchPattern(searchPattern)));
 
         for (int i = 0;i < words.size();i++){
@@ -195,8 +198,10 @@ public class SearchToolTests extends UITests {
                 .perform(scrollToPosition(randomPosition))
                 .perform(actionOnItemAtPosition(randomPosition, click()));
 
-        onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
         onView(withText(randomWord.getWordName())).check(matches(isDisplayed()));
+        onView(withId(R.id.meanings_recycler_view))
+                .check(matches(isDisplayed()))
+                .check(matches(hasLength(meanings.size())));
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);
@@ -259,23 +264,6 @@ public class SearchToolTests extends UITests {
             return wordDao.searchWords("%"+searchPattern+"%");
         }else{
             return wordDao.searchWords("%"+searchPattern+"%", language.getLanguageName());
-        }
-    }
-
-    /**
-     * Search in the database all the favorite words in a given language matching the specified
-     * search pattern.
-     * @param searchPattern search string.
-     * @param language concerned language.
-     * @return all the favorite words in the specified language matching the search string.
-     */
-    private List<Word> searchFavoriteWords(String searchPattern, Language language){
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-
-        if (language.getLanguageName().equals(context.getString(R.string.all_languages_spinner_option))){
-            return wordDao.searchFavoriteWords("%"+searchPattern+"%");
-        }else{
-            return wordDao.searchFavoriteWords("%"+searchPattern+"%", language.getLanguageName());
         }
     }
 

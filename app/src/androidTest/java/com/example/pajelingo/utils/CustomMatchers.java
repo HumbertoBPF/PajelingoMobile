@@ -443,4 +443,26 @@ public class CustomMatchers {
             }
         };
     }
+
+    /**
+     * Checks if the number of items of a RecyclerView matches the expected number of items.
+     * @param nbOfItems expected number of items
+     * @return Matcher that performs the specified assertion over the number of items of the RecyclerView
+     */
+    public static Matcher<? super View> hasLength(int nbOfItems){
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Verifying if the number of items of a RecyclerView is ").appendValue(nbOfItems);
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                if (item.getAdapter() == null) {
+                    throw new NullPointerException("No adapter was found for the provided RecyclerView");
+                }
+                return item.getAdapter().getItemCount() == nbOfItems;
+            }
+        };
+    }
 }
