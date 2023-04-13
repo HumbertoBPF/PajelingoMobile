@@ -109,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
             String username = sp.getString(getString(R.string.username_sp), null);
             String selectedLanguage = languageSpinner.getSelectedItem().toString();
             scoreDao.getScoresByUserAndByLanguage(username, selectedLanguage,
-                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(this, result))).execute();
+                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(result))).execute();
         }
     }
 

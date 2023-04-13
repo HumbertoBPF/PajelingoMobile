@@ -53,7 +53,7 @@ public class RandomTools {
         return randomString;
     }
 
-    public static String getRandomWord(int length){
+    public static String getRandomAlphabeticalString(int length){
         return getRandomString(length, true, false, false);
     }
 
@@ -145,11 +145,11 @@ public class RandomTools {
     }
 
     public static String getRandomEmail(){
-        return getRandomWord(10) + "@test.com";
+        return getRandomAlphabeticalString(10) + "@test.com";
     }
 
     public static String getRandomUsername(){
-        return getRandomWord(10);
+        return getRandomAlphabeticalString(10);
     }
 
     public static String getRandomValidPassword(){

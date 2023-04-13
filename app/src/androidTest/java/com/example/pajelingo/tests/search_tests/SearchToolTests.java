@@ -17,14 +17,16 @@ import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
+import static com.example.pajelingo.utils.CustomViewActions.clickChildViewWithId;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
-import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-
-import android.util.Log;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -41,9 +43,9 @@ import com.example.pajelingo.tests.abstract_tests.UITests;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class SearchToolTests extends UITests {
     @Test
@@ -52,25 +54,115 @@ public class SearchToolTests extends UITests {
         String labelLanguageSpinner = context.getString(R.string.choose_language_label);
 
         onView(withId(R.id.search_button)).perform(click());
+        onView(withId(R.id.action_filter)).perform(click());
         onView(withId(R.id.search_edit_text)).check(matches(isDisplayed()));
         onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
-        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.search_button), withText(R.string.search_button_text))).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testRenderingSearchResults(){
+    public void testSearchWithResultsNonAuthenticatedUser() throws IOException {
+        searchWithResults(false);
+    }
+
+    @Test
+    public void testSearchWithResultsAuthenticatedUser() throws IOException {
+        searchWithResults(true);
+    }
+
+    @Test
+    public void testSearchWithResultsFavoriteWord() throws IOException, InterruptedException {
+        authenticateUser(context, testUser);
+
+        List<Word> words = getAllWords();
+        int randomPosition = getRandomInteger(0, words.size() - 1);
+        Word word = words.get(randomPosition);
+        boolean wasFavorite = word.getFavorite();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
+        browseToSearchActivity();
+
+        onView(withId(R.id.search_recycler_view))
+                .perform(scrollToPosition(randomPosition))
+                .perform(actionOnItemAtPosition(randomPosition, clickChildViewWithId(R.id.ic_heart)));
+        Thread.sleep(5000);
+        // Checking if the word is now a favorite
+        words = searchWords("", new Language(context.getString(R.string.all_languages_spinner_option)));
+        assertEquals(words.get(randomPosition).getFavorite(), !wasFavorite);
+
+        onView(withId(R.id.search_recycler_view))
+                .perform(scrollToPosition(randomPosition))
+                .check(matches(isWordAtPosition(word, randomPosition, !wasFavorite)));
+    }
+
+    @Test
+    public void testSearchWithNoResults(){
+        Language randomLanguage = getRandomLanguage();
+        String searchPattern = getSearchPattern(randomLanguage, false);
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
+        performSearch(searchPattern, randomLanguage);
+        // Checking that loading image and text are shown
+        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
+        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+        // Checking that no results image and message are shown
+        onView(isRoot()).perform(waitForView(allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message)), 5000, true));
+        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMeaningOfWordNonAuthenticatedUser() throws IOException {
+        meaningOfWord(false);
+    }
+
+    @Test
+    public void testMeaningOfWordAuthenticatedUser() throws IOException {
+        meaningOfWord(true);
+    }
+
+    @Test
+    public void testMeaningOfWordFavoriteWord() throws IOException {
+        authenticateUser(context, testUser);
+
+        List<Word> words = getAllWords();
+        int randomPosition = getRandomInteger(0, words.size() - 1);
+        Word word = words.get(randomPosition);
+        boolean wasFavorite = word.getFavorite();
+
+        activityScenario = ActivityScenario.launch(MainActivity.class);
+
+        browseToSearchActivity();
+
+        onView(withId(R.id.search_recycler_view))
+                .perform(scrollToPosition(randomPosition))
+                .perform(actionOnItemAtPosition(randomPosition, click()));
+
+        onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
+        onView(withText(word.getWordName())).check(matches(isDisplayed()));
+
+        onView(withId(R.id.favorite_word_button)).perform(click());
+        // Checking if the word is now a favorite
+        int expectedStringResource = wasFavorite?R.string.add_to_favorite_words:R.string.remove_from_favorite_words;
+        onView(isRoot()).perform(waitForView(allOf(withId(R.id.favorite_word_button), withText(expectedStringResource)), 5000, true));
+        words = getAllWords();
+        assert words.get(randomPosition).getFavorite() == !wasFavorite;
+    }
+
+    private void searchWithResults(boolean isAuthenticated) throws IOException {
+        if (isAuthenticated) {
+            authenticateUser(context, testUser);
+        }
+
         Language randomLanguage = getRandomLanguage();
         String searchPattern = getSearchPattern(randomLanguage, true);
         List<Word> words = searchWords(searchPattern, randomLanguage);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        performSearch(randomLanguage, searchPattern);
-        // Checking that loading image and text are shown
-        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
-        // Checking that loading image and message disappear when the results are shown
-        onView(isRoot()).perform(waitForView(withId(R.id.warning_image_view), 5000, false));
+        performSearch(searchPattern, randomLanguage);
+        assertLoadingPage();
         // Checking that the results are correctly displayed
         onView(withId(R.id.search_recycler_view)).check(matches(isDisplayed()));
         onView(withId(R.id.search_recycler_view)).check(matches(searchResultsMatchPattern(searchPattern)));
@@ -79,60 +171,46 @@ public class SearchToolTests extends UITests {
             Word word = words.get(i);
             onView(withId(R.id.search_recycler_view))
                     .perform(scrollToPosition(i))
-                    .check(matches(isWordAtPosition(word, i)));
+                    .check(matches(isWordAtPosition(word, i, isAuthenticated)));
         }
     }
 
-    @Test
-    public void testRenderingNoResults(){
-        Language randomLanguage = getRandomLanguage();
-        String searchPattern = getSearchPattern(randomLanguage, false);
+    private void meaningOfWord(boolean isAuthenticated) throws IOException {
+        if (isAuthenticated) {
+            authenticateUser(context, testUser);
+        }
 
-        activityScenario = ActivityScenario.launch(MainActivity.class);
-
-        performSearch(randomLanguage, searchPattern);
-        // Checking that loading image and text are shown
-        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
-        // Checking that no results image and message are shown
-        onView(isRoot()).perform(waitForView(allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message)), 5000, true));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
-
-    }
-
-    @Test
-    public void testRenderingMeaningOfWord(){
-        MeaningDao meaningDao = AppDatabase.getInstance(context).getMeaningDao();
-
-        Language randomLanguage = getRandomLanguage();
-        String searchPattern = getSearchPattern(randomLanguage, true);
-        List<Word> words = searchWords(searchPattern, randomLanguage);
-
-        int randomPosition = new Random().nextInt(words.size());
+        List<Word> words = getAllWords();
+        int randomPosition = getRandomInteger(0, words.size() - 1);
         Word randomWord = words.get(randomPosition);
 
-        String wordName = randomWord.getWordName();
-
+        MeaningDao meaningDao = AppDatabase.getInstance(context).getMeaningDao();
         List<Meaning> meanings = meaningDao.getMeaningsOfWord(randomWord.getId());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        performSearch(randomLanguage, searchPattern);
-        // Checking that loading image and text are shown
-        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
-        // Checking that loading image and message disappear when the results are shown
-        onView(isRoot()).perform(waitForView(withId(R.id.warning_image_view), 5000, false));
+        browseToSearchActivity();
 
-        onView(withId(R.id.search_recycler_view)).perform(actionOnItemAtPosition(randomPosition, click()));
+        onView(withId(R.id.search_recycler_view))
+                .perform(scrollToPosition(randomPosition))
+                .perform(actionOnItemAtPosition(randomPosition, click()));
+
         onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
-        onView(withText(wordName)).check(matches(isDisplayed()));
+        onView(withText(randomWord.getWordName())).check(matches(isDisplayed()));
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);
             onView(withId(R.id.meanings_recycler_view))
                     .perform(scrollToPosition(i))
                     .check(matches(isMeaningAtPosition(meaning, i)));
+        }
+
+        if (isAuthenticated) {
+            boolean isFavorite = randomWord.getFavorite();
+            int expectedStringResource = isFavorite?R.string.remove_from_favorite_words: R.string.add_to_favorite_words;
+            onView(allOf(withId(R.id.favorite_word_button), withText(expectedStringResource))).check(matches(isDisplayed()));
+        }else {
+            onView(withId(R.id.favorite_word_button)).check(matches(not(isDisplayed())));
         }
     }
 
@@ -141,6 +219,11 @@ public class SearchToolTests extends UITests {
         List<Language> languages = languageDao.getAllRecords();
         languages.add(new Language(context.getString(R.string.all_languages_spinner_option)));
         return languages.get(getRandomInteger(0, languages.size() - 1));
+    }
+
+    private List<Word> getAllWords(){
+        Language allLanguages = new Language(context.getString(R.string.all_languages_spinner_option));
+        return searchWords("", allLanguages);
     }
 
     /**
@@ -152,12 +235,11 @@ public class SearchToolTests extends UITests {
     private String getSearchPattern(Language language, boolean hasResults){
         int length = hasResults?1:8;
 
-        String searchPattern = getRandomWord(length);
+        String searchPattern = getRandomAlphabeticalString(length);
         List<Word> words = new ArrayList<>();
 
         while (words.isEmpty() == hasResults){
-            Log.i("searchPattern", searchPattern);
-            searchPattern = getRandomWord(length);
+            searchPattern = getRandomAlphabeticalString(length);
             words = searchWords(searchPattern, language);
         }
 
@@ -180,13 +262,45 @@ public class SearchToolTests extends UITests {
         }
     }
 
-    private void performSearch(Language language, String searchPattern){
+    /**
+     * Search in the database all the favorite words in a given language matching the specified
+     * search pattern.
+     * @param searchPattern search string.
+     * @param language concerned language.
+     * @return all the favorite words in the specified language matching the search string.
+     */
+    private List<Word> searchFavoriteWords(String searchPattern, Language language){
+        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
+
+        if (language.getLanguageName().equals(context.getString(R.string.all_languages_spinner_option))){
+            return wordDao.searchFavoriteWords("%"+searchPattern+"%");
+        }else{
+            return wordDao.searchFavoriteWords("%"+searchPattern+"%", language.getLanguageName());
+        }
+    }
+
+    private void performSearch(String searchPattern, Language language){
         onView(withId(R.id.search_button)).perform(click());
+        onView(withId(R.id.action_filter)).perform(click());
         // Type pattern to search
         onView(withId(R.id.search_edit_text)).perform(typeText(searchPattern), closeSoftKeyboard());
         // Select language
         onView(withId(R.id.language_input)).perform(expandSpinner());
         onData(is(language)).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.search_button)).perform(click());
+    }
+
+    private void browseToSearchActivity() {
+        onView(withId(R.id.search_button)).perform(click());
+        assertLoadingPage();
+    }
+
+    private void assertLoadingPage() {
+        // Checking that loading image and text are shown
+        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
+        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+        // Checking that loading image and message disappear when the results are shown
+        onView(isRoot())
+                .perform(waitForView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message)), 5000, false));
     }
 }

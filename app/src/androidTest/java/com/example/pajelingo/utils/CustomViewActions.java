@@ -6,13 +6,16 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -113,7 +116,7 @@ public class CustomViewActions {
                 if (isCorrect){
                     setCorrectAnswer();
                 }else{
-                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomWord(5));
+                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomAlphabeticalString(5));
                 }
             }
 
@@ -180,7 +183,7 @@ public class CustomViewActions {
                 if (isCorrect){
                     setCorrectAnswer();
                 }else{
-                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomWord(10));
+                    typeTextAndCloseSoftKeyboard(uiController, this.answerEditText, getRandomAlphabeticalString(10));
                 }
             }
 
@@ -266,12 +269,12 @@ public class CustomViewActions {
                         LabeledEditText conjugation5 = view.findViewById(R.id.conjugation_5);
                         LabeledEditText conjugation6 = view.findViewById(R.id.conjugation_6);
 
-                        conjugation1.getEditText().setText(isCorrect?correctAnswer.getConjugation1(): getRandomWord(10));
-                        conjugation2.getEditText().setText(isCorrect?correctAnswer.getConjugation2(): getRandomWord(10));
-                        conjugation3.getEditText().setText(isCorrect?correctAnswer.getConjugation3(): getRandomWord(10));
-                        conjugation4.getEditText().setText(isCorrect?correctAnswer.getConjugation4(): getRandomWord(10));
-                        conjugation5.getEditText().setText(isCorrect?correctAnswer.getConjugation5(): getRandomWord(10));
-                        conjugation6.getEditText().setText(isCorrect?correctAnswer.getConjugation6(): getRandomWord(10));
+                        conjugation1.getEditText().setText(isCorrect?correctAnswer.getConjugation1(): getRandomAlphabeticalString(10));
+                        conjugation2.getEditText().setText(isCorrect?correctAnswer.getConjugation2(): getRandomAlphabeticalString(10));
+                        conjugation3.getEditText().setText(isCorrect?correctAnswer.getConjugation3(): getRandomAlphabeticalString(10));
+                        conjugation4.getEditText().setText(isCorrect?correctAnswer.getConjugation4(): getRandomAlphabeticalString(10));
+                        conjugation5.getEditText().setText(isCorrect?correctAnswer.getConjugation5(): getRandomAlphabeticalString(10));
+                        conjugation6.getEditText().setText(isCorrect?correctAnswer.getConjugation6(): getRandomAlphabeticalString(10));
                     }).execute();
                 }).execute();
             }
@@ -299,6 +302,26 @@ public class CustomViewActions {
             public void perform(final UiController uiController, final View view) {
                 LabeledEditText labeledInput = (LabeledEditText) view;
                 typeTextAndCloseSoftKeyboard(uiController, labeledInput.getEditText(), input);
+            }
+        };
+    }
+
+    public static ViewAction clickChildViewWithId(int id) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isDisplayed();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Clicking on a child view with a specific id";
+            }
+
+            @Override
+            public void perform(final UiController uiController, final View view) {
+                ImageView iconHeart = view.findViewById(id);
+                iconHeart.performClick();
             }
         };
     }

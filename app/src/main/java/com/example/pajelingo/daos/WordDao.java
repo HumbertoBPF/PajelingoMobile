@@ -31,11 +31,11 @@ public abstract class WordDao extends BaseDao<Word>{
     @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (language = :language) ORDER BY LOWER(wordName)")
     public abstract List<Word> searchWords(String pattern, String language);
 
-    @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (isFavorite = :isFavorite) ORDER BY LOWER(wordName)")
-    public abstract List<Word> searchWords(String pattern, Boolean isFavorite);
+    @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (isFavorite) ORDER BY LOWER(wordName)")
+    public abstract List<Word> searchFavoriteWords(String pattern);
 
-    @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (language = :language) AND (isFavorite = :isFavorite) ORDER BY LOWER(wordName)")
-    public abstract List<Word> searchWords(String pattern, String language, Boolean isFavorite);
+    @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (language = :language) AND (isFavorite) ORDER BY LOWER(wordName)")
+    public abstract List<Word> searchFavoriteWords(String pattern, String language);
 
     public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(String language,
                                                                          OnResultListener<List<Word>> onResultListener){
@@ -115,11 +115,11 @@ public abstract class WordDao extends BaseDao<Word>{
         };
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchWordsTask(String pattern, Boolean isFavorite, OnResultListener<List<Word>> onResultListener){
+    public AsyncTask<Void, Void, List<Word>> searchFavoriteWordsTask(String pattern, OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return searchWords(pattern, isFavorite);
+                return searchFavoriteWords(pattern);
             }
 
             @Override
@@ -130,11 +130,11 @@ public abstract class WordDao extends BaseDao<Word>{
         };
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchWordsTask(String pattern, String language, Boolean isFavorite, OnResultListener<List<Word>> onResultListener){
+    public AsyncTask<Void, Void, List<Word>> searchFavoriteWordsTask(String pattern, String language, OnResultListener<List<Word>> onResultListener){
         return new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                return searchWords(pattern, language, isFavorite);
+                return searchFavoriteWords(pattern, language);
             }
 
             @Override

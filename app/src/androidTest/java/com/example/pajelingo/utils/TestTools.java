@@ -1,5 +1,6 @@
 package com.example.pajelingo.utils;
 
+import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static com.example.pajelingo.utils.Tools.saveToken;
 import static org.junit.Assert.assertEquals;
@@ -7,12 +8,16 @@ import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 
+import com.example.pajelingo.activities.account.LoginActivity;
+import com.example.pajelingo.daos.WordDao;
+import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
 import org.junit.Assert;
@@ -95,15 +100,23 @@ public class TestTools {
     }
 
     public static void authenticateUser(Context context, User user) throws IOException {
-        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(user);
+        LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
+        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
+
+        Call<Token> tokenCall = languageSchoolAPI.getToken(user);
         Response<Token> tokenResponse = tokenCall.execute();
+
+        if (tokenResponse.code() != 200){
+            Assert.fail("Failed to get user token.");
+        }
+
         Token token = tokenResponse.body();
 
         if (token == null) {
             Assert.fail("Failed to get user token");
         }
 
-        Call<User> userCall = LanguageSchoolAPIHelper.getApiObject().login("Token " + token.getToken());
+        Call<User> userCall = languageSchoolAPI.login("Token " + token.getToken());
         Response<User> userResponse = userCall.execute();
 
         if (userResponse.code() != 200){
@@ -117,6 +130,21 @@ public class TestTools {
         }
 
         saveToken(context, token);
+
+        Call<List<Word>> wordsCall = languageSchoolAPI.getWords(getAuthToken(context));
+        Response<List<Word>> wordsResponse = wordsCall.execute();
+
+        if (wordsResponse.code() != 200) {
+            Assert.fail("Failed to get words.");
+        }
+
+        List<Word> words = wordsResponse.body();
+
+        if (words == null) {
+            Assert.fail("No word object was returned.");
+        }
+
+        wordDao.save(words);
         saveStateAndUserCredentials(context, user);
     }
 }

@@ -12,7 +12,7 @@ import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomInvalidPassword;
 import static com.example.pajelingo.utils.RandomTools.getRandomUsername;
 import static com.example.pajelingo.utils.RandomTools.getRandomValidPassword;
-import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
 
@@ -81,13 +81,13 @@ public class SignupActivityTests extends FormUserActivityTests {
 
     @Test
     public void testFailedSignupEmailWithSpace() throws IOException, InterruptedException {
-        testInvalidSubmission(getRandomWord(getRandomInteger(1, 5)) + " " + getRandomEmail(),
+        testInvalidSubmission(getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomEmail(),
                 getRandomUsername(), getRandomValidPassword(), true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupUsernameWithSpace() throws IOException, InterruptedException {
-        testInvalidSubmission(getRandomEmail(), getRandomWord(getRandomInteger(1, 5)) + " " + getRandomUsername(),
+        testInvalidSubmission(getRandomEmail(), getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomUsername(),
                 getRandomValidPassword(), true, true, true, true, true);
     }
 

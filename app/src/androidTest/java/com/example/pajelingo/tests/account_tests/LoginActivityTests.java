@@ -14,7 +14,7 @@ import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
-import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
@@ -57,8 +57,8 @@ public class LoginActivityTests extends UITests {
 
     @Test
     public void testLoginFailed(){
-        String username = getRandomWord(getRandomInteger(1, 18));
-        String password = getRandomWord(getRandomInteger(8, 30));
+        String username = getRandomAlphabeticalString(getRandomInteger(1, 18));
+        String password = getRandomAlphabeticalString(getRandomInteger(8, 30));
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 

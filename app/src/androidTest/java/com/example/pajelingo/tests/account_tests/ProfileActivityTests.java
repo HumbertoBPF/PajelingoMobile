@@ -14,7 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInProfile;
 import static com.example.pajelingo.utils.CustomViewActions.waitForView;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
-import static com.example.pajelingo.utils.RandomTools.getRandomWord;
+import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
@@ -141,7 +141,7 @@ public class ProfileActivityTests extends UITests {
         onView(withId(R.id.delete_account_button)).perform(click());
         onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
 
-        onView(withId(R.id.confirm_deletion_edit_text)).perform(typeText(getRandomWord(10)), closeSoftKeyboard());
+        onView(withId(R.id.confirm_deletion_edit_text)).perform(typeText(getRandomAlphabeticalString(10)), closeSoftKeyboard());
         onView(withId(R.id.confirm_deletion_button)).perform(click());
         Thread.sleep(5000);
 

@@ -5,6 +5,7 @@ import static com.example.pajelingo.utils.Tools.getAuthToken;
 import static com.example.pajelingo.utils.Tools.getPictureFromBase64String;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -72,12 +73,18 @@ public class MeaningActivity extends AppCompatActivity {
     }
 
     private void setFavoriteWordButtonLayout() {
-        if (word.getFavorite()) {
-            favoriteWordButton.setText(R.string.remove_from_favorite_words);
-            favoriteWordButton.setIconResource(R.drawable.ic_favorite_border);
+        if (word.getFavorite() == null) {
+            favoriteWordButton.setVisibility(View.GONE);
         }else{
-            favoriteWordButton.setText(R.string.add_to_favorite_words);
-            favoriteWordButton.setIconResource(R.drawable.ic_favorite);
+            favoriteWordButton.setVisibility(View.VISIBLE);
+
+            if (word.getFavorite()) {
+                favoriteWordButton.setText(R.string.remove_from_favorite_words);
+                favoriteWordButton.setIconResource(R.drawable.ic_favorite_border);
+            }else{
+                favoriteWordButton.setText(R.string.add_to_favorite_words);
+                favoriteWordButton.setIconResource(R.drawable.ic_favorite);
+            }
         }
     }
 

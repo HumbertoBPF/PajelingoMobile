@@ -1,6 +1,5 @@
 package com.example.pajelingo.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.GameDao;
-import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Score;
 
 import java.util.List;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
-    private final GameDao gameDao;
     private final List<Score> scores;
 
-    public ScoreAdapter(Context context, List<Score> scores) {
-        this.gameDao = AppDatabase.getInstance(context).getGameDao();
+    public ScoreAdapter(List<Score> scores) {
         this.scores = scores;
     }
 

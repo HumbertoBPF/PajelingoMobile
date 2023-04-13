@@ -5,6 +5,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,7 +71,7 @@ public class CustomMatchers {
      * @param position position of the concerned item.
      * @return Matcher that performs the mentioned validation.
      */
-    public static Matcher<? super View> isWordAtPosition(Word word, int position){
+    public static Matcher<? super View> isWordAtPosition(Word word, int position, boolean hasFavorite){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {
@@ -93,8 +94,17 @@ public class CustomMatchers {
                 View itemView = viewHolder.itemView;
 
                 TextView wordNameTextView = itemView.findViewById(R.id.word_name_text_view);
+                ImageView iconHeart = itemView.findViewById(R.id.ic_heart);
+
+                boolean textMatches = wordNameTextView.getText().toString().equals(word.getWordName());
+                int iconHeartVisibility = iconHeart.getVisibility();
+
+                if (hasFavorite) {
+                    return (textMatches && (iconHeartVisibility == View.VISIBLE));
+                }
+
                 // TODO check if the flag image is properly rendered
-                return wordNameTextView.getText().toString().equals(word.getWordName());
+                return (textMatches && (iconHeartVisibility == View.GONE));
             }
         };
     }
@@ -135,16 +145,22 @@ public class CustomMatchers {
     }
 
     /**
-     * Verifies if a RecyclerView containing a list of results of a search is coherent, that is if the
-     * results are in alphabetic order and if they contain the provided search pattern.
-     * @param searchPattern search pattern provided.
+     * Asserts the content of a RecyclerView containing a list of search results:
+     * <br>
+     * <ul>
+     *  <li>The results must be in alphabetic order</li>
+     *  <li>The results must contain the search pattern (case insensitive search)</li>
+     * </ul>
+     * @param searchPattern search pattern to be matched.
      * @return Matcher that performs the mentioned validation.
      */
     public static Matcher<? super View> searchResultsMatchPattern(String searchPattern){
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {
-                description.appendText("Search results match pattern ").appendValue(searchPattern);
+                description.appendText("Search results match pattern ")
+                        .appendValue(searchPattern)
+                        .appendText(" and are in the alphabetic order");
             }
 
             @Override
@@ -278,7 +294,6 @@ public class CustomMatchers {
 
             @Override
             protected boolean matchesSafely(RecyclerView item) {
-                item.getAdapter();
                 RecyclerView.ViewHolder viewHolder = item.findViewHolderForAdapterPosition(position);
                 if (viewHolder == null){
                     throw new IndexOutOfBoundsException("View at position "+position+" not found.");
