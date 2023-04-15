@@ -654,9 +654,11 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="RQCW203SD3H" value="120" />
                   <entry key="RZ8N127D0NR" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-A202F" value="120" />
+                  <entry key="samsung&#10; SM-A536E" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -839,9 +841,11 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="RQCW203SD3H" value="120" />
                   <entry key="RZ8N127D0NR" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-A202F" value="120" />
+                  <entry key="samsung&#10; SM-A536E" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

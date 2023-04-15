@@ -10,7 +10,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.checkAnswerFeedback;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
@@ -22,6 +21,7 @@ import static com.example.pajelingo.utils.TestTools.getScore;
 import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
 import androidx.test.core.app.ActivityScenario;
@@ -250,9 +250,10 @@ public class ConjugationGameActivityTests extends GameActivityTests {
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
     private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
+        String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
         onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(checkAnswerFeedback(isCorrect)));
+        onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));
     }
 
     /**

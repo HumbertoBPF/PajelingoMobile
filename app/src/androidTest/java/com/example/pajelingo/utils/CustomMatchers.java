@@ -3,7 +3,6 @@ package com.example.pajelingo.utils;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 import android.content.res.ColorStateList;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -248,30 +247,6 @@ public class CustomMatchers {
                 String tense = item.getText().toString().split(" - ")[1];
 
                 return TestTools.findConjugationOfVerb(verb, tense, verbs, conjugations) != null;
-            }
-        };
-    }
-
-    /**
-     * Verifies if the provided feedback.
-     * @param isCorrectAnswer specifies if the feedback is positive or negative.
-     * @return Matcher that performs the mentioned validation.
-     */
-    public static Matcher<? super View> checkAnswerFeedback(boolean isCorrectAnswer){
-        return new BoundedMatcher<View, TextView>(TextView.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Verifying if the feedback corresponds to a ")
-                        .appendText(isCorrectAnswer?"correct":"incorrect")
-                        .appendText(" answer.");
-            }
-
-            @Override
-            protected boolean matchesSafely(TextView item) {
-                String feedbackMessage = item.getText().toString();
-                Log.i("FEEDBACK MESSAGE", feedbackMessage);
-                String startText = isCorrectAnswer?"Correct :)":"Wrong answer";
-                return feedbackMessage.startsWith(startText);
             }
         };
     }
