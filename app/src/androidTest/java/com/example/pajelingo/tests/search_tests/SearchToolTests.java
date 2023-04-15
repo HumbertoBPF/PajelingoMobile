@@ -20,7 +20,7 @@ import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
 import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
 import static com.example.pajelingo.utils.CustomViewActions.clickChildViewWithId;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
-import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
@@ -109,7 +109,7 @@ public class SearchToolTests extends UITests {
         onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
         onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
         // Checking that no results image and message are shown
-        onView(isRoot()).perform(waitForView(allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message)), 5000, true));
+        onView(isRoot()).perform(waitUntil(allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message)), 5000, true));
         onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
     }
 
@@ -146,7 +146,7 @@ public class SearchToolTests extends UITests {
         onView(withId(R.id.favorite_word_button)).perform(click());
         // Checking if the word is now a favorite
         int expectedStringResource = wasFavorite?R.string.add_to_favorite_words:R.string.remove_from_favorite_words;
-        onView(isRoot()).perform(waitForView(allOf(withId(R.id.favorite_word_button), withText(expectedStringResource)), 5000, true));
+        onView(isRoot()).perform(waitUntil(allOf(withId(R.id.favorite_word_button), withText(expectedStringResource)), 5000, true));
         words = getAllWords();
         assert words.get(randomPosition).getFavorite() == !wasFavorite;
     }
@@ -289,6 +289,6 @@ public class SearchToolTests extends UITests {
         onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
         // Checking that loading image and message disappear when the results are shown
         onView(isRoot())
-                .perform(waitForView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message)), 5000, false));
+                .perform(waitUntil(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message)), 5000, false));
     }
 }

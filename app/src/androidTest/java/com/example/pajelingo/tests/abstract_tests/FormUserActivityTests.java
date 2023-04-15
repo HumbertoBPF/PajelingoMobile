@@ -10,7 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasRequirementText;
 import static com.example.pajelingo.utils.CustomMatchers.isChecked;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
-import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -77,8 +77,8 @@ public abstract class FormUserActivityTests extends UITests{
 
         onView(withId(R.id.submit_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
+        onView(isRoot()).perform(waitUntil(withText((R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
     }
 
     /**

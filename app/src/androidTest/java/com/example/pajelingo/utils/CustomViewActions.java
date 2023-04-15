@@ -7,15 +7,14 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
+import static com.example.pajelingo.utils.TestTools.getDisplayedWord;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -41,12 +40,12 @@ import java.util.concurrent.TimeoutException;
 
 public class CustomViewActions {
     /**
-     * Perform action of waiting until the element is accessible and shown.
+     * Perform waits until the element is accessible and has the specified visibility.
      * @param viewMatcher A view matcher for the view to wait for.
      * @param millis The timeout of until when to wait for.
      * @param isVisible Boolean indicating the visibility that is awaited.
      */
-    public static ViewAction waitForView(Matcher<View> viewMatcher, final long millis, boolean isVisible) {
+    public static ViewAction waitUntil(Matcher<View> viewMatcher, final long millis, boolean isVisible) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -105,7 +104,7 @@ public class CustomViewActions {
 
             @Override
             public String getDescription() {
-                return "Inputs an answer to the Article Game";
+                return "Inputs an answer for the Article Game";
             }
 
             @Override
@@ -120,35 +119,28 @@ public class CustomViewActions {
                 }
             }
 
-            private void setCorrectAnswer(){
+            private void setCorrectAnswer() {
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
                 ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
 
                 wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), words -> {
-                    Word wordObjectInTextView = null;
+                    Word displayedWord = getDisplayedWord(this.wordTextView, words);
 
-                    for (Word word: words){
-                        if (word.getWordName().equals(this.wordTextView.getText().toString())){
-                            wordObjectInTextView = word;
-                        }
-                    }
-
-                    if (wordObjectInTextView == null){
-                        throw new NullPointerException("No word in the database matches the word shown.");
-                    }
-
-                    Word finalWordObjectInTextView = wordObjectInTextView;
                     articleDao.getAllRecordsTask(articles -> {
-                        for (Article article: articles){
-                            if (article.getId().equals(finalWordObjectInTextView.getIdArticle())){
-                                answerEditText.setText(article.getArticleName());
-                                return;
-                            }
-                        }
-
-                        throw new NullPointerException("No article matches the word shown.");
+                        Article article = getArticleOfWord(displayedWord, articles);
+                        answerEditText.setText(article.getArticleName());
                     }).execute();
                 }).execute();
+            }
+
+            private Article getArticleOfWord(Word displayedWord, List<Article> articles) {
+                for (Article article : articles) {
+                    if (article.getId().equals(displayedWord.getIdArticle())) {
+                        return article;
+                    }
+                }
+
+                throw new NullPointerException("No article matches the word shown "+displayedWord.getWordName());
             }
         };
     }
@@ -172,7 +164,7 @@ public class CustomViewActions {
 
             @Override
             public String getDescription() {
-                return "Inputs an answer to the Vocabulary Game";
+                return "Inputs an answer for the Vocabulary Game";
             }
 
             @Override
@@ -189,39 +181,29 @@ public class CustomViewActions {
 
             private void setCorrectAnswer(){
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-                String wordShown = wordTextView.getText().toString();
 
-                wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), result -> {
-                    Word wordObjectShown = null;
+                wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), targetLanguageWords -> {
+                    Word displayedWord = getDisplayedWord(this.wordTextView, targetLanguageWords);
 
-                    for (Word word: result){
-                        if (word.getWordName().equals(wordShown)){
-                            wordObjectShown = word;
-                            break;
-                        }
-                    }
-
-                    if (wordObjectShown == null){
-                        throw new NullPointerException("No word in language "+
-                                targetLanguage.getLanguageName()+" matches the word "+wordShown+".");
-                    }
-
-                    Word finalWordObjectShown = wordObjectShown;
-                    wordDao.getWordsByLanguageAsyncTask(baseLanguage.getLanguageName(), result1 -> {
-                        List<Long> synonymsIds = finalWordObjectShown.getIdsSynonyms();
-
-                        for (Word word: result1){
-                            if (synonymsIds.contains(word.getId()) &&
-                                    word.getLanguage().equals(baseLanguage.getLanguageName())){
-                                answerEditText.setText(word.getWordName());
-                                return;
-                            }
-                        }
-
-                        throw new NullPointerException("No synonym in the base language "
-                                + baseLanguage.getLanguageName() +" was found to the word shown "+wordShown+".");
+                    wordDao.getWordsByLanguageAsyncTask(baseLanguage.getLanguageName(), baseLanguageWords -> {
+                        Word word = getSynonym(displayedWord, baseLanguageWords);
+                        answerEditText.setText(word.getWordName());
                     }).execute();
                 }).execute();
+            }
+
+            private Word getSynonym(Word displayedWord, List<Word> baseLanguageWords) {
+                List<Long> synonymsIds = displayedWord.getIdsSynonyms();
+
+                for (Word word: baseLanguageWords){
+                    if (synonymsIds.contains(word.getId()) &&
+                            word.getLanguage().equals(baseLanguage.getLanguageName())){
+                        return word;
+                    }
+                }
+
+                throw new NullPointerException("No synonym in the base language "
+                        + baseLanguage.getLanguageName() +" was found to the word "+ displayedWord.getWordName() +".");
             }
         };
     }
@@ -262,21 +244,19 @@ public class CustomViewActions {
                             throw new NullPointerException("No valid answer was found in the specified verb and conjugation lists.");
                         }
 
-                        LabeledEditText conjugation1 = view.findViewById(R.id.conjugation_1);
-                        LabeledEditText conjugation2 = view.findViewById(R.id.conjugation_2);
-                        LabeledEditText conjugation3 = view.findViewById(R.id.conjugation_3);
-                        LabeledEditText conjugation4 = view.findViewById(R.id.conjugation_4);
-                        LabeledEditText conjugation5 = view.findViewById(R.id.conjugation_5);
-                        LabeledEditText conjugation6 = view.findViewById(R.id.conjugation_6);
-
-                        conjugation1.getEditText().setText(isCorrect?correctAnswer.getConjugation1(): getRandomAlphabeticalString(10));
-                        conjugation2.getEditText().setText(isCorrect?correctAnswer.getConjugation2(): getRandomAlphabeticalString(10));
-                        conjugation3.getEditText().setText(isCorrect?correctAnswer.getConjugation3(): getRandomAlphabeticalString(10));
-                        conjugation4.getEditText().setText(isCorrect?correctAnswer.getConjugation4(): getRandomAlphabeticalString(10));
-                        conjugation5.getEditText().setText(isCorrect?correctAnswer.getConjugation5(): getRandomAlphabeticalString(10));
-                        conjugation6.getEditText().setText(isCorrect?correctAnswer.getConjugation6(): getRandomAlphabeticalString(10));
+                        setAnswer(view, R.id.conjugation_1, correctAnswer.getConjugation1(), isCorrect);
+                        setAnswer(view, R.id.conjugation_2, correctAnswer.getConjugation2(), isCorrect);
+                        setAnswer(view, R.id.conjugation_3, correctAnswer.getConjugation3(), isCorrect);
+                        setAnswer(view, R.id.conjugation_4, correctAnswer.getConjugation4(), isCorrect);
+                        setAnswer(view, R.id.conjugation_5, correctAnswer.getConjugation5(), isCorrect);
+                        setAnswer(view, R.id.conjugation_6, correctAnswer.getConjugation6(), isCorrect);
                     }).execute();
                 }).execute();
+            }
+
+            private void setAnswer(View parentView, int inputId, String correctAnswer, boolean isCorrect) {
+                LabeledEditText conjugation = parentView.findViewById(inputId);
+                conjugation.getEditText().setText(isCorrect?correctAnswer: getRandomAlphabeticalString(10));
             }
         };
     }

@@ -9,7 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
@@ -57,8 +57,8 @@ public class RequestResetPasswordActivityTests extends UITests {
         onView(withId(R.id.email_edit_text)).perform(typeText(randomEmail), closeSoftKeyboard());
         onView(withId(R.id.reset_password_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 10000, true));
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 10000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
         // Check that the feedback dialog is displayed and dismiss it
         Thread.sleep(5000);
         onView(withText(R.string.reset_password_feedback_dialog_title)).check(matches(isDisplayed()));

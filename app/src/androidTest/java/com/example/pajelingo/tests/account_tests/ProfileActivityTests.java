@@ -13,7 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLength;
 import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInProfile;
-import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
@@ -85,7 +85,7 @@ public class ProfileActivityTests extends UITests {
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(R.string.dialog_delete_account_message), 5000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_delete_account_message), 5000, true));
         onView(withText(R.string.dialog_delete_account_title)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_delete_account_message)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_delete_account_confirm)).check(matches(isDisplayed()));

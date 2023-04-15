@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import com.example.pajelingo.activities.account.LoginActivity;
 import com.example.pajelingo.daos.WordDao;
@@ -97,6 +98,16 @@ public class TestTools {
         }
 
         return null;
+    }
+
+    public static Word getDisplayedWord(TextView textView, List<Word> words) {
+        for (Word word: words){
+            if (word.getWordName().equals(textView.getText().toString())){
+                return word;
+            }
+        }
+
+        throw new NullPointerException("No word in the database matches the word shown.");
     }
 
     public static void authenticateUser(Context context, User user) throws IOException {

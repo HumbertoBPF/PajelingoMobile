@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
-import static com.example.pajelingo.utils.CustomViewActions.waitForView;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
@@ -68,8 +68,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_input)).perform(fillLabeledEditText(password), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText((R.string.login_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
+        onView(isRoot()).perform(waitUntil(withText((R.string.login_dialog_title)), 5000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
 
         assertFalse(isUserAuthenticated(context));
     }
@@ -84,8 +84,8 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_input)).perform(fillLabeledEditText(testUser.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 5000, true));
-        onView(isRoot()).perform(waitForView(withText(R.string.login_dialog_title), 30000, false));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 5000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
 
         assertTrue(isUserAuthenticated(context));
 

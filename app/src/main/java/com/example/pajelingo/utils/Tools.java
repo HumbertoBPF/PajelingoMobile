@@ -198,23 +198,29 @@ public class Tools{
     public static void handleGameAnswerFeedback(Context context, Call<GameAnswerFeedback> call) {
         call.enqueue(new Callback<GameAnswerFeedback>() {
             @Override
-            public void onResponse(retrofit2.Call<GameAnswerFeedback> call, Response<GameAnswerFeedback> response) {
+            public void onResponse(Call<GameAnswerFeedback> call, Response<GameAnswerFeedback> response) {
                 GameAnswerFeedback gameAnswerFeedback = response.body();
+                String currentGameScore = context.getString(R.string.current_game_score);
 
                 if ((response.isSuccessful()) && (gameAnswerFeedback != null)) {
-                    Toast.makeText(context, "Your current score is " + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, currentGameScore + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<GameAnswerFeedback> call, Throwable t) {
-                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<GameAnswerFeedback> call, Throwable t) {
+                Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * Displays a toast with an error message communicating an error when toggling the favorite status of a word.
+     * @param context application's context
+     * @param word word concerned by the operation
+     */
     public static void displayFavoriteWordError(Context context, Word word) {
         if (word.getFavorite()) {
             Toast.makeText(context, R.string.error_removing_word_from_favorites, Toast.LENGTH_SHORT).show();
