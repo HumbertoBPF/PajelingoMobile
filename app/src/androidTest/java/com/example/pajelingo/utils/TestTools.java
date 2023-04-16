@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.example.pajelingo.activities.account.LoginActivity;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Conjugation;
@@ -110,10 +109,7 @@ public class TestTools {
         throw new NullPointerException("No word in the database matches the word shown.");
     }
 
-    public static void authenticateUser(Context context, User user) throws IOException {
-        LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
-        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-
+    private static Token getUserToken(User user, LanguageSchoolAPI languageSchoolAPI) throws IOException {
         Call<Token> tokenCall = languageSchoolAPI.getToken(user);
         Response<Token> tokenResponse = tokenCall.execute();
 
@@ -127,6 +123,10 @@ public class TestTools {
             Assert.fail("Failed to get user token");
         }
 
+        return token;
+    }
+
+    private static User getUserData(Token token, LanguageSchoolAPI languageSchoolAPI) throws IOException {
         Call<User> userCall = languageSchoolAPI.login("Token " + token.getToken());
         Response<User> userResponse = userCall.execute();
 
@@ -134,14 +134,16 @@ public class TestTools {
             Assert.fail("Failed to create user.");
         }
 
-        User responseUser = userResponse.body();
+        User user = userResponse.body();
 
-        if (responseUser == null){
+        if (user == null){
             Assert.fail("No user object was returned.");
         }
 
-        saveToken(context, token);
+        return user;
+    }
 
+    private static List<Word> getWordsForAuthenticatedUser(Context context, LanguageSchoolAPI languageSchoolAPI) throws IOException {
         Call<List<Word>> wordsCall = languageSchoolAPI.getWords(getAuthToken(context));
         Response<List<Word>> wordsResponse = wordsCall.execute();
 
@@ -155,7 +157,21 @@ public class TestTools {
             Assert.fail("No word object was returned.");
         }
 
+        return words;
+    }
+
+    public static void authenticateUser(Context context, User user) throws IOException {
+        LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
+
+        Token token = getUserToken(user, languageSchoolAPI);
+        // It is necessary to save the user token here to be able to get the words of the authenticated user later
+        saveToken(context, token);
+
+        User userData = getUserData(token, languageSchoolAPI);
+        List<Word> words = getWordsForAuthenticatedUser(context, languageSchoolAPI);
+
+        WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         wordDao.save(words);
-        saveStateAndUserCredentials(context, user);
+        saveStateAndUserCredentials(context, userData);
     }
 }
