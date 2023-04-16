@@ -2,12 +2,16 @@ package com.example.pajelingo.tests.abstract_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.example.pajelingo.utils.CustomMatchers.isGameNameAtPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
+import static org.hamcrest.Matchers.allOf;
 
 import android.content.Context;
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -18,6 +22,7 @@ import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 
@@ -54,14 +59,21 @@ public abstract class UITests {
         onView(withId(R.id.action_login_logout)).check(matches(isDisplayed()));
 
         if (hasGames){
-            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Vocabulary Training", 0)));
-            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Guess the Article", 1)));
-            onView(withId(R.id.games_recycler_view)).check(matches(isGameNameAtPosition("Conjugation Game", 2)));
+            onView(withId(R.id.games_recycler_view))
+                    .check(matches(atPosition(hasDescendant(getGameMatcher("Vocabulary Training")), 0)));
+            onView(withId(R.id.games_recycler_view))
+                    .check(matches(atPosition(hasDescendant(getGameMatcher("Guess the Article")), 1)));
+            onView(withId(R.id.games_recycler_view))
+                    .check(matches(atPosition(hasDescendant(getGameMatcher("Conjugation Game")), 2)));
         }else{
             onView(withId(R.id.no_data_constraint_layout)).check(matches(isDisplayed()));
             onView(withId(R.id.no_data_image_view)).check(matches(isDisplayed()));
             onView(withId(R.id.no_data_text_view)).check(matches(isDisplayed()));
         }
+    }
+
+    private Matcher<View> getGameMatcher(String gameName) {
+        return allOf(withId(R.id.game_name_text_view), withText(gameName));
     }
 
     @After

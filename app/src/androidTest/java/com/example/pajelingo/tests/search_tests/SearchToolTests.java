@@ -9,15 +9,14 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.hasLength;
-import static com.example.pajelingo.utils.CustomMatchers.isMeaningAtPosition;
-import static com.example.pajelingo.utils.CustomMatchers.isWordAtPosition;
-import static com.example.pajelingo.utils.CustomMatchers.searchResultsMatchPattern;
 import static com.example.pajelingo.utils.CustomViewActions.clickChildViewWithId;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
@@ -25,9 +24,12 @@ import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalStrin
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -42,6 +44,7 @@ import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -92,9 +95,13 @@ public class SearchToolTests extends UITests {
         words = searchWords("", new Language(context.getString(R.string.all_languages_spinner_option)));
         assertEquals(words.get(randomPosition).getFavorite(), !wasFavorite);
 
+        Matcher<View> matcherTextView = allOf(withId(R.id.word_name_text_view), withText(word.getWordName()));
+        Matcher<View> matcherHeartIcon = allOf(withId(R.id.ic_heart), isDisplayed());
+
         onView(withId(R.id.search_recycler_view))
                 .perform(scrollToPosition(randomPosition))
-                .check(matches(isWordAtPosition(word, randomPosition, !wasFavorite)));
+                .check(matches(atPosition(hasDescendant(matcherTextView), randomPosition)))
+                .check(matches(atPosition(hasDescendant(matcherHeartIcon), randomPosition)));
     }
 
     @Test
@@ -168,13 +175,23 @@ public class SearchToolTests extends UITests {
         onView(withId(R.id.search_recycler_view))
                 .check(matches(isDisplayed()))
                 .check(matches(hasLength(words.size())));
-        onView(withId(R.id.search_recycler_view)).check(matches(searchResultsMatchPattern(searchPattern)));
 
         for (int i = 0;i < words.size();i++){
             Word word = words.get(i);
+
+            Matcher<View> matcherTextView = allOf(
+                    withId(R.id.word_name_text_view),
+                    withText(word.getWordName()),
+                    withText(containsStringIgnoringCase(searchPattern)));
+
+            Matcher<View> matcherHeartIcon = isAuthenticated?
+                    allOf(withId(R.id.ic_heart), isDisplayed()):
+                    allOf(withId(R.id.ic_heart), not(isDisplayed()));
+
             onView(withId(R.id.search_recycler_view))
                     .perform(scrollToPosition(i))
-                    .check(matches(isWordAtPosition(word, i, isAuthenticated)));
+                    .check(matches(atPosition(hasDescendant(matcherTextView), i)))
+                    .check(matches(atPosition(hasDescendant(matcherHeartIcon), i)));
         }
     }
 
@@ -205,9 +222,12 @@ public class SearchToolTests extends UITests {
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);
+
+            Matcher<View> meaningView = allOf(withId(R.id.meaning_text_view), withText(meaning.getMeaning()));
+
             onView(withId(R.id.meanings_recycler_view))
                     .perform(scrollToPosition(i))
-                    .check(matches(isMeaningAtPosition(meaning, i)));
+                    .check(matches(atPosition(hasDescendant(meaningView), i)));
         }
 
         if (isAuthenticated) {

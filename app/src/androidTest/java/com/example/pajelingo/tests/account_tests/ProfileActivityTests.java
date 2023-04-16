@@ -7,15 +7,16 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.CustomMatchers.hasLength;
-import static com.example.pajelingo.utils.CustomMatchers.isScoreAtPositionInProfile;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
-import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
+import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
@@ -24,21 +25,21 @@ import static org.junit.Assert.assertNull;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
-import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -193,7 +194,6 @@ public class ProfileActivityTests extends UITests {
      */
     private void assertScoreHistory(Language language) {
         ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
-        GameDao gameDao = AppDatabase.getInstance(context).getGameDao();
 
         List<Score> scores = scoreDao.getScoresByUserAndByLanguage(testUser.getUsername(),
                 Objects.requireNonNull(language).getLanguageName());
@@ -202,8 +202,16 @@ public class ProfileActivityTests extends UITests {
 
         for (int i = 0;i < scores.size();i++){
             Score score = scores.get(i);
-            Game game = gameDao.getGameByName(score.getGame());
-            onView(withId(R.id.score_recycler_view)).check(matches(isScoreAtPositionInProfile(score, game, i)));
+
+            String gameName = score.getGame();
+            String scoreValue = score.getScore().toString();
+
+            Matcher<View> gameMatcher = allOf(withId(R.id.game_text_view), withText(gameName));
+            Matcher<View> scoreMatcher = allOf(withId(R.id.score_text_view), withText(scoreValue));
+
+            onView(withId(R.id.score_recycler_view))
+                    .check(matches(atPosition(hasDescendant(gameMatcher) , i)))
+                    .check(matches(atPosition(hasDescendant(scoreMatcher), i)));
         }
     }
 }
