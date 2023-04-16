@@ -64,7 +64,7 @@ public abstract class ResourcesSynchro<E> {
         if (entities != null){
             Log.i("ResourcesSynchro","Number of elements of "+resourceName+" table: " + entities.size());
         }
-        dao.getSaveAsyncTask(entities, result -> nextStep()).execute();
+        dao.save(entities, result -> nextStep());
     }
 
     /**

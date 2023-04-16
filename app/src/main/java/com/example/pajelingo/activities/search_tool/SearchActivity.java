@@ -15,9 +15,9 @@ public class SearchActivity extends WordListActivity {
     @Override
     protected void getWords() {
         if (selectedLanguage.equals(getString(R.string.all_languages_spinner_option))){
-            wordDao.searchWordsTask("%" + pattern + "%", this).execute();
+            wordDao.searchWords("%" + pattern + "%", this);
         }else{
-            wordDao.searchWordsTask("%" + pattern + "%", selectedLanguage, this).execute();
+            wordDao.searchWords("%" + pattern + "%", selectedLanguage, this);
         }
     }
 }

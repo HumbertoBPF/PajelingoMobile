@@ -63,14 +63,14 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
         scoreDao = AppDatabase.getInstance(this).getScoreDao();
 
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             ArrayAdapter<Language> adapter = new ArrayAdapter<>(ProfileActivity.this,
                     android.R.layout.simple_spinner_item, result);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             languageSpinner.setAdapter(adapter);
             languageSpinner.setOnItemSelectedListener(ProfileActivity.this);
             applyLanguageFilter();
-        }).execute();
+        });
 
         deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
 
@@ -109,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity implements AdapterView.On
             String username = sp.getString(getString(R.string.username_sp), null);
             String selectedLanguage = languageSpinner.getSelectedItem().toString();
             scoreDao.getScoresByUserAndByLanguage(username, selectedLanguage,
-                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(result))).execute();
+                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(result)));
         }
     }
 

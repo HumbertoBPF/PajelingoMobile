@@ -15,9 +15,9 @@ public class FavoriteWordsActivity extends WordListActivity {
     @Override
     protected void getWords() {
         if (selectedLanguage.equals(getString(R.string.all_languages_spinner_option))){
-            wordDao.searchFavoriteWordsTask("%" + pattern + "%", this).execute();
+            wordDao.searchFavoriteWords("%" + pattern + "%", this);
         }else{
-            wordDao.searchFavoriteWordsTask("%" + pattern + "%", selectedLanguage, this).execute();
+            wordDao.searchFavoriteWords("%" + pattern + "%", selectedLanguage, this);
         }
     }
 }

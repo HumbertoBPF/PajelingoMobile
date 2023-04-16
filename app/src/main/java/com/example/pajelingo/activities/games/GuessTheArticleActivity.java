@@ -38,7 +38,7 @@ public class GuessTheArticleActivity extends GameActivity {
         Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             // Verify if there are at least one language
             if (result.isEmpty()){
                 finishActivityNotEnoughResources();
@@ -65,12 +65,12 @@ public class GuessTheArticleActivity extends GameActivity {
             playButton.setOnClickListener(v -> {
                 String languageChosenName = languageSpinner.getSelectedItem().toString();
                 playButton.setOnClickListener(null);
-                languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
+                languageDao.getLanguageByName(languageChosenName, result1 -> {
                     language = result1;
                     startGame();
-                }).execute();
+                });
             });
-        }).execute();
+        });
     }
 
     @Override
@@ -82,7 +82,7 @@ public class GuessTheArticleActivity extends GameActivity {
         Button checkButton = findViewById(R.id.check_button);
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), result -> {
+        wordDao.getNounsByLanguage(language.getLanguageName(), result -> {
             // Verify if there are at least one word
             if (result.isEmpty()){
                 finishActivityNotEnoughResources();
@@ -97,7 +97,7 @@ public class GuessTheArticleActivity extends GameActivity {
                 String userAnswer = answerInputEditText.getText().toString().trim();
                 verifyAnswer(userAnswer);
             });
-        }).execute();
+        });
     }
 
     @Override
@@ -110,7 +110,7 @@ public class GuessTheArticleActivity extends GameActivity {
 
         ArticleDao articleDao = AppDatabase.getInstance(this).getArticleDao();
         // Gets the article related to the word and verifies user's answer
-        articleDao.getRecordByIdTask(word.getIdArticle(), result -> {
+        articleDao.getRecordById(word.getIdArticle(), result -> {
             // Verify if an article is returned
             if (result == null){
                 finishActivityNotEnoughResources();
@@ -138,6 +138,6 @@ public class GuessTheArticleActivity extends GameActivity {
             feedbackTextView.setText(feedback);
             // If pressed, the user can play again
             newWordButton.setOnClickListener(v -> startGame());
-        }).execute();
+        });
     }
 }

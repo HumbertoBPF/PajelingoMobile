@@ -1,13 +1,14 @@
 package com.example.pajelingo.daos;
 
-import android.os.AsyncTask;
-
 import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.example.pajelingo.interfaces.OnResultListener;
+import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.utils.BackgroundTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -37,112 +38,55 @@ public abstract class WordDao extends BaseDao<Word>{
     @Query("SELECT * FROM Word WHERE (wordName LIKE :pattern) AND (language = :language) AND (isFavorite) ORDER BY LOWER(wordName)")
     public abstract List<Word> searchFavoriteWords(String pattern, String language);
 
-    public AsyncTask<Void, Void, List<Word>> getWordsByLanguageAsyncTask(String language,
-                                                                         OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return getWordsByLanguage(language);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void getWordsByLanguage(String language, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> getWordsByLanguage(language), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> getNounsByLanguageAsyncTask(String language,
-                                                                         OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return getNounsByLanguage(language);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void getNounsByLanguage(String language, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> getNounsByLanguage(language), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> getWordsByCategoryAndByLanguageTask(String category, String language,
-                                                                                 OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return getWordsByCategoryAndByLanguage(category, language);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void getWordsByCategoryAndByLanguage(String category, String language, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> getWordsByCategoryAndByLanguage(category, language), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchWordsTask(String pattern, OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return searchWords(pattern);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void searchWords(String pattern, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> searchWords(pattern), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchWordsTask(String pattern, String language, OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return searchWords(pattern, language);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void searchWords(String pattern, String language, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> searchWords(pattern, language), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchFavoriteWordsTask(String pattern, OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return searchFavoriteWords(pattern);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void searchFavoriteWords(String pattern, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> searchFavoriteWords(pattern), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void, Void, List<Word>> searchFavoriteWordsTask(String pattern, String language, OnResultListener<List<Word>> onResultListener){
-        return new AsyncTask<Void, Void, List<Word>>() {
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                return searchFavoriteWords(pattern, language);
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words);
-                onResultListener.onResult(words);
-            }
-        };
+    public void searchFavoriteWords(String pattern, String language, OnResultListener<List<Word>> onResultListener){
+        BackgroundTask<List<Word>> backgroundTask = new BackgroundTask<>(() -> searchFavoriteWords(pattern, language), onResultListener);
+        backgroundTask.execute();
     }
 
+    public void getSynonyms(Word word, Language language, OnResultListener<List<String>> onResultListener) {
+        BackgroundTask<List<String>> backgroundTask = new BackgroundTask<>(() -> {
+            List<String> synonyms = new ArrayList<>();
+
+            for (Long synonymId : word.getIdsSynonyms()){
+                Word synonym = getRecordById(synonymId);
+                // Return only the synonyms whose language matches with the specified one
+                if (synonym.getLanguage().equals(language.getLanguageName())){
+                    synonyms.add(synonym.getWordName());
+                }
+            }
+
+            return synonyms;
+        }, onResultListener);
+        backgroundTask.execute();
+    }
 }

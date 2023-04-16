@@ -117,7 +117,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 context.startActivity(intent);
             });
             // Setting the language flag from internal memory
-            languageDao.getLanguageByNameAsyncTask(word.getLanguage(), result -> {
+            languageDao.getLanguageByName(word.getLanguage(), result -> {
                 String path = context.getFilesDir()+result.getFlagImageUri();
                 File languageImageFile = new File(path);
                 if(languageImageFile.exists()){
@@ -126,7 +126,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 }else{
                     languageImageView.setImageBitmap(null);
                 }
-            }).execute();
+            });
         }
     }
 }

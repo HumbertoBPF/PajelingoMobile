@@ -1,12 +1,11 @@
 package com.example.pajelingo.daos;
 
-import android.os.AsyncTask;
-
 import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Meaning;
+import com.example.pajelingo.utils.BackgroundTask;
 
 import java.util.List;
 
@@ -19,18 +18,8 @@ public abstract class MeaningDao extends BaseDao<Meaning>{
     @Query("SELECT * FROM meaning WHERE idWord=:idWord")
     public abstract List<Meaning> getMeaningsOfWord(long idWord);
 
-    public AsyncTask<Void, Void, List<Meaning>> getMeaningOfWordTask(long idWord, OnResultListener<List<Meaning>> onResultListener) {
-        return new AsyncTask<Void, Void, List<Meaning>>() {
-            @Override
-            protected List<Meaning> doInBackground(Void... voids) {
-                return getMeaningsOfWord(idWord);
-            }
-
-            @Override
-            protected void onPostExecute(List<Meaning> meanings) {
-                super.onPostExecute(meanings);
-                onResultListener.onResult(meanings);
-            }
-        };
+    public void getMeaningOfWord(long idWord, OnResultListener<List<Meaning>> onResultListener) {
+        BackgroundTask<List<Meaning>> backgroundTask = new BackgroundTask<>(() -> getMeaningsOfWord(idWord), onResultListener);
+        backgroundTask.execute();
     }
 }

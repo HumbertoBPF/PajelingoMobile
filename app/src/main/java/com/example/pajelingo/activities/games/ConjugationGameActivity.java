@@ -42,7 +42,7 @@ public class ConjugationGameActivity extends GameActivity {
         Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Fill the spinner with all languages available
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             // Verify if there are at least one language
             if (result.isEmpty()){
                 finishActivityNotEnoughResources();
@@ -58,12 +58,12 @@ public class ConjugationGameActivity extends GameActivity {
             playButton.setOnClickListener(v -> {
                 String languageChosenName = languageSpinner.getSelectedItem().toString();
                 playButton.setOnClickListener(null);
-                languageDao.getLanguageByNameAsyncTask(languageChosenName, result1 -> {
+                languageDao.getLanguageByName(languageChosenName, result1 -> {
                     language = result1;
                     startGame();
-                }).execute();
+                });
             });
-        }).execute();
+        });
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ConjugationGameActivity extends GameActivity {
 
         // We want to get only the words that are verbs
         WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
-        wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), result -> {
+        wordDao.getWordsByCategoryAndByLanguage("verbs", language.getLanguageName(), result -> {
             // Verify if at least one word is returned
             if (result.isEmpty()){
                 finishActivityNotEnoughResources();
@@ -99,7 +99,7 @@ public class ConjugationGameActivity extends GameActivity {
             // Pick a word that is in the category "verb" and whose language corresponds to the selected language
             Word word = getRandomItemFromList(result);
             ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
-            conjugationDao.getConjugationsFromVerbTask(word.getId(), result1 -> {
+            conjugationDao.getConjugationsFromVerb(word.getId(), result1 -> {
                 // Verify if there are at least one conjugation is returned
                 if (result1.isEmpty()){
                     finishActivityNotEnoughResources();
@@ -120,8 +120,8 @@ public class ConjugationGameActivity extends GameActivity {
                     answers.add(conjugation6.getEditText().getText().toString().trim());
                     verifyAnswer(answers);
                 });
-            }).execute();
-        }).execute();
+            });
+        });
 
     }
 

@@ -1,12 +1,11 @@
 package com.example.pajelingo.daos;
 
-import android.os.AsyncTask;
-
 import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Game;
+import com.example.pajelingo.utils.BackgroundTask;
 
 import java.util.List;
 
@@ -22,34 +21,8 @@ public abstract class GameDao extends BaseDao<Game>{
     @Query("SELECT * FROM Game WHERE gameName = :gameName LIMIT 1")
     public abstract Game getGameByName(String gameName);
 
-    public AsyncTask<Void, Void, List<Game>> getEnabledGamesTask(OnResultListener<List<Game>> onResultListener){
-        return new AsyncTask<Void, Void, List<Game>>() {
-            @Override
-            protected List<Game> doInBackground(Void... voids) {
-                return getEnabledGames();
-            }
-
-            @Override
-            protected void onPostExecute(List<Game> games) {
-                super.onPostExecute(games);
-                onResultListener.onResult(games);
-            }
-        };
-    }
-
-    public AsyncTask<Void, Void, Game> getGameByNameTask(String gameName,
-                                                                      OnResultListener<Game> onResultListener){
-        return new AsyncTask<Void, Void, Game>() {
-            @Override
-            protected Game doInBackground(Void... voids) {
-                return getGameByName(gameName);
-            }
-
-            @Override
-            protected void onPostExecute(Game game) {
-                super.onPostExecute(game);
-                onResultListener.onResult(game);
-            }
-        };
+    public void getEnabledGames(OnResultListener<List<Game>> onResultListener){
+        BackgroundTask<List<Game>> backgroundTask = new BackgroundTask<>(this::getEnabledGames, onResultListener);
+        backgroundTask.execute();
     }
 }

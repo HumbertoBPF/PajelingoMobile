@@ -54,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadGames(){
-        gameDao.getEnabledGamesTask(result -> {
+        gameDao.getEnabledGames(result -> {
             if (result.isEmpty()){
                 noDataWarning.setVisibility(View.VISIBLE);
             }else{
                 noDataWarning.setVisibility(View.GONE);
             }
             gamesRecyclerView.setAdapter(new GameAdapter(MainActivity.this, result));
-        }).execute();
+        });
     }
 
     @Override

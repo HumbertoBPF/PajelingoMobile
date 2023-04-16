@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.async_tasks.SynonymsByLanguageTask;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.GameAnswerFeedback;
@@ -32,9 +31,13 @@ public class VocabularyTrainingActivity extends GameActivity {
     private Language targetLanguage;
     private Word wordToTranslate;
 
+    private WordDao wordDao;
+
     @Override
     protected void setup() {
         setContentView(R.layout.activity_dual_language_choice);
+
+        wordDao = AppDatabase.getInstance(this).getWordDao();
 
         LabeledSpinner baseLanguageInput = findViewById(R.id.base_language_input);
         LabeledSpinner targetLanguageInput = findViewById(R.id.target_language_input);
@@ -42,7 +45,7 @@ public class VocabularyTrainingActivity extends GameActivity {
         Spinner targetLanguageSpinner = targetLanguageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
         // Create an ArrayAdapter using the string array and a default baseLanguageSpinner layout
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             // Verifying if there are at least two languages
             if (result.size() < 2){
                 finishActivityNotEnoughResources();
@@ -66,16 +69,16 @@ public class VocabularyTrainingActivity extends GameActivity {
                 }else{
                     playButton.setOnClickListener(null);
                     // Set base and target languages attributes according to the user's choices and start game
-                    languageDao.getLanguageByNameAsyncTask(baseLanguageName, result1 -> {
+                    languageDao.getLanguageByName(baseLanguageName, result1 -> {
                         baseLanguage = result1;
-                        languageDao.getLanguageByNameAsyncTask(targetLanguageName, result2 -> {
+                        languageDao.getLanguageByName(targetLanguageName, result2 -> {
                             targetLanguage = result2;
                             startGame();
-                        }).execute();
-                    }).execute();
+                        });
+                    });
                 }
             });
-        }).execute();
+        });
     }
 
     @Override
@@ -89,7 +92,7 @@ public class VocabularyTrainingActivity extends GameActivity {
         answerInputEditText.setHint(getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName());
 
         WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), result -> {
+        wordDao.getWordsByLanguage(targetLanguage.getLanguageName(), result -> {
             // Verify if there is at least one element in the list
             if (result.isEmpty()){
                 finishActivityNotEnoughResources();
@@ -103,7 +106,7 @@ public class VocabularyTrainingActivity extends GameActivity {
                 String userAnswer = answerInputEditText.getText().toString().trim();
                 verifyAnswer(userAnswer);
             });
-        }).execute();
+        });
     }
 
     @Override
@@ -114,7 +117,7 @@ public class VocabularyTrainingActivity extends GameActivity {
         CardView feedbackCardView = findViewById(R.id.feedback_rounded_background);
         Button newWordButton = findViewById(R.id.new_word_button);
 
-        new SynonymsByLanguageTask(this, wordToTranslate, baseLanguage, synonyms -> {
+        wordDao.getSynonyms(wordToTranslate, baseLanguage, synonyms -> {
             String userTranslation = (String) answer;
             int numberOfSynonyms = synonyms.size();
             boolean isAnswerCorrect = false;
@@ -141,7 +144,7 @@ public class VocabularyTrainingActivity extends GameActivity {
                     VocabularyGameAnswer vocabularyGameAnswer = new VocabularyGameAnswer(wordToTranslate.getId(),
                             baseLanguage.getLanguageName(), userTranslation);
                     Call<GameAnswerFeedback> call =
-                            this.languageSchoolAPI.submitVocabularyGameAnswer(getAuthToken(VocabularyTrainingActivity.this), vocabularyGameAnswer);
+                            languageSchoolAPI.submitVocabularyGameAnswer(getAuthToken(VocabularyTrainingActivity.this), vocabularyGameAnswer);
                     handleGameAnswerFeedback(VocabularyTrainingActivity.this, call);
                 }
 
@@ -155,6 +158,6 @@ public class VocabularyTrainingActivity extends GameActivity {
             feedbackTextView.setText(feedback);
             // If pressed, the user can play again
             newWordButton.setOnClickListener(v -> startGame());
-        }).execute();
+        });
     }
 }

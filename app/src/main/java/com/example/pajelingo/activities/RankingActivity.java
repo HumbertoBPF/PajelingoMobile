@@ -36,14 +36,14 @@ public class RankingActivity extends AppCompatActivity implements AdapterView.On
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
         scoreDao = AppDatabase.getInstance(this).getScoreDao();
 
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             ArrayAdapter<Language> adapter = new ArrayAdapter<>(RankingActivity.this,
                     android.R.layout.simple_spinner_item, result);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             languageSpinner.setAdapter(adapter);
             languageSpinner.setOnItemSelectedListener(RankingActivity.this);
             applyFilter();
-        }).execute();
+        });
     }
 
     private void applyFilter() {
@@ -52,7 +52,7 @@ public class RankingActivity extends AppCompatActivity implements AdapterView.On
         if (selectedItem != null){
             String selectedLanguage = languageSpinner.getSelectedItem().toString();
             scoreDao.getTotalScoresByLanguage(selectedLanguage,
-                    result -> rankingRecyclerView.setAdapter(new RankingAdapter(result))).execute();
+                    result -> rankingRecyclerView.setAdapter(new RankingAdapter(result)));
         }
     }
 

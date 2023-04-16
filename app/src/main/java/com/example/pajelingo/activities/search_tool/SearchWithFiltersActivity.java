@@ -53,7 +53,7 @@ public class SearchWithFiltersActivity extends AppCompatActivity implements Adap
             searchEditText.setText(pattern);
         }
 
-        languageDao.getAllRecordsTask(result -> {
+        languageDao.getAllRecords(result -> {
             result.add(new Language(getString(R.string.all_languages_spinner_option)));
             ArrayAdapter<Language> adapter = new ArrayAdapter<>(SearchWithFiltersActivity.this,
                     android.R.layout.simple_spinner_item, result);
@@ -62,7 +62,7 @@ public class SearchWithFiltersActivity extends AppCompatActivity implements Adap
             languageSpinner.setOnItemSelectedListener(SearchWithFiltersActivity.this);
             int position = getLanguageItemPosition(result);
             languageSpinner.setSelection(position);
-        }).execute();
+        });
 
         searchButton.setOnClickListener(v -> {
             Intent resultIntent = new Intent(SearchWithFiltersActivity.this, SearchActivity.class);

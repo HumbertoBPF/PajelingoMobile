@@ -123,14 +123,14 @@ public class CustomViewActions {
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
                 ArticleDao articleDao = AppDatabase.getInstance(context).getArticleDao();
 
-                wordDao.getNounsByLanguageAsyncTask(language.getLanguageName(), words -> {
+                wordDao.getNounsByLanguage(language.getLanguageName(), words -> {
                     Word displayedWord = getDisplayedWord(this.wordTextView, words);
 
-                    articleDao.getAllRecordsTask(articles -> {
+                    articleDao.getAllRecords(articles -> {
                         Article article = getArticleOfWord(displayedWord, articles);
                         answerEditText.setText(article.getArticleName());
-                    }).execute();
-                }).execute();
+                    });
+                });
             }
 
             private Article getArticleOfWord(Word displayedWord, List<Article> articles) {
@@ -182,14 +182,14 @@ public class CustomViewActions {
             private void setCorrectAnswer(){
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
 
-                wordDao.getWordsByLanguageAsyncTask(targetLanguage.getLanguageName(), targetLanguageWords -> {
+                wordDao.getWordsByLanguage(targetLanguage.getLanguageName(), targetLanguageWords -> {
                     Word displayedWord = getDisplayedWord(this.wordTextView, targetLanguageWords);
 
-                    wordDao.getWordsByLanguageAsyncTask(baseLanguage.getLanguageName(), baseLanguageWords -> {
+                    wordDao.getWordsByLanguage(baseLanguage.getLanguageName(), baseLanguageWords -> {
                         Word word = getSynonym(displayedWord, baseLanguageWords);
                         answerEditText.setText(word.getWordName());
-                    }).execute();
-                }).execute();
+                    });
+                });
             }
 
             private Word getSynonym(Word displayedWord, List<Word> baseLanguageWords) {
@@ -235,9 +235,9 @@ public class CustomViewActions {
                 String tense = verbAndTenseInTextView.split(" - ")[1];
 
                 WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
-                wordDao.getWordsByCategoryAndByLanguageTask("verbs", language.getLanguageName(), verbsInLanguage -> {
+                wordDao.getWordsByCategoryAndByLanguage("verbs", language.getLanguageName(), verbsInLanguage -> {
                     ConjugationDao conjugationDao = AppDatabase.getInstance(context).getConjugationDao();
-                    conjugationDao.getAllRecordsTask(conjugations -> {
+                    conjugationDao.getAllRecords(conjugations -> {
                         Conjugation correctAnswer = TestTools.findConjugationOfVerb(verb, tense, verbsInLanguage, conjugations);
 
                         if (correctAnswer == null){
@@ -250,8 +250,8 @@ public class CustomViewActions {
                         setAnswer(view, R.id.conjugation_4, correctAnswer.getConjugation4(), isCorrect);
                         setAnswer(view, R.id.conjugation_5, correctAnswer.getConjugation5(), isCorrect);
                         setAnswer(view, R.id.conjugation_6, correctAnswer.getConjugation6(), isCorrect);
-                    }).execute();
-                }).execute();
+                    });
+                });
             }
 
             private void setAnswer(View parentView, int inputId, String correctAnswer, boolean isCorrect) {

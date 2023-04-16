@@ -61,8 +61,8 @@ public class MeaningActivity extends AppCompatActivity {
         setTitle(word.getWordName());
 
         MeaningDao meaningDao = AppDatabase.getInstance(MeaningActivity.this).getMeaningDao();
-        meaningDao.getMeaningOfWordTask(word.getId(),
-                result -> meaningsRecyclerView.setAdapter(new MeaningAdapter(result))).execute();
+        meaningDao.getMeaningOfWord(word.getId(),
+                result -> meaningsRecyclerView.setAdapter(new MeaningAdapter(result)));
 
         setWordImage();
         setFavoriteWordButtonLayout();
@@ -101,10 +101,10 @@ public class MeaningActivity extends AppCompatActivity {
                 if ((response.isSuccessful()) && (returnedWord != null)) {
                     List<Word> wordList = new ArrayList<>();
                     wordList.add(returnedWord);
-                    wordDao.getSaveAsyncTask(wordList, result -> {
+                    wordDao.save(wordList, result -> {
                         word = returnedWord;
                         setFavoriteWordButtonLayout();
-                    }).execute();
+                    });
                 }else {
                     displayFavoriteWordError(MeaningActivity.this, word);
                 }

@@ -117,9 +117,9 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
                         if ((response.isSuccessful()) && (returnedWord != null)) {
                             List<Word> wordList = new ArrayList<>();
                             wordList.add(returnedWord);
-                            wordDao.getSaveAsyncTask(wordList, result -> {
+                            wordDao.save(wordList, result -> {
                                 adapter.setWordAtPosition(returnedWord, position);
-                            }).execute();
+                            });
                         }else {
                             displayFavoriteWordError(WordListActivity.this, word);
                         }

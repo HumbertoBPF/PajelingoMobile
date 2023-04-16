@@ -2,8 +2,6 @@ package com.example.pajelingo.daos;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
-import android.os.AsyncTask;
-
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.RawQuery;
@@ -11,6 +9,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.example.pajelingo.interfaces.OnResultListener;
+import com.example.pajelingo.utils.BackgroundTask;
 
 import java.util.List;
 
@@ -37,40 +36,20 @@ public abstract class BaseDao<E> {
         return getAllRecords(new SimpleSQLiteQuery("SELECT * FROM "+tableName));
     }
 
-    public AsyncTask<Void, Void, List<E>> getAllRecordsTask(OnResultListener<List<E>> onResultListener){
-        return new AsyncTask<Void, Void, List<E>>() {
-            @Override
-            protected List<E> doInBackground(Void... voids) {
-                return getAllRecords();
-            }
-
-            @Override
-            protected void onPostExecute(List<E> result) {
-                super.onPostExecute(result);
-                onResultListener.onResult(result);
-            }
-        };
+    public void getAllRecords(OnResultListener<List<E>> onResultListener){
+        BackgroundTask<List<E>> backgroundTask = new BackgroundTask<>(this::getAllRecords, onResultListener);
+        backgroundTask.execute();
     }
 
     @Insert(onConflict = REPLACE)
     public abstract void save(List<E> entity);
 
-    public AsyncTask<Void, Void, List<E>> getSaveAsyncTask(List<E> entities, OnResultListener<List<E>> onResultListener){
-        return new AsyncTask<Void, Void, List<E>>() {
-            @Override
-            protected List<E> doInBackground(Void... voids) {
-                save(entities);
-                return entities;
-            }
-
-            @Override
-            protected void onPostExecute(List<E> list) {
-                super.onPostExecute(list);
-                if (onResultListener != null){
-                    onResultListener.onResult(list);
-                }
-            }
-        };
+    public void save(List<E> entities, OnResultListener<List<E>> onResultListener){
+        BackgroundTask<List<E>> backgroundTask = new BackgroundTask<>(() -> {
+            save(entities);
+            return entities;
+        }, onResultListener);
+        backgroundTask.execute();
     }
 
     @RawQuery
@@ -84,20 +63,9 @@ public abstract class BaseDao<E> {
         return getRecordById(new SimpleSQLiteQuery("SELECT * FROM "+tableName+" WHERE id = "+id));
     }
 
-    public AsyncTask<Void, Void, E> getRecordByIdTask(long id, OnResultListener<E> onResultListener){
-        return new AsyncTask<Void, Void, E>(){
-
-            @Override
-            protected E doInBackground(Void... voids) {
-                return getRecordById(id);
-            }
-
-            @Override
-            protected void onPostExecute(E e) {
-                super.onPostExecute(e);
-                onResultListener.onResult(e);
-            }
-        };
+    public void getRecordById(long id, OnResultListener<E> onResultListener){
+        BackgroundTask<E> backgroundTask = new BackgroundTask<>(() -> getRecordById(id), onResultListener);
+        backgroundTask.execute();
     }
 
 }

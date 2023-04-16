@@ -203,7 +203,7 @@ public class Tools{
                 String currentGameScore = context.getString(R.string.current_game_score);
 
                 if ((response.isSuccessful()) && (gameAnswerFeedback != null)) {
-                    Toast.makeText(context, currentGameScore + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, currentGameScore + " " + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
                 }

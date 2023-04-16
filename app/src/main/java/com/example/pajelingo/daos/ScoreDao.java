@@ -1,12 +1,11 @@
 package com.example.pajelingo.daos;
 
-import android.os.AsyncTask;
-
 import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.example.pajelingo.interfaces.OnResultListener;
 import com.example.pajelingo.models.Score;
+import com.example.pajelingo.utils.BackgroundTask;
 
 import java.util.List;
 
@@ -22,35 +21,13 @@ public abstract class ScoreDao extends BaseDao<Score> {
     @Query("SELECT id, user, language, game, score AS score FROM Score WHERE (language=:languageName) AND (user=:username) ORDER BY game ASC;")
     public abstract List<Score> getScoresByUserAndByLanguage(String username, String languageName);
 
-    public AsyncTask<Void,Void,List<Score>> getTotalScoresByLanguage(String languageName,
-                                                                     OnResultListener<List<Score>> onResultListener){
-        return new AsyncTask<Void, Void, List<Score>>() {
-            @Override
-            protected List<Score> doInBackground(Void... voids) {
-                return getTotalScoresByLanguage(languageName);
-            }
-
-            @Override
-            protected void onPostExecute(List<Score> scores) {
-                super.onPostExecute(scores);
-                onResultListener.onResult(scores);
-            }
-        };
+    public void getTotalScoresByLanguage(String languageName, OnResultListener<List<Score>> onResultListener){
+        BackgroundTask<List<Score>> backgroundTask = new BackgroundTask<>(() -> getTotalScoresByLanguage(languageName), onResultListener);
+        backgroundTask.execute();
     }
 
-    public AsyncTask<Void,Void,List<Score>> getScoresByUserAndByLanguage(String username, String languageName,
-                                                                         OnResultListener<List<Score>> onResultListener){
-        return new AsyncTask<Void, Void, List<Score>>() {
-            @Override
-            protected List<Score> doInBackground(Void... voids) {
-                return getScoresByUserAndByLanguage(username, languageName);
-            }
-
-            @Override
-            protected void onPostExecute(List<Score> scores) {
-                super.onPostExecute(scores);
-                onResultListener.onResult(scores);
-            }
-        };
+    public void getScoresByUserAndByLanguage(String username, String languageName, OnResultListener<List<Score>> onResultListener){
+        BackgroundTask<List<Score>> backgroundTask = new BackgroundTask<>(() -> getScoresByUserAndByLanguage(username, languageName), onResultListener);
+        backgroundTask.execute();
     }
 }
