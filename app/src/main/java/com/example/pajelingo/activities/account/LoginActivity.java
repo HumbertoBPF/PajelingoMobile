@@ -7,7 +7,6 @@ import static com.example.pajelingo.utils.Tools.saveToken;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +25,6 @@ import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 import com.example.pajelingo.ui.LabeledEditText;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,9 +42,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private WordDao wordDao;
 
-    private ExecutorService executor;
-    private Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         setTitle(R.string.login_activity_title);
 
         wordDao = AppDatabase.getInstance(this).getWordDao();
-
-        executor = Executors.newSingleThreadExecutor();
-        handler = new Handler(Looper.getMainLooper());
 
         signupLinkTextView = findViewById(R.id.signup_link_text_view);
         resetPasswordLinkTextView = findViewById(R.id.reset_password_link_text_view);
