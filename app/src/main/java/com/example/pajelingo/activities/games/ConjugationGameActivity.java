@@ -38,9 +38,12 @@ public class ConjugationGameActivity extends GameActivity {
     protected void setup() {
         setContentView(R.layout.activity_single_language_choice);
 
+        TextView instructionsTextView = findViewById(R.id.instructions_text_view);
         LabeledSpinner languageInput = findViewById(R.id.language_input);
         Spinner languageSpinner = languageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
+
+        instructionsTextView.setText(game.getInstructions());
         // Fill the spinner with all languages available
         languageDao.getAllRecords(result -> {
             // Verify if there are at least one language

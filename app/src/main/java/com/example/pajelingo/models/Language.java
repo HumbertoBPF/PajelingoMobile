@@ -33,10 +33,6 @@ public class Language {
     @SerializedName(value = "flag_image_uri")
     private String flagImageUri;
 
-    public Language(){
-
-    }
-
     public Language(String languageName) {
         this.languageName = languageName;
     }

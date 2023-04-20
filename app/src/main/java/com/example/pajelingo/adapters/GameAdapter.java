@@ -1,10 +1,13 @@
 package com.example.pajelingo.adapters;
 
+import static com.example.pajelingo.utils.Tools.setImageResourceFromFile;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,14 +46,18 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     }
 
     class GameViewHolder extends RecyclerView.ViewHolder{
+        private final ImageView gameImageView;
         private final TextView gameNameTextView;
 
         public GameViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.gameImageView = itemView.findViewById(R.id.game_image_view);
             this.gameNameTextView = itemView.findViewById(R.id.game_name_text_view);
         }
 
         public void bind(Context context, Game game){
+            String path = context.getFilesDir()+game.getImageUri();
+            setImageResourceFromFile(gameImageView, path);
             this.gameNameTextView.setText(game.getGameName());
             itemView.setOnClickListener(v -> {
                 try {

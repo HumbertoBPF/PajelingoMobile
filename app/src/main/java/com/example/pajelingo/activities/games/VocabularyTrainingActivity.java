@@ -39,11 +39,14 @@ public class VocabularyTrainingActivity extends GameActivity {
 
         wordDao = AppDatabase.getInstance(this).getWordDao();
 
+        TextView instructionsTextView = findViewById(R.id.instructions_text_view);
         LabeledSpinner baseLanguageInput = findViewById(R.id.base_language_input);
         LabeledSpinner targetLanguageInput = findViewById(R.id.target_language_input);
         Spinner baseLanguageSpinner = baseLanguageInput.getSpinner();
         Spinner targetLanguageSpinner = targetLanguageInput.getSpinner();
         Button playButton = findViewById(R.id.play_button);
+
+        instructionsTextView.setText(game.getInstructions());
         // Create an ArrayAdapter using the string array and a default baseLanguageSpinner layout
         languageDao.getAllRecords(result -> {
             // Verifying if there are at least two languages

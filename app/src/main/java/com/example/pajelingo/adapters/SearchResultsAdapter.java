@@ -1,11 +1,10 @@
 package com.example.pajelingo.adapters;
 
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Tools.setImageResourceFromFile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnFavoriteItem;
 import com.example.pajelingo.models.Word;
 
-import java.io.File;
 import java.util.List;
 
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultsViewHolder> {
@@ -119,13 +117,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             // Setting the language flag from internal memory
             languageDao.getLanguageByName(word.getLanguage(), result -> {
                 String path = context.getFilesDir()+result.getFlagImageUri();
-                File languageImageFile = new File(path);
-                if(languageImageFile.exists()){
-                    Bitmap image = BitmapFactory.decodeFile(languageImageFile.getAbsolutePath());
-                    languageImageView.setImageBitmap(image);
-                }else{
-                    languageImageView.setImageBitmap(null);
-                }
+                setImageResourceFromFile(languageImageView, path);
             });
         }
     }

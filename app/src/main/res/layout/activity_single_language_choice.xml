@@ -6,17 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".activities.games.VocabularyTrainingActivity">
 
-    <com.example.pajelingo.ui.LabeledSpinner
-        android:id="@+id/language_input"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/play_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:spinnerLabel="@string/choose_language_label"
-        android:layout_marginHorizontal="8dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/instructions_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Hello word"
+                android:textSize="16sp"/>
+
+            <com.example.pajelingo.ui.LabeledSpinner
+                android:id="@+id/language_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/instructions_text_view"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:spinnerLabel="@string/choose_language_label"
+                android:layout_marginBottom="8dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/play_button"

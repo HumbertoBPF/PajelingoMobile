@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,6 +21,8 @@ import com.example.pajelingo.models.Word;
 import com.example.pajelingo.synchronization.ArticleSynchro;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -226,6 +229,39 @@ public class Tools{
             Toast.makeText(context, R.string.error_removing_word_from_favorites, Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(context, R.string.error_adding_word_to_favorites, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void saveImage(Context context, String base64String, String path) throws IOException {
+        String[] subPaths = path.split("/");
+
+        int nbPaths = subPaths.length;
+        File parentFile = context.getFilesDir();
+
+        for (int i = 0;i < nbPaths-1;i++){
+            String subDirectory = subPaths[i];
+            File file = new File(parentFile, subDirectory);
+            file.mkdir();
+            parentFile = file;
+        }
+
+        String filename = subPaths[nbPaths - 1];
+
+        File imageFile = new File(parentFile,filename);
+
+        FileOutputStream fos = new FileOutputStream(imageFile);
+        // Use the compress method on the BitMap object to write image to the OutputStream
+        getPictureFromBase64String(base64String).compress(Bitmap.CompressFormat.PNG, 100, fos);
+        fos.close();
+    }
+
+    public static void setImageResourceFromFile(ImageView imageView, String path) {
+        File languageImageFile = new File(path);
+        if(languageImageFile.exists()){
+            Bitmap image = BitmapFactory.decodeFile(languageImageFile.getAbsolutePath());
+            imageView.setImageBitmap(image);
+        }else{
+            imageView.setImageBitmap(null);
         }
     }
 }

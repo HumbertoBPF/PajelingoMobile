@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         gameDao = AppDatabase.getInstance(this).getGameDao();
 
-        loadGames();
-
         searchButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SearchActivity.class)));
     }
 
@@ -134,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadGames();
         // Greet user if it is logged in
         if (isUserAuthenticated(this)){
             greetingTextView.setVisibility(View.VISIBLE);
