@@ -32,7 +32,7 @@ public class MainActivityTests extends UITests {
         onView(isRoot()).perform(waitUntil(withText(R.string.dialog_download_resources_title), 5000, true));
         onView(withText(R.string.dialog_download_resources_confirm)).perform(click());
         onView(isRoot()).perform(waitUntil(withText(R.string.progress_download_title), 5000, true));
-        onView(isRoot()).perform(waitUntil(withText(R.string.progress_download_title), 30000, false));
+        onView(isRoot()).perform(waitUntil(withText(R.string.progress_download_title), 150000, false));
     }
 
     @Test

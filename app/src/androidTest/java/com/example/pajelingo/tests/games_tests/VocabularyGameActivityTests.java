@@ -269,6 +269,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         String textPlayButton = context.getString(R.string.play_button_text);
 
         onView(withId(R.id.base_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelBaseLanguageSpinner)));
+        onView(withId(R.id.instructions_text_view)).check(matches(withText(game.getInstructions())));
         onView(withId(R.id.target_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelTargetLanguageSpinner)));
         onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches(isDisplayed()));
     }

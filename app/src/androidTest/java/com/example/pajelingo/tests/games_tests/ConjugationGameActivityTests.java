@@ -58,6 +58,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
+        onView(withId(R.id.instructions_text_view)).check(matches(withText(game.getInstructions())));
         onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
         onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches((isDisplayed())));
     }
