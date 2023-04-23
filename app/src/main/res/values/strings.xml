@@ -155,4 +155,5 @@
     <string name="search_with_filters">Filter</string>
     <string name="error_game_score">Something went wrong</string>
     <string name="current_game_score">Your current score is</string>
+    <string name="loading_game_text">Please wait\n(Log out to get rid of loadings,\nbut keep in mind that you will not receive a score when logged out)</string>
 </resources>

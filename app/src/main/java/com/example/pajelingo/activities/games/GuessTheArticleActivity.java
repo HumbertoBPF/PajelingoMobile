@@ -5,6 +5,7 @@ import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +16,18 @@ import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ArticleDao;
-import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.ArticleGameAnswer;
 import com.example.pajelingo.models.GameAnswerFeedback;
+import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.ui.LabeledSpinner;
+import com.example.pajelingo.ui.LoadingSpinner;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GuessTheArticleActivity extends GameActivity {
 
@@ -80,27 +84,88 @@ public class GuessTheArticleActivity extends GameActivity {
     protected void startGame() {
         setContentView(R.layout.activity_guess_the_article);
 
-        EditText answerInputEditText = findViewById(R.id.answer_input);
-        TextView wordTextView = findViewById(R.id.word_text_view);
-        Button checkButton = findViewById(R.id.check_button);
+        setLoadingLayout();
 
-        WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getNounsByLanguage(language.getLanguageName(), result -> {
+        if (isUserAuthenticated(this)) {
+            getWordFromAPI();
+        }else {
+            getWordFromLocalDatabase();
+        }
+    }
+
+    private void getWordFromAPI() {
+        Call<GameRoundWord> call =
+                this.languageSchoolAPI.getWordForArticleGame(getAuthToken(this), language.getLanguageName());
+        call.enqueue(new Callback<GameRoundWord>() {
+            @Override
+            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+                GameRoundWord gameRoundWord = response.body();
+
+                if ((response.isSuccessful()) && (gameRoundWord != null)) {
+                    wordDao.getRecordById(gameRoundWord.getId(), word -> {
+                        if (word == null) {
+                            getWordFromLocalDatabase();
+                            return;
+                        }
+
+                        fillGameLayout(word);
+                    });
+                }else {
+                    getWordFromLocalDatabase();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+                getWordFromLocalDatabase();
+            }
+        });
+    }
+
+    protected void getWordFromLocalDatabase() {
+        wordDao.getNounsByLanguage(language.getLanguageName(), words -> {
             // Verify if there are at least one word
-            if (result.isEmpty()){
+            if (words.isEmpty()){
                 finishActivityNotEnoughResources();
                 return;
             }
-            word = getRandomItemFromList(result);
-            wordTextView.setText(word.getWordName());
 
-            checkButton.setOnClickListener(v -> {
-                checkButton.setOnClickListener(null);
-                // Trim the answer since the user may accidentally insert a space before of after the article
-                String userAnswer = answerInputEditText.getText().toString().trim();
-                verifyAnswer(userAnswer);
-            });
+            fillGameLayout(getRandomItemFromList(words));
         });
+    }
+
+    private void setLoadingLayout() {
+        TextView wordTextView = findViewById(R.id.word_text_view);
+        EditText answerInputEditText = findViewById(R.id.answer_input);
+        Button checkButton = findViewById(R.id.check_button);
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
+        wordTextView.setVisibility(View.GONE);
+        answerInputEditText.setVisibility(View.GONE);
+        checkButton.setVisibility(View.GONE);
+        loadingSpinner.setVisibility(View.VISIBLE);
+    }
+
+    private void fillGameLayout(Word word) {
+        TextView wordTextView = findViewById(R.id.word_text_view);
+        EditText answerInputEditText = findViewById(R.id.answer_input);
+        Button checkButton = findViewById(R.id.check_button);
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
+        this.word = word;
+        wordTextView.setText(word.getWordName());
+
+        checkButton.setOnClickListener(v -> {
+            checkButton.setOnClickListener(null);
+            // Trim the answer since the user may accidentally insert a space before of after the article
+            String userAnswer = answerInputEditText.getText().toString().trim();
+            verifyAnswer(userAnswer);
+        });
+
+        wordTextView.setVisibility(View.VISIBLE);
+        answerInputEditText.setVisibility(View.VISIBLE);
+        checkButton.setVisibility(View.VISIBLE);
+        loadingSpinner.setVisibility(View.GONE);
     }
 
     @Override

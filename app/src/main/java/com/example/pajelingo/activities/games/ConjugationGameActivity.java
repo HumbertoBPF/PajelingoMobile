@@ -5,6 +5,7 @@ import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -14,29 +15,36 @@ import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ConjugationDao;
-import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.ConjugationGameAnswer;
 import com.example.pajelingo.models.GameAnswerFeedback;
+import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LabeledSpinner;
+import com.example.pajelingo.ui.LoadingSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ConjugationGameActivity extends GameActivity {
 
     private Language language;
     private Conjugation conjugation;
 
+    private ConjugationDao conjugationDao;
+
     @Override
     protected void setup() {
         setContentView(R.layout.activity_single_language_choice);
+
+        conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
 
         TextView instructionsTextView = findViewById(R.id.instructions_text_view);
         LabeledSpinner languageInput = findViewById(R.id.language_input);
@@ -73,6 +81,74 @@ public class ConjugationGameActivity extends GameActivity {
     protected void startGame() {
         setContentView(R.layout.activity_conjugation_game);
 
+        setLoadingLayout();
+
+        if (isUserAuthenticated(this)) {
+            getWordFromAPI();
+        }else {
+            getWordFromLocalDatabase();
+        }
+    }
+
+    private void getWordFromAPI() {
+        Call<GameRoundWord> call
+                = languageSchoolAPI.getWordForConjugationGame(getAuthToken(this), language.getLanguageName());
+        call.enqueue(new Callback<GameRoundWord>() {
+            @Override
+            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+                GameRoundWord gameRoundWord = response.body();
+
+                if ((response.isSuccessful()) && (gameRoundWord != null)) {
+                    wordDao.getRecordById(gameRoundWord.getId(), verb -> {
+                        if (verb == null){
+                            getWordFromLocalDatabase();
+                            return;
+                        }
+
+                        conjugationDao.getConjugation(gameRoundWord.getId(), gameRoundWord.getTense(), conjugation -> {
+                            if (conjugation == null){
+                                getWordFromLocalDatabase();
+                                return;
+                            }
+
+                            fillGameLayout(verb, conjugation);
+                        });
+                    });
+                }else {
+                    getWordFromLocalDatabase();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+                getWordFromLocalDatabase();
+            }
+        });
+    }
+
+    private void getWordFromLocalDatabase() {
+        // We want to get only the words that are verbs
+        wordDao.getWordsByCategoryAndByLanguage("verbs", language.getLanguageName(), verbs -> {
+            // Verify if at least one word is returned
+            if (verbs.isEmpty()){
+                finishActivityNotEnoughResources();
+                return;
+            }
+            // Pick a word that is in the category "verb" and whose language corresponds to the selected language
+            Word word = getRandomItemFromList(verbs);
+            conjugationDao.getConjugations(word.getId(), conjugations -> {
+                // Verify if there are at least one conjugation is returned
+                if (conjugations.isEmpty()){
+                    finishActivityNotEnoughResources();
+                    return;
+                }
+
+                fillGameLayout(word, getRandomItemFromList(conjugations));
+            });
+        });
+    }
+
+    private void setLoadingLayout() {
         TextView verb = findViewById(R.id.verb_and_tense_text_view);
 
         LabeledEditText conjugation1 = findViewById(R.id.conjugation_1);
@@ -84,48 +160,71 @@ public class ConjugationGameActivity extends GameActivity {
 
         Button checkButton = findViewById(R.id.check_button);
 
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
+        verb.setVisibility(View.GONE);
+
+        conjugation1.setVisibility(View.GONE);
+        conjugation2.setVisibility(View.GONE);
+        conjugation3.setVisibility(View.GONE);
+        conjugation4.setVisibility(View.GONE);
+        conjugation5.setVisibility(View.GONE);
+        conjugation6.setVisibility(View.GONE);
+
+        checkButton.setVisibility(View.GONE);
+
+        loadingSpinner.setVisibility(View.VISIBLE);
+    }
+
+    private void fillGameLayout(Word word, Conjugation conjugation) {
+        TextView verb = findViewById(R.id.verb_and_tense_text_view);
+
+        LabeledEditText conjugation1 = findViewById(R.id.conjugation_1);
+        LabeledEditText conjugation2 = findViewById(R.id.conjugation_2);
+        LabeledEditText conjugation3 = findViewById(R.id.conjugation_3);
+        LabeledEditText conjugation4 = findViewById(R.id.conjugation_4);
+        LabeledEditText conjugation5 = findViewById(R.id.conjugation_5);
+        LabeledEditText conjugation6 = findViewById(R.id.conjugation_6);
+
+        Button checkButton = findViewById(R.id.check_button);
+
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
         conjugation1.setLabel(language.getPersonalPronoun1());
         conjugation2.setLabel(language.getPersonalPronoun2());
         conjugation3.setLabel(language.getPersonalPronoun3());
         conjugation4.setLabel(language.getPersonalPronoun4());
         conjugation5.setLabel(language.getPersonalPronoun5());
         conjugation6.setLabel(language.getPersonalPronoun6());
+        // Pick a random conjugation of the chosen verb
+        this.conjugation = conjugation;
+        verb.setText(word.getWordName() + " - " + conjugation.getTense());
 
-        // We want to get only the words that are verbs
-        WordDao wordDao = AppDatabase.getInstance(ConjugationGameActivity.this).getWordDao();
-        wordDao.getWordsByCategoryAndByLanguage("verbs", language.getLanguageName(), result -> {
-            // Verify if at least one word is returned
-            if (result.isEmpty()){
-                finishActivityNotEnoughResources();
-                return;
-            }
-            // Pick a word that is in the category "verb" and whose language corresponds to the selected language
-            Word word = getRandomItemFromList(result);
-            ConjugationDao conjugationDao = AppDatabase.getInstance(ConjugationGameActivity.this).getConjugationDao();
-            conjugationDao.getConjugationsFromVerb(word.getId(), result1 -> {
-                // Verify if there are at least one conjugation is returned
-                if (result1.isEmpty()){
-                    finishActivityNotEnoughResources();
-                    return;
-                }
-                // Pick a random conjugation of the chosen verb
-                conjugation = getRandomItemFromList(result1);
-                verb.setText(word.getWordName() + " - " + conjugation.getTense());
-                checkButton.setOnClickListener(v -> {
-                    checkButton.setOnClickListener(null);
-                    List<String> answers = new ArrayList<>();
-                    // Trim the answers since the user may accidentally insert a space before of after them
-                    answers.add(conjugation1.getEditText().getText().toString().trim());
-                    answers.add(conjugation2.getEditText().getText().toString().trim());
-                    answers.add(conjugation3.getEditText().getText().toString().trim());
-                    answers.add(conjugation4.getEditText().getText().toString().trim());
-                    answers.add(conjugation5.getEditText().getText().toString().trim());
-                    answers.add(conjugation6.getEditText().getText().toString().trim());
-                    verifyAnswer(answers);
-                });
-            });
+        checkButton.setOnClickListener(v -> {
+            checkButton.setOnClickListener(null);
+            List<String> answers = new ArrayList<>();
+            // Trim the answers since the user may accidentally insert a space before of after them
+            answers.add(conjugation1.getEditText().getText().toString().trim());
+            answers.add(conjugation2.getEditText().getText().toString().trim());
+            answers.add(conjugation3.getEditText().getText().toString().trim());
+            answers.add(conjugation4.getEditText().getText().toString().trim());
+            answers.add(conjugation5.getEditText().getText().toString().trim());
+            answers.add(conjugation6.getEditText().getText().toString().trim());
+            verifyAnswer(answers);
         });
 
+        verb.setVisibility(View.VISIBLE);
+
+        conjugation1.setVisibility(View.VISIBLE);
+        conjugation2.setVisibility(View.VISIBLE);
+        conjugation3.setVisibility(View.VISIBLE);
+        conjugation4.setVisibility(View.VISIBLE);
+        conjugation5.setVisibility(View.VISIBLE);
+        conjugation6.setVisibility(View.VISIBLE);
+
+        checkButton.setVisibility(View.VISIBLE);
+
+        loadingSpinner.setVisibility(View.GONE);
     }
 
     @Override

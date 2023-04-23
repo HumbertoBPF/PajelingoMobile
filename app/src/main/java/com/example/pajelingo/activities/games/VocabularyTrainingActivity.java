@@ -5,6 +5,7 @@ import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +16,17 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.WordDao;
-import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.GameAnswerFeedback;
+import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.VocabularyGameAnswer;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.ui.LabeledSpinner;
+import com.example.pajelingo.ui.LoadingSpinner;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VocabularyTrainingActivity extends GameActivity {
 
@@ -31,13 +34,9 @@ public class VocabularyTrainingActivity extends GameActivity {
     private Language targetLanguage;
     private Word wordToTranslate;
 
-    private WordDao wordDao;
-
     @Override
     protected void setup() {
         setContentView(R.layout.activity_dual_language_choice);
-
-        wordDao = AppDatabase.getInstance(this).getWordDao();
 
         TextView instructionsTextView = findViewById(R.id.instructions_text_view);
         LabeledSpinner baseLanguageInput = findViewById(R.id.base_language_input);
@@ -88,28 +87,90 @@ public class VocabularyTrainingActivity extends GameActivity {
     protected void startGame() {
         setContentView(R.layout.activity_vocabulary_training);
 
-        TextView wordToTranslateTextView = findViewById(R.id.word_text_view);
-        EditText answerInputEditText = findViewById(R.id.answer_input);
-        Button checkButton = findViewById(R.id.check_button);
+        setLoadingLayout();
 
-        answerInputEditText.setHint(getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName());
+        if (isUserAuthenticated(this)) {
+            getWordFromAPI();
+        }else{
+            getWordFromLocalDatabase();
+        }
+    }
 
-        WordDao wordDao = AppDatabase.getInstance(this).getWordDao();
-        wordDao.getWordsByLanguage(targetLanguage.getLanguageName(), result -> {
+    private void getWordFromAPI() {
+        Call<GameRoundWord> call =
+                languageSchoolAPI.getWordForVocabularyGame(getAuthToken(this), targetLanguage.getLanguageName());
+        call.enqueue(new Callback<GameRoundWord>() {
+            @Override
+            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+                GameRoundWord gameRoundWord = response.body();
+
+                if ((response.isSuccessful()) && (gameRoundWord != null)) {
+                    wordDao.getRecordById(gameRoundWord.getId(), word -> {
+                        if (word == null) {
+                            getWordFromLocalDatabase();
+                            return;
+                        }
+
+                        fillGameLayout(word);
+                    });
+                }else {
+                    getWordFromLocalDatabase();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+                getWordFromLocalDatabase();
+            }
+        });
+    }
+
+    private void getWordFromLocalDatabase() {
+        wordDao.getWordsByLanguage(targetLanguage.getLanguageName(), words -> {
             // Verify if there is at least one element in the list
-            if (result.isEmpty()){
+            if (words.isEmpty()){
                 finishActivityNotEnoughResources();
                 return;
             }
-            wordToTranslate = getRandomItemFromList(result);
-            wordToTranslateTextView.setText(wordToTranslate.getWordName());
-            checkButton.setOnClickListener(v -> {
-                checkButton.setOnClickListener(null);
-                // Trim the answer since the user may accidentally insert a space before of after the word
-                String userAnswer = answerInputEditText.getText().toString().trim();
-                verifyAnswer(userAnswer);
-            });
+
+            fillGameLayout(getRandomItemFromList(words));
         });
+    }
+
+    private void setLoadingLayout() {
+        TextView wordToTranslateTextView = findViewById(R.id.word_text_view);
+        EditText answerInputEditText = findViewById(R.id.answer_input);
+        Button checkButton = findViewById(R.id.check_button);
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
+        wordToTranslateTextView.setVisibility(View.GONE);
+        answerInputEditText.setVisibility(View.GONE);
+        checkButton.setVisibility(View.GONE);
+        loadingSpinner.setVisibility(View.VISIBLE);
+    }
+
+    private void fillGameLayout(Word word) {
+        TextView wordToTranslateTextView = findViewById(R.id.word_text_view);
+        EditText answerInputEditText = findViewById(R.id.answer_input);
+        Button checkButton = findViewById(R.id.check_button);
+        LoadingSpinner loadingSpinner = findViewById(R.id.loading_spinner);
+
+        wordToTranslate = word;
+
+        wordToTranslateTextView.setText(wordToTranslate.getWordName());
+        answerInputEditText.setHint(getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName());
+
+        checkButton.setOnClickListener(v -> {
+            checkButton.setOnClickListener(null);
+            // Trim the answer since the user may accidentally insert a space before of after the word
+            String userAnswer = answerInputEditText.getText().toString().trim();
+            verifyAnswer(userAnswer);
+        });
+
+        wordToTranslateTextView.setVisibility(View.VISIBLE);
+        answerInputEditText.setVisibility(View.VISIBLE);
+        checkButton.setVisibility(View.VISIBLE);
+        loadingSpinner.setVisibility(View.GONE);
     }
 
     @Override

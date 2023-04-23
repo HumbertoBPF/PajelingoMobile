@@ -8,6 +8,7 @@ import com.example.pajelingo.models.ConjugationGameAnswer;
 import com.example.pajelingo.models.FavoriteWordPayload;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.models.GameAnswerFeedback;
+import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
@@ -81,6 +82,18 @@ public interface LanguageSchoolAPI {
 
     @DELETE("user/")
     Call<Void> deleteAccount(@Header("Authorization") String authString);
+
+    @GET("article-game")
+    Call<GameRoundWord> getWordForArticleGame(@Header("Authorization") String authString,
+                                              @Query("language") String language);
+
+    @GET("conjugation-game")
+    Call<GameRoundWord> getWordForConjugationGame(@Header("Authorization") String authString,
+                                                  @Query("language") String language);
+
+    @GET("vocabulary-game")
+    Call<GameRoundWord> getWordForVocabularyGame(@Header("Authorization") String authString,
+                                                 @Query("language") String language);
 
     @POST("article-game")
     Call<GameAnswerFeedback> submitArticleGameAnswer(@Header("Authorization") String authString,
