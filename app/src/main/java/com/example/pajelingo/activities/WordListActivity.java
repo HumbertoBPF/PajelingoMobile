@@ -111,22 +111,20 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
 
                 call.enqueue(new Callback<Word>() {
                     @Override
-                    public void onResponse(Call<Word> call, Response<Word> response) {
+                    public void onResponse(@NonNull Call<Word> call, @NonNull Response<Word> response) {
                         Word returnedWord = response.body();
 
                         if ((response.isSuccessful()) && (returnedWord != null)) {
                             List<Word> wordList = new ArrayList<>();
                             wordList.add(returnedWord);
-                            wordDao.save(wordList, result -> {
-                                adapter.setWordAtPosition(returnedWord, position);
-                            });
+                            wordDao.save(wordList, result -> adapter.setWordAtPosition(returnedWord, position));
                         }else {
                             displayFavoriteWordError(WordListActivity.this, word);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Word> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Word> call, @NonNull Throwable t) {
                         Toast.makeText(WordListActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
                     }
                 });

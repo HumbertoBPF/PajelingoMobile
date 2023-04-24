@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,9 +68,7 @@ public class MeaningActivity extends AppCompatActivity {
         setWordImage();
         setFavoriteWordButtonLayout();
 
-        favoriteWordButton.setOnClickListener(v -> {
-            toggleFavoriteWord();
-        });
+        favoriteWordButton.setOnClickListener(v -> toggleFavoriteWord());
     }
 
     private void setFavoriteWordButtonLayout() {
@@ -95,7 +94,7 @@ public class MeaningActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<Word>() {
             @Override
-            public void onResponse(Call<Word> call, Response<Word> response) {
+            public void onResponse(@NonNull Call<Word> call, @NonNull Response<Word> response) {
                 Word returnedWord = response.body();
 
                 if ((response.isSuccessful()) && (returnedWord != null)) {
@@ -111,7 +110,7 @@ public class MeaningActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Word> call, Throwable t) {
+            public void onFailure(@NonNull Call<Word> call, @NonNull Throwable t) {
                 Toast.makeText(MeaningActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -122,7 +121,7 @@ public class MeaningActivity extends AppCompatActivity {
             Call<Image> call = LanguageSchoolAPIHelper.getApiObject().getPublicImage(word.getImage());
             call.enqueue(new Callback<Image>() {
                 @Override
-                public void onResponse(Call<Image> call, Response<Image> response) {
+                public void onResponse(@NonNull Call<Image> call, @NonNull Response<Image> response) {
                     if (response.isSuccessful()){
                         Image image = response.body();
                         if (image != null){
@@ -132,7 +131,7 @@ public class MeaningActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Image> call, Throwable t) {
+                public void onFailure(@NonNull Call<Image> call, @NonNull Throwable t) {
 
                 }
             });

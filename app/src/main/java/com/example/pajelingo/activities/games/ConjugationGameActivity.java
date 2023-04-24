@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
@@ -95,7 +96,7 @@ public class ConjugationGameActivity extends GameActivity {
                 = languageSchoolAPI.getWordForConjugationGame(getAuthToken(this), language.getLanguageName());
         call.enqueue(new Callback<GameRoundWord>() {
             @Override
-            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+            public void onResponse(@NonNull Call<GameRoundWord> call, @NonNull Response<GameRoundWord> response) {
                 GameRoundWord gameRoundWord = response.body();
 
                 if ((response.isSuccessful()) && (gameRoundWord != null)) {
@@ -120,7 +121,7 @@ public class ConjugationGameActivity extends GameActivity {
             }
 
             @Override
-            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+            public void onFailure(@NonNull Call<GameRoundWord> call, @NonNull Throwable t) {
                 getWordFromLocalDatabase();
             }
         });
@@ -198,7 +199,7 @@ public class ConjugationGameActivity extends GameActivity {
         conjugation6.setLabel(language.getPersonalPronoun6());
         // Pick a random conjugation of the chosen verb
         this.conjugation = conjugation;
-        verb.setText(word.getWordName() + " - " + conjugation.getTense());
+        verb.setText(getString(R.string.verb_and_tense_text, word.getWordName(), conjugation.getTense()));
 
         checkButton.setOnClickListener(v -> {
             checkButton.setOnClickListener(null);

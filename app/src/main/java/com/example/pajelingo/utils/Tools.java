@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.R;
@@ -201,7 +202,7 @@ public class Tools{
     public static void handleGameAnswerFeedback(Context context, Call<GameAnswerFeedback> call) {
         call.enqueue(new Callback<GameAnswerFeedback>() {
             @Override
-            public void onResponse(Call<GameAnswerFeedback> call, Response<GameAnswerFeedback> response) {
+            public void onResponse(@NonNull Call<GameAnswerFeedback> call, @NonNull Response<GameAnswerFeedback> response) {
                 GameAnswerFeedback gameAnswerFeedback = response.body();
                 String currentGameScore = context.getString(R.string.current_game_score);
 
@@ -213,7 +214,7 @@ public class Tools{
             }
 
             @Override
-            public void onFailure(Call<GameAnswerFeedback> call, Throwable t) {
+            public void onFailure(@NonNull Call<GameAnswerFeedback> call, @NonNull Throwable t) {
                 Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
             }
         });

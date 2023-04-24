@@ -15,19 +15,16 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
+        new Handler().postDelayed(() -> {
+            SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
 
-                Class destinyActivity = MainActivity.class;
-                if (sp.getBoolean(getString(R.string.is_first_access), true)){
-                    destinyActivity = OnBoardingActivity.class;
-                }
-
-                startActivity(new Intent(SplashScreen.this, destinyActivity));
-                finish();
+            if (sp.getBoolean(getString(R.string.is_first_access), true)){
+                startActivity(new Intent(SplashScreen.this, OnBoardingActivity.class));
+            }else {
+                startActivity(new Intent(SplashScreen.this, MainActivity.class));
             }
+
+            finish();
         },3000);
     }
 }

@@ -3,12 +3,12 @@ package com.example.pajelingo.activities.account;
 import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
 import static com.example.pajelingo.utils.Tools.getAuthToken;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
@@ -39,7 +39,7 @@ public class DeletionConfirmationActivity extends AppCompatActivity {
                 Call<Void> call = LanguageSchoolAPIHelper.getApiObject().deleteAccount(getAuthToken(DeletionConfirmationActivity.this));
                 call.enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(DeletionConfirmationActivity.this, R.string.account_deletion_success, Toast.LENGTH_SHORT).show();
                             deleteUserCredentials(DeletionConfirmationActivity.this);
@@ -50,7 +50,7 @@ public class DeletionConfirmationActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                         Toast.makeText(DeletionConfirmationActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
                     }
                 });

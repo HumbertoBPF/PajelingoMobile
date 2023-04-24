@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
@@ -98,7 +99,7 @@ public class GuessTheArticleActivity extends GameActivity {
                 this.languageSchoolAPI.getWordForArticleGame(getAuthToken(this), language.getLanguageName());
         call.enqueue(new Callback<GameRoundWord>() {
             @Override
-            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+            public void onResponse(@NonNull Call<GameRoundWord> call, @NonNull Response<GameRoundWord> response) {
                 GameRoundWord gameRoundWord = response.body();
 
                 if ((response.isSuccessful()) && (gameRoundWord != null)) {
@@ -116,7 +117,7 @@ public class GuessTheArticleActivity extends GameActivity {
             }
 
             @Override
-            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+            public void onFailure(@NonNull Call<GameRoundWord> call, @NonNull Throwable t) {
                 getWordFromLocalDatabase();
             }
         });

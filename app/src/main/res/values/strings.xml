@@ -44,7 +44,7 @@
     <string name="password_label">Password</string>
     <string name="login_button_text">Login</string>
     <string name="choose_language_label">Select a language</string>
-    <string name="greeting_text">Welcome back,\u0020</string>
+    <string name="greeting_text">Welcome back, %1$s</string>
     <string name="tab_icon_rankings_title">Rankings</string>
     <string name="tab_icon_menu_title">Menu</string>
     <string name="all_languages_spinner_option">All languages</string>
@@ -142,7 +142,7 @@
     <string name="reset_password_feedback_dialog_message">Check the specified email to reset your account. If there is an email associated with a
         Pajelingo account you should have received an email with a reset link.</string>
     <string name="reset_password_error_dialog_title">Error</string>
-    <string name="reset_password_positive_button_text">Ok</string>
+    <string name="reset_password_positive_button_text">OK</string>
     <string name="warning_email_required">Email is required</string>
     <string name="warning_email_format_required">Input needs to be an email</string>
     <string name="update_account_dialog_message">Updating your account…</string>
@@ -156,4 +156,5 @@
     <string name="error_game_score">Something went wrong</string>
     <string name="current_game_score">Your current score is</string>
     <string name="loading_game_text">Please wait\n(Log out to get rid of loadings,\nbut keep in mind that you will not receive a score when logged out)</string>
+    <string name="verb_and_tense_text">%1$s - %2$s</string>
 </resources>

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -68,7 +69,7 @@ public class RequestResetPasswordActivity extends AppCompatActivity {
             Call<Void> call = LanguageSchoolAPIHelper.getApiObject().resetAccount(new ResetEmail(email.toString()));
             call.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                     loadingDialog.dismiss();
                     if (!response.isSuccessful()){
                         feedbackDialog.setTitle(R.string.reset_password_error_dialog_title);
@@ -78,7 +79,7 @@ public class RequestResetPasswordActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                     loadingDialog.dismiss();
                     feedbackDialog.setTitle(R.string.reset_password_error_dialog_title);
                     feedbackDialog.setMessage(getString(R.string.warning_connection_error));

@@ -52,9 +52,9 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
         }
 
         public void bind(Score score, int position){
-            this.positionTextView.setText((position+1)+"");
+            this.positionTextView.setText(String.valueOf(position+1));
             this.usernameTextView.setText(score.getUser());
-            this.scoreTextView.setText(score.getScore().toString());
+            this.scoreTextView.setText(String.valueOf(score.getScore()));
         }
 
     }

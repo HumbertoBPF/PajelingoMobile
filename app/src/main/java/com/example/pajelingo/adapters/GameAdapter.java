@@ -61,7 +61,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             this.gameNameTextView.setText(game.getGameName());
             itemView.setOnClickListener(v -> {
                 try {
-                    Class destinyClass = Class.forName("com.example.pajelingo.activities.games."
+                    Class<?> destinyClass = Class.forName("com.example.pajelingo.activities.games."
                             + game.getAndroidGameActivity());
                     Intent intent = new Intent(context, destinyClass);
                     intent.putExtra("game", game);

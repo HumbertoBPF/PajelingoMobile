@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
@@ -102,7 +103,7 @@ public class VocabularyTrainingActivity extends GameActivity {
                         baseLanguage.getLanguageName(), targetLanguage.getLanguageName());
         call.enqueue(new Callback<GameRoundWord>() {
             @Override
-            public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {
+            public void onResponse(@NonNull Call<GameRoundWord> call, @NonNull Response<GameRoundWord> response) {
                 GameRoundWord gameRoundWord = response.body();
 
                 if ((response.isSuccessful()) && (gameRoundWord != null)) {
@@ -120,7 +121,7 @@ public class VocabularyTrainingActivity extends GameActivity {
             }
 
             @Override
-            public void onFailure(Call<GameRoundWord> call, Throwable t) {
+            public void onFailure(@NonNull Call<GameRoundWord> call, @NonNull Throwable t) {
                 getWordFromLocalDatabase();
             }
         });

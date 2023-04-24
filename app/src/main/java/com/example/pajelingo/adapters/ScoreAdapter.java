@@ -49,7 +49,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
         public void bind(Score score){
             gameTextView.setText(score.getGame());
-            scoreTextView.setText(score.getScore().toString());
+            scoreTextView.setText(String.valueOf(score.getScore()));
         }
     }
 }

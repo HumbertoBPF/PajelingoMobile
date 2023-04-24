@@ -28,7 +28,7 @@ import java.util.List;
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultsViewHolder> {
 
     private final Context context;
-    private List<Word> words;
+    private final List<Word> words;
     private final LanguageDao languageDao;
     private final OnFavoriteItem onFavoriteItem;
 
@@ -49,10 +49,6 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @Override
     public void onBindViewHolder(@NonNull SearchResultsAdapter.SearchResultsViewHolder holder, int position) {
         holder.bind(position);
-    }
-
-    public Word getItem(int position){
-        return words.get(position);
     }
 
     @Override
@@ -104,9 +100,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 guideline75.setGuidelinePercent(0.75f);
                 setHeartIcon(word.getFavorite());
 
-                heartIcon.setOnClickListener(v -> {
-                    onFavoriteItem.favoriteItem(word, position);
-                });
+                heartIcon.setOnClickListener(v -> onFavoriteItem.favoriteItem(word, position));
             }
 
             rootView.setOnClickListener(v -> {

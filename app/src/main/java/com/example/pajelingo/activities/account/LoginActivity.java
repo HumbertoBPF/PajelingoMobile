@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -84,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
         tokenCall.enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
+            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
                 Token token = response.body();
                 if ((response.isSuccessful()) && (token != null)) {
                     saveToken(LoginActivity.this, token);
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Token> call, Throwable t) {
+            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
                 dismissDialogDelayed(dialog);
             }
         });
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<User> call = languageSchoolAPI.login(getAuthToken(LoginActivity.this));
         call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 User user = response.body();
                 if ((response.isSuccessful()) && (user != null)){
                     getWords(dialog, user);
@@ -125,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 onErrorInternetConnection(dialog);
             }
         });
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<List<Word>> call = languageSchoolAPI.getWords(getAuthToken(LoginActivity.this));
         call.enqueue(new Callback<List<Word>>() {
             @Override
-            public void onResponse(Call<List<Word>> call, Response<List<Word>> response) {
+            public void onResponse(@NonNull Call<List<Word>> call, @NonNull Response<List<Word>> response) {
                 List<Word> words = response.body();
                 if ((response.isSuccessful()) && (words != null)){
                     wordDao.save(words, result -> {
@@ -156,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Word>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Word>> call, @NonNull Throwable t) {
                 onErrorInternetConnection(dialog);
             }
         });

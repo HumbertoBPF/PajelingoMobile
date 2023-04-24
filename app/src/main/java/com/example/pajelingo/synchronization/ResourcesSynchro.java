@@ -3,6 +3,7 @@ package com.example.pajelingo.synchronization;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.daos.BaseDao;
@@ -23,12 +24,12 @@ public abstract class ResourcesSynchro<E> {
     private final String resourceName;
     private final BaseDao<E> dao;
     private final ResourcesInterface<E> resourcesInterface;
-    private final ResourcesSynchro nextTask;
+    private final ResourcesSynchro<?> nextTask;
     private AlertDialog downloadDialog;
     private Handler handler =  new Handler();
 
     public ResourcesSynchro(String resourceName, BaseDao<E> dao, ResourcesInterface<E> resourcesInterface,
-                            ResourcesSynchro nextTask, AlertDialog downloadDialog){
+                            ResourcesSynchro<?> nextTask, AlertDialog downloadDialog){
         this.resourceName = resourceName;
         this.dao = dao;
         this.resourcesInterface = resourcesInterface;
@@ -40,7 +41,7 @@ public abstract class ResourcesSynchro<E> {
         Call<List<E>> callObject = this.resourcesInterface.getCallForResources();
         callObject.enqueue(new Callback<List<E>>() {
             @Override
-            public void onResponse(Call<List<E>> call, Response<List<E>> response) {
+            public void onResponse(@NonNull Call<List<E>> call, @NonNull Response<List<E>> response) {
                 if (response.isSuccessful()) {
                     saveEntities(response.body());
                 }else{
@@ -51,7 +52,7 @@ public abstract class ResourcesSynchro<E> {
             }
 
             @Override
-            public void onFailure(Call<List<E>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<E>> call, @NonNull Throwable t) {
                 Log.e("ResourcesSynchro", "doInBackground:onFailure");
                 downloadDialog.setMessage("Fail to download "+resourceName+" table");
                 nextStep();

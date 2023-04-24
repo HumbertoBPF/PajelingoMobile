@@ -40,7 +40,7 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
 
     class MeaningViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView meaningTextView;
+        private final TextView meaningTextView;
 
         public MeaningViewHolder(@NonNull View itemView) {
             super(itemView);
