@@ -98,7 +98,8 @@ public class VocabularyTrainingActivity extends GameActivity {
 
     private void getWordFromAPI() {
         Call<GameRoundWord> call =
-                languageSchoolAPI.getWordForVocabularyGame(getAuthToken(this), targetLanguage.getLanguageName());
+                languageSchoolAPI.getWordForVocabularyGame(getAuthToken(this),
+                        baseLanguage.getLanguageName(), targetLanguage.getLanguageName());
         call.enqueue(new Callback<GameRoundWord>() {
             @Override
             public void onResponse(Call<GameRoundWord> call, Response<GameRoundWord> response) {

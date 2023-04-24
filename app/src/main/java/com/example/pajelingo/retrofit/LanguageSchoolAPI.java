@@ -93,7 +93,8 @@ public interface LanguageSchoolAPI {
 
     @GET("vocabulary-game")
     Call<GameRoundWord> getWordForVocabularyGame(@Header("Authorization") String authString,
-                                                 @Query("language") String language);
+                                                 @Query("base_language") String baseLanguage,
+                                                 @Query("target_language") String targetLanguage);
 
     @POST("article-game")
     Call<GameAnswerFeedback> submitArticleGameAnswer(@Header("Authorization") String authString,

@@ -15,6 +15,7 @@ import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
+import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
@@ -247,6 +248,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
      */
     private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
+        waitUntil(withId(R.id.loading_progress_bar), 5000, true);
+        waitUntil(withId(R.id.loading_progress_bar), 10000, false);
         onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));
