@@ -213,10 +213,10 @@ public class Tools{
         // Delete database and internal storage files before synchronization
         context.deleteDatabase(NAME_DB);
         clearFolder(context.getFilesDir());
-        new ArticleSynchro(context, notificationBuilder, () -> {
+        new ArticleSynchro(context, notificationBuilder).execute(() -> {
             loadingDialog.dismiss();
             onTaskListener.onTask();
-        }).execute();
+        });
     }
 
     /**

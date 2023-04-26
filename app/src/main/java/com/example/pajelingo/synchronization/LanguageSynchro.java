@@ -7,7 +7,6 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.interfaces.OnTaskListener;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
@@ -17,10 +16,9 @@ import java.util.List;
 public class LanguageSynchro extends ResourcesSynchro<Language> {
     private final Context context;
 
-    public LanguageSynchro(Context context, NotificationCompat.Builder builder, OnTaskListener onTaskListener) {
+    public LanguageSynchro(Context context, NotificationCompat.Builder builder) {
         super(context, builder, 38, AppDatabase.getInstance(context).getLanguageDao(),
-                () -> LanguageSchoolAPIHelper.getApiObject().getLanguages(),
-                new MeaningSynchro(context, builder, onTaskListener), onTaskListener);
+                () -> LanguageSchoolAPIHelper.getApiObject().getLanguages(), new MeaningSynchro(context, builder));
         this.context = context;
     }
 

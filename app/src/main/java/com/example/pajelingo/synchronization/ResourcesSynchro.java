@@ -38,22 +38,24 @@ public abstract class ResourcesSynchro<E> {
     private final BaseDao<E> dao;
     private final ResourcesInterface<E> resourcesInterface;
     private final ResourcesSynchro<?> nextTask;
-    private final OnTaskListener onTaskListener;
+    private OnTaskListener onTaskListener;
     private final Handler handler =  new Handler();
 
     public ResourcesSynchro(Context context, NotificationCompat.Builder builder, int percentage, BaseDao<E> dao,
-                            ResourcesInterface<E> resourcesInterface, ResourcesSynchro<?> nextTask, OnTaskListener onTaskListener){
+                            ResourcesInterface<E> resourcesInterface, ResourcesSynchro<?> nextTask){
         this.context = context;
         this.builder = builder;
         this.percentage = percentage;
         this.dao = dao;
         this.resourcesInterface = resourcesInterface;
         this.nextTask = nextTask;
-        this.onTaskListener = onTaskListener;
     }
 
-    public void execute() {
+    public void execute(OnTaskListener onTaskListener) {
+        this.onTaskListener = onTaskListener;
+
         Call<List<E>> callObject = this.resourcesInterface.getCallForResources();
+
         callObject.enqueue(new Callback<List<E>>() {
             @Override
             public void onResponse(@NonNull Call<List<E>> call, @NonNull Response<List<E>> response) {
@@ -87,7 +89,7 @@ public abstract class ResourcesSynchro<E> {
     protected void nextStep() {
         handler.postDelayed(() -> {
             if (nextTask != null) {
-                nextTask.execute();
+                nextTask.execute(this.onTaskListener);
             }else {
                 updateProgressBarNotification(PROGRESS_MAX);
                 handler.postDelayed(() -> terminateSynchronization(true), 2000);
