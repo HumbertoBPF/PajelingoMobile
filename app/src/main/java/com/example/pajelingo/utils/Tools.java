@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -194,6 +195,7 @@ public class Tools{
      * @param context application's context.
      */
     public static void launchResourcesSync(Context context, LayoutInflater inflater, OnTaskListener onTaskListener){
+        final int nbSteps = 8;
         // Sync progress notification
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_synchro)
@@ -204,8 +206,8 @@ public class Tools{
                 .setOngoing(true);
         showNotification(context, notificationBuilder, SYNC_NOTIFICATION_ID);
         // Loading dialog
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setTitle(R.string.dialog_confirm_resources_sync_title)
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context)
+                .setTitle(R.string.dialog_confirm_resources_sync_title)
                 .setView(inflater.inflate(R.layout.loading_dialog_layout, null))
                 .setCancelable(false);
         AlertDialog loadingDialog = dialogBuilder.create();
@@ -213,10 +215,57 @@ public class Tools{
         // Delete database and internal storage files before synchronization
         context.deleteDatabase(NAME_DB);
         clearFolder(context.getFilesDir());
-        new ArticleSynchro(context, notificationBuilder).execute(() -> {
-            loadingDialog.dismiss();
-            onTaskListener.onTask();
+        Handler handler = new Handler();
+
+        new ArticleSynchro(context).execute(1, (isSuccessful, currentStep) -> {
+            int percentage = Math.min(Math.round(currentStep*100f/nbSteps), 100);
+
+            updateProgressBarNotification(context, notificationBuilder, percentage);
+
+            if ((!isSuccessful) || (currentStep == nbSteps)) {
+                handler.postDelayed(() -> {
+                    loadingDialog.dismiss();
+                    terminateSynchronization(context, notificationBuilder, isSuccessful);
+                    onTaskListener.onTask();
+                }, 2000);
+            }
         });
+    }
+
+    private static void updateProgressBarNotification(Context context, NotificationCompat.Builder builder, int percentage) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            builder.setProgress(PROGRESS_MAX, percentage,false);
+            showNotification(context, builder, SYNC_NOTIFICATION_ID);
+        }
+    }
+
+    private static void terminateSynchronization(Context context, NotificationCompat.Builder builder, boolean isSuccessful) {
+        String titleNotification;
+        String textNotification;
+        int iconResource;
+        String toastMessage;
+
+        if (isSuccessful) {
+            titleNotification = context.getString(R.string.sync_notification_concluded_title);
+            textNotification = context.getString(R.string.sync_notification_concluded_text);
+            iconResource = R.drawable.ic_check;
+            toastMessage = context.getString(R.string.sync_toast_concluded);
+        }else {
+            titleNotification = context.getString(R.string.sync_notification_failed_title);
+            textNotification = context.getString(R.string.sync_notification_failed_text);
+            iconResource = R.drawable.ic_warning;
+            toastMessage = context.getString(R.string.sync_toast_failed);
+        }
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            builder.setContentTitle(titleNotification)
+                    .setContentText(textNotification)
+                    .setSmallIcon(iconResource)
+                    .setProgress(0, 0,false)
+                    .setOngoing(false);
+            showNotification(context, builder, SYNC_NOTIFICATION_ID);
+        }
+        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
     }
 
     /**
