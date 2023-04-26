@@ -3,18 +3,28 @@ package com.example.pajelingo.utils;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.pajelingo.database.settings.AppDatabase.NAME_DB;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.interfaces.OnTaskListener;
 import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
@@ -33,6 +43,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Tools{
+
+    public static final String CHANNEL_ID = "notification channel id";
+    public static final int PROGRESS_MAX = 100;
+    public static final int SYNC_NOTIFICATION_ID = 1;
 
     /**
      * Picks a random item from a list.
@@ -178,14 +192,31 @@ public class Tools{
      * Launches the synchronization of resources, which is implemented through a chain of
      * responsibility design pattern.
      * @param context application's context.
-     * @param dialog AlertDialog instance that must be launched while the synchronization takes
-     *               place.
      */
-    public static void launchSynchroResources(Context context, AlertDialog dialog){
+    public static void launchResourcesSync(Context context, LayoutInflater inflater, OnTaskListener onTaskListener){
+        // Sync progress notification
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_synchro)
+                .setContentTitle(context.getString(R.string.sync_notification_title))
+                .setContentText(context.getString(R.string.sync_notification_in_progress))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setProgress(PROGRESS_MAX, 0, false)
+                .setOngoing(true);
+        showNotification(context, notificationBuilder, SYNC_NOTIFICATION_ID);
+        // Loading dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(R.string.dialog_confirm_resources_sync_title)
+                .setView(inflater.inflate(R.layout.loading_dialog_layout, null))
+                .setCancelable(false);
+        AlertDialog loadingDialog = dialogBuilder.create();
+        loadingDialog.show();
         // Delete database and internal storage files before synchronization
         context.deleteDatabase(NAME_DB);
         clearFolder(context.getFilesDir());
-        new ArticleSynchro(context, dialog).execute();
+        new ArticleSynchro(context, notificationBuilder, () -> {
+            loadingDialog.dismiss();
+            onTaskListener.onTask();
+        }).execute();
     }
 
     /**
@@ -265,4 +296,28 @@ public class Tools{
             imageView.setImageBitmap(null);
         }
     }
+
+    public static void createNotificationChannel(Context context) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = context.getString(R.string.notification_channel_name);
+            String description = context.getString(R.string.notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public static void showNotification(Context context, NotificationCompat.Builder builder, int notificationId) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(notificationId, builder.build());
+        }
+    }
+
 }

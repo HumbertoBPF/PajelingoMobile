@@ -4,9 +4,10 @@ import static com.example.pajelingo.utils.Tools.saveImage;
 
 import android.content.Context;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.OnTaskListener;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
@@ -16,9 +17,10 @@ import java.util.List;
 public class GameSynchro extends ResourcesSynchro<Game>{
     private final Context context;
 
-    public GameSynchro(Context context, AlertDialog downloadDialog) {
-        super("game", AppDatabase.getInstance(context).getGameDao(),
-                () -> LanguageSchoolAPIHelper.getApiObject().getGames(), new ScoresSynchro(context, downloadDialog), downloadDialog);
+    public GameSynchro(Context context, NotificationCompat.Builder builder, OnTaskListener onTaskListener) {
+        super(context, builder, 75, AppDatabase.getInstance(context).getGameDao(),
+                () -> LanguageSchoolAPIHelper.getApiObject().getGames(),
+                new ScoresSynchro(context, builder, onTaskListener), onTaskListener);
         this.context = context;
     }
 

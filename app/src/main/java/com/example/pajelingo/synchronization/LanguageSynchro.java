@@ -4,9 +4,10 @@ import static com.example.pajelingo.utils.Tools.saveImage;
 
 import android.content.Context;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.OnTaskListener;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
@@ -16,9 +17,10 @@ import java.util.List;
 public class LanguageSynchro extends ResourcesSynchro<Language> {
     private final Context context;
 
-    public LanguageSynchro(Context context, AlertDialog downloadDialog) {
-        super("language", AppDatabase.getInstance(context).getLanguageDao(),
-                () -> LanguageSchoolAPIHelper.getApiObject().getLanguages(), new MeaningSynchro(context, downloadDialog), downloadDialog);
+    public LanguageSynchro(Context context, NotificationCompat.Builder builder, OnTaskListener onTaskListener) {
+        super(context, builder, 38, AppDatabase.getInstance(context).getLanguageDao(),
+                () -> LanguageSchoolAPIHelper.getApiObject().getLanguages(),
+                new MeaningSynchro(context, builder, onTaskListener), onTaskListener);
         this.context = context;
     }
 

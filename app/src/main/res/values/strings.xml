@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">Pajelingo</string>
-    <string name="dialog_download_resources_title">Download resources</string>
-    <string name="dialog_download_resources_message">You are going to download the resources from the server. Please, make sure to be connected to internet.</string>
-    <string name="dialog_download_resources_confirm">Launch</string>
-    <string name="dialog_download_resources_decline">Cancel</string>
+
+    <string name="dialog_confirm_resources_sync_title">Resources synchronization</string>
+    <string name="dialog_confirm_resources_sync_message"> You are going to download the resources. Please make sure to be online.
+        If you have provided notification permission to the app, you can follow the progress on the notifications.
+    </string>
+    <string name="dialog_confirm_resources_sync_confirm">Launch</string>
+    <string name="dialog_confirm_resources_sync_decline">Cancel</string>
 
     <string name="dialog_delete_account_title">Delete account</string>
     <string name="dialog_delete_account_message">Are you sure that you want to delete your account? This action is permanent and irreversible</string>
     <string name="dialog_delete_account_confirm">Yes, delete account</string>
     <string name="dialog_delete_account_decline">Decline</string>
 
-    <string name="progress_download_title">Download in progress</string>
-    <string name="progress_download_initial_msg">Preparing your download</string>
+    <string name="sync_notification_title">Resources synchronization</string>
+    <string name="sync_toast_start">Synchronization started! Check the notifications to follow the progress.</string>
+    <string name="sync_toast_failed">Synchronization failed. Try again and, if the error persists, contact us.</string>
+    <string name="sync_toast_concluded">Synchronization concluded! Pajelingo is up to date now!</string>
+    <string name="sync_notification_failed_title">Synchronization failed</string>
+    <string name="sync_notification_failed_text">Try again and, if the error persists, contact us.</string>
+    <string name="sync_notification_in_progress">Synchronization in progress…</string>
+    <string name="sync_notification_concluded_title">Synchronization concluded</string>
+    <string name="sync_notification_concluded_text">Pajelingo is up to date now!</string>
 
     <string name="play_button_text">Play</string>
     <string name="check_button_text">Check</string>
@@ -34,11 +44,11 @@
     <string name="tab_icon_login_title">Login</string>
     <string name="tab_icon_logout_title">Logout</string>
     <string name="sp_file_name">MySharedPref</string>
+    <string name="is_syncing_sp">is_syncing</string>
     <string name="username_sp">username</string>
     <string name="email_sp">email</string>
     <string name="token_sp">token</string>
     <string name="picture_sp">picture</string>
-    <string name="last_score_synchro_sp">last_score_synchro</string>
     <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
@@ -157,4 +167,6 @@
     <string name="current_game_score">Your current score is</string>
     <string name="loading_game_text">Please wait\n(Log out to get rid of loadings,\nbut keep in mind that you will not receive a score when logged out)</string>
     <string name="verb_and_tense_text">%1$s - %2$s</string>
+    <string name="notification_channel_name">Notification channel name</string>
+    <string name="notification_channel_description">Notification channel description</string>
 </resources>

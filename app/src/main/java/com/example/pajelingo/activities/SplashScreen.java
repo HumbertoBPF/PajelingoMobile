@@ -1,5 +1,7 @@
 package com.example.pajelingo.activities;
 
+import static com.example.pajelingo.utils.Tools.createNotificationChannel;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +17,9 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        createNotificationChannel(this);
+
         new Handler().postDelayed(() -> {
             SharedPreferences sp = getSharedPreferences(getString(R.string.sp_file_name),MODE_PRIVATE);
 

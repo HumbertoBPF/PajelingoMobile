@@ -1,12 +1,23 @@
 package com.example.pajelingo.synchronization;
 
+import static com.example.pajelingo.utils.Tools.PROGRESS_MAX;
+import static com.example.pajelingo.utils.Tools.SYNC_NOTIFICATION_ID;
+import static com.example.pajelingo.utils.Tools.showNotification;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
+import com.example.pajelingo.R;
 import com.example.pajelingo.daos.BaseDao;
+import com.example.pajelingo.interfaces.OnTaskListener;
 
 import java.util.List;
 
@@ -21,20 +32,24 @@ import retrofit2.Response;
  */
 public abstract class ResourcesSynchro<E> {
 
-    private final String resourceName;
+    private final Context context;
+    private final NotificationCompat.Builder builder;
+    private final int percentage;
     private final BaseDao<E> dao;
     private final ResourcesInterface<E> resourcesInterface;
     private final ResourcesSynchro<?> nextTask;
-    private AlertDialog downloadDialog;
-    private Handler handler =  new Handler();
+    private final OnTaskListener onTaskListener;
+    private final Handler handler =  new Handler();
 
-    public ResourcesSynchro(String resourceName, BaseDao<E> dao, ResourcesInterface<E> resourcesInterface,
-                            ResourcesSynchro<?> nextTask, AlertDialog downloadDialog){
-        this.resourceName = resourceName;
+    public ResourcesSynchro(Context context, NotificationCompat.Builder builder, int percentage, BaseDao<E> dao,
+                            ResourcesInterface<E> resourcesInterface, ResourcesSynchro<?> nextTask, OnTaskListener onTaskListener){
+        this.context = context;
+        this.builder = builder;
+        this.percentage = percentage;
         this.dao = dao;
         this.resourcesInterface = resourcesInterface;
         this.nextTask = nextTask;
-        this.downloadDialog = downloadDialog;
+        this.onTaskListener = onTaskListener;
     }
 
     public void execute() {
@@ -46,24 +61,22 @@ public abstract class ResourcesSynchro<E> {
                     saveEntities(response.body());
                 }else{
                     Log.e("ResourcesSynchro", "doInBackground:onResponse not successful");
-                    downloadDialog.setMessage("Fail to download "+resourceName+" table");
-                    nextStep();
+                    terminateSynchronization(false);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<E>> call, @NonNull Throwable t) {
                 Log.e("ResourcesSynchro", "doInBackground:onFailure");
-                downloadDialog.setMessage("Fail to download "+resourceName+" table");
-                nextStep();
+                terminateSynchronization(false);
             }
         });
     }
 
     protected void saveEntities(List<E> entities) {
-        downloadDialog.setMessage("Downloading "+resourceName+" table");
+        updateProgressBarNotification(percentage);
         if (entities != null){
-            Log.i("ResourcesSynchro","Number of elements of "+resourceName+" table: " + entities.size());
+            Log.i("ResourcesSynchro","Number of elements of table: " + entities.size());
         }
         dao.save(entities, result -> nextStep());
     }
@@ -76,13 +89,50 @@ public abstract class ResourcesSynchro<E> {
             if (nextTask != null) {
                 nextTask.execute();
             }else {
-                downloadDialog.dismiss();
+                updateProgressBarNotification(PROGRESS_MAX);
+                handler.postDelayed(() -> terminateSynchronization(true), 2000);
             }
         },2000);
+    }
+
+    private void updateProgressBarNotification(int percentage) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            builder.setProgress(PROGRESS_MAX, percentage,false);
+            showNotification(context, builder, SYNC_NOTIFICATION_ID);
+        }
+    }
+
+    private void terminateSynchronization(boolean isSuccessful) {
+        String titleNotification;
+        String textNotification;
+        int iconResource;
+        String toastMessage;
+
+        if (isSuccessful) {
+            titleNotification = context.getString(R.string.sync_notification_concluded_title);
+            textNotification = context.getString(R.string.sync_notification_concluded_text);
+            iconResource = R.drawable.ic_check;
+            toastMessage = context.getString(R.string.sync_toast_concluded);
+        }else {
+            titleNotification = context.getString(R.string.sync_notification_failed_title);
+            textNotification = context.getString(R.string.sync_notification_failed_text);
+            iconResource = R.drawable.ic_warning;
+            toastMessage = context.getString(R.string.sync_toast_failed);
+        }
+
+        onTaskListener.onTask();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            builder.setContentTitle(titleNotification)
+                    .setContentText(textNotification)
+                    .setSmallIcon(iconResource)
+                    .setProgress(0, 0,false)
+                    .setOngoing(false);
+            showNotification(context, builder, SYNC_NOTIFICATION_ID);
+        }
+        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
     }
 
     public interface ResourcesInterface<E> {
         Call<List<E>> getCallForResources();
     }
-
 }
