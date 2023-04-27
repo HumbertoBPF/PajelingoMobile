@@ -1,8 +1,8 @@
 package com.example.pajelingo.utils;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
-import static com.example.pajelingo.utils.Tools.saveToken;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.saveToken;
+import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -175,6 +175,6 @@ public class TestTools {
 
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         wordDao.save(words);
-        saveStateAndUserCredentials(context, userData);
+        saveUserData(context, userData);
     }
 }

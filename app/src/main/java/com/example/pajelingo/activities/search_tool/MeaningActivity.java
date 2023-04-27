@@ -1,8 +1,8 @@
 package com.example.pajelingo.activities.search_tool;
 
+import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 import static com.example.pajelingo.utils.Tools.displayFavoriteWordError;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.getPictureFromBase64String;
 
 import android.os.Bundle;
 import android.view.View;

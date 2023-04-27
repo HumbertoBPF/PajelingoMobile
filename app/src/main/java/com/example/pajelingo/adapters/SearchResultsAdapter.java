@@ -1,7 +1,7 @@
 package com.example.pajelingo.adapters;
 
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
-import static com.example.pajelingo.utils.Tools.setImageResourceFromFile;
+import static com.example.pajelingo.utils.Files.setImageResourceFromFile;
+import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 
 import android.content.Context;
 import android.content.Intent;

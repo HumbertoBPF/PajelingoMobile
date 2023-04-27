@@ -18,9 +18,9 @@ import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameA
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
+import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static com.example.pajelingo.utils.TestTools.getScore;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
@@ -187,7 +187,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
 
     @Test
     public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
-        saveStateAndUserCredentials(context, testUser);
+        saveUserData(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());

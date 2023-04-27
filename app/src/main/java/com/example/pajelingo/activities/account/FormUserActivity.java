@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 import static com.example.pajelingo.utils.Tools.validatePassword;
 
 import android.content.Intent;
@@ -156,7 +156,7 @@ public class FormUserActivity extends AppCompatActivity {
                 if ((response.code() == 200) && (user != null)) {
                     Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
                     user.setPassword(password);
-                    saveStateAndUserCredentials(FormUserActivity.this, user);
+                    saveUserData(FormUserActivity.this, user);
                     finish();
                 }else if (response.code() == 400) {
                     String error = getValidationErrorMessage(response);

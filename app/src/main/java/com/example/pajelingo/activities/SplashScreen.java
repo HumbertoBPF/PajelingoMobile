@@ -1,6 +1,6 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.utils.Tools.createNotificationChannel;
+import static com.example.pajelingo.utils.Notifications.createNotificationChannel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

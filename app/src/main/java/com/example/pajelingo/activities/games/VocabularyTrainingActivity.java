@@ -1,9 +1,9 @@
 package com.example.pajelingo.activities.games;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
 import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
 
 import android.view.View;
 import android.widget.ArrayAdapter;

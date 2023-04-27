@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.Tools.getPictureFromBase64String;
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
+import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
+import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

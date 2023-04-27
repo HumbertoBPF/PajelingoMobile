@@ -1,40 +1,14 @@
 package com.example.pajelingo.utils;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.pajelingo.database.settings.AppDatabase.NAME_DB;
-
-import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.Handler;
-import android.util.Base64;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.interfaces.OnTaskListener;
 import com.example.pajelingo.models.GameAnswerFeedback;
-import com.example.pajelingo.models.Token;
-import com.example.pajelingo.models.User;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.synchronization.ArticleSynchro;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -44,10 +18,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Tools{
-
-    public static final String CHANNEL_ID = "notification channel id";
-    public static final int PROGRESS_MAX = 100;
-    public static final int SYNC_NOTIFICATION_ID = 1;
 
     /**
      * Picks a random item from a list.
@@ -60,67 +30,6 @@ public class Tools{
         int randomIndex = rand.nextInt(list.size());
 
         return list.get(randomIndex);
-    }
-
-    /**
-     * Verifies if the user credentials are saved on Shared Preferences, which indicates that the user
-     * is authenticated.
-     * @param context application Context
-     * @return if the user credentials are saved on Shared Preferences
-     */
-    public static boolean isUserAuthenticated(Context context){
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
-        String username = sp.getString(context.getString(R.string.username_sp),null);
-        String email = sp.getString(context.getString(R.string.email_sp),null);
-        String token = sp.getString(context.getString(R.string.token_sp),null);
-
-        return (username != null) && (email != null) && (token != null);
-    }
-
-    public static void saveToken(Context context, Token token){
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(context.getString(R.string.token_sp), token.getToken());
-        editor.apply();
-    }
-
-    /**
-     * Saves the specified user credentials on Shared Preferences.
-     * @param context application Context
-     * @param user User whose credentials must be saved
-     */
-    public static void saveStateAndUserCredentials(Context context, User user) {
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(context.getString(R.string.username_sp), user.getUsername());
-        editor.putString(context.getString(R.string.email_sp), user.getEmail());
-        editor.putString(context.getString(R.string.picture_sp), user.getPicture());
-        editor.apply();
-    }
-
-    /**
-     * Deletes the user credentials from Shared Preferences.
-     * @param context application Context
-     */
-    public static void deleteUserCredentials(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name),MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        // Remove user from Shared Preferences due to logout
-        editor.remove(context.getString(R.string.token_sp));
-        editor.remove(context.getString(R.string.username_sp));
-        editor.remove(context.getString(R.string.email_sp));
-        editor.remove(context.getString(R.string.picture_sp));
-        editor.apply();
-    }
-
-    /**
-     * Generates a Token Authentication string to be provided as authorization header.
-     * @return Basic Authentication token
-     */
-    public static String getAuthToken(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), MODE_PRIVATE);
-        String token = sp.getString(context.getString(R.string.token_sp), "");
-        return "Token " + token;
     }
 
     /**
@@ -169,116 +78,6 @@ public class Tools{
         return passwordMap;
     }
 
-    /**
-     * Deletes the content of the specified folder, that is its sub folders and files.
-     * @param file File instance corresponding to the file whose content must be deleted.
-     */
-    public static void clearFolder(File file){
-        // Specified file can't be null
-        if (file == null){
-            return;
-        }
-
-        File[] subFiles = file.listFiles();
-        // Check if the file has subFiles
-        if (subFiles != null) {
-            for (File subFile: subFiles){
-                clearFolder(subFile);
-                subFile.delete();
-            }
-        }
-    }
-
-    /**
-     * Launches the synchronization of resources, which is implemented through a chain of
-     * responsibility design pattern.
-     * @param context application's context.
-     */
-    public static void launchResourcesSync(Context context, LayoutInflater inflater, OnTaskListener onTaskListener){
-        final int nbSteps = 8;
-        // Sync progress notification
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_synchro)
-                .setContentTitle(context.getString(R.string.sync_notification_title))
-                .setContentText(context.getString(R.string.sync_notification_in_progress))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setProgress(PROGRESS_MAX, 0, false)
-                .setOngoing(true);
-        showNotification(context, notificationBuilder, SYNC_NOTIFICATION_ID);
-        // Loading dialog
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context)
-                .setTitle(R.string.dialog_confirm_resources_sync_title)
-                .setView(inflater.inflate(R.layout.loading_dialog_layout, null))
-                .setCancelable(false);
-        AlertDialog loadingDialog = dialogBuilder.create();
-        loadingDialog.show();
-        // Delete database and internal storage files before synchronization
-        context.deleteDatabase(NAME_DB);
-        clearFolder(context.getFilesDir());
-        Handler handler = new Handler();
-
-        new ArticleSynchro(context).execute(1, (isSuccessful, currentStep) -> {
-            int percentage = Math.min(Math.round(currentStep*100f/nbSteps), 100);
-
-            updateProgressBarNotification(context, notificationBuilder, percentage);
-
-            if ((!isSuccessful) || (currentStep == nbSteps)) {
-                handler.postDelayed(() -> {
-                    loadingDialog.dismiss();
-                    terminateSynchronization(context, notificationBuilder, isSuccessful);
-                    onTaskListener.onTask();
-                }, 2000);
-            }
-        });
-    }
-
-    private static void updateProgressBarNotification(Context context, NotificationCompat.Builder builder, int percentage) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            builder.setProgress(PROGRESS_MAX, percentage,false);
-            showNotification(context, builder, SYNC_NOTIFICATION_ID);
-        }
-    }
-
-    private static void terminateSynchronization(Context context, NotificationCompat.Builder builder, boolean isSuccessful) {
-        String titleNotification;
-        String textNotification;
-        int iconResource;
-        String toastMessage;
-
-        if (isSuccessful) {
-            titleNotification = context.getString(R.string.sync_notification_concluded_title);
-            textNotification = context.getString(R.string.sync_notification_concluded_text);
-            iconResource = R.drawable.ic_check;
-            toastMessage = context.getString(R.string.sync_toast_concluded);
-        }else {
-            titleNotification = context.getString(R.string.sync_notification_failed_title);
-            textNotification = context.getString(R.string.sync_notification_failed_text);
-            iconResource = R.drawable.ic_warning;
-            toastMessage = context.getString(R.string.sync_toast_failed);
-        }
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            builder.setContentTitle(titleNotification)
-                    .setContentText(textNotification)
-                    .setSmallIcon(iconResource)
-                    .setProgress(0, 0,false)
-                    .setOngoing(false);
-            showNotification(context, builder, SYNC_NOTIFICATION_ID);
-        }
-        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Gets a Bitmap from a base 64 string. The Bitmap instance can be used, for instance, to
-     * display or save the picture as a file.
-     * @param base64String base 64 string encoding a picture.
-     * @return a Bitmap instance representing the encoded picture.
-     */
-    public static Bitmap getPictureFromBase64String(String base64String){
-        byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes,0, bytes.length);
-    }
-
     public static void handleGameAnswerFeedback(Context context, Call<GameAnswerFeedback> call) {
         call.enqueue(new Callback<GameAnswerFeedback>() {
             @Override
@@ -310,62 +109,6 @@ public class Tools{
             Toast.makeText(context, R.string.error_removing_word_from_favorites, Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(context, R.string.error_adding_word_to_favorites, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static void saveImage(Context context, String base64String, String path) throws IOException {
-        String[] subPaths = path.split("/");
-
-        int nbPaths = subPaths.length;
-        File parentFile = context.getFilesDir();
-
-        for (int i = 0;i < nbPaths-1;i++){
-            String subDirectory = subPaths[i];
-            File file = new File(parentFile, subDirectory);
-            file.mkdir();
-            parentFile = file;
-        }
-
-        String filename = subPaths[nbPaths - 1];
-
-        File imageFile = new File(parentFile,filename);
-
-        FileOutputStream fos = new FileOutputStream(imageFile);
-        // Use the compress method on the BitMap object to write image to the OutputStream
-        getPictureFromBase64String(base64String).compress(Bitmap.CompressFormat.PNG, 100, fos);
-        fos.close();
-    }
-
-    public static void setImageResourceFromFile(ImageView imageView, String path) {
-        File languageImageFile = new File(path);
-        if(languageImageFile.exists()){
-            Bitmap image = BitmapFactory.decodeFile(languageImageFile.getAbsolutePath());
-            imageView.setImageBitmap(image);
-        }else{
-            imageView.setImageBitmap(null);
-        }
-    }
-
-    public static void createNotificationChannel(Context context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = context.getString(R.string.notification_channel_name);
-            String description = context.getString(R.string.notification_channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    public static void showNotification(Context context, NotificationCompat.Builder builder, int notificationId) {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            notificationManager.notify(notificationId, builder.build());
         }
     }
 

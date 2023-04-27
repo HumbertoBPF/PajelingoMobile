@@ -1,8 +1,8 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
-import static com.example.pajelingo.utils.Tools.isUserAuthenticated;
-import static com.example.pajelingo.utils.Tools.launchResourcesSync;
+import static com.example.pajelingo.utils.SharedPreferences.deleteUserData;
+import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
+import static com.example.pajelingo.utils.Synchronization.launchResourcesSync;
 
 import android.Manifest;
 import android.content.Intent;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isUserAuthenticated(this)) {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            deleteUserCredentials(this);
+            deleteUserData(this);
             // Update menu layout
             onResume();
         }

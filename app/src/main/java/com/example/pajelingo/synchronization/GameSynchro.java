@@ -1,6 +1,6 @@
 package com.example.pajelingo.synchronization;
 
-import static com.example.pajelingo.utils.Tools.saveImage;
+import static com.example.pajelingo.utils.Files.saveImage;
 
 import android.content.Context;
 

@@ -1,7 +1,7 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.Tools.deleteUserCredentials;
-import static com.example.pajelingo.utils.Tools.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.deleteUserData;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -42,7 +42,7 @@ public class DeletionConfirmationActivity extends AppCompatActivity {
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(DeletionConfirmationActivity.this, R.string.account_deletion_success, Toast.LENGTH_SHORT).show();
-                            deleteUserCredentials(DeletionConfirmationActivity.this);
+                            deleteUserData(DeletionConfirmationActivity.this);
                             finish();
                         }else{
                             Toast.makeText(DeletionConfirmationActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();

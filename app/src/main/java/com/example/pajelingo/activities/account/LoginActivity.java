@@ -1,8 +1,8 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.Tools.getAuthToken;
-import static com.example.pajelingo.utils.Tools.saveStateAndUserCredentials;
-import static com.example.pajelingo.utils.Tools.saveToken;
+import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
+import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
+import static com.example.pajelingo.utils.SharedPreferences.saveToken;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                 if ((response.isSuccessful()) && (words != null)){
                     wordDao.save(words, result -> {
                         new Handler().postDelayed(() -> {
-                            saveStateAndUserCredentials(getApplicationContext(), user);
+                            saveUserData(getApplicationContext(), user);
                             Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                             finish();
