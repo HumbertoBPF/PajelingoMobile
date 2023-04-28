@@ -146,7 +146,7 @@
     <string name="reset_password_link"><u>I forgot my password</u></string>
     <string name="reset_button_text">Reset password</string>
     <string name="reset_password_instructions">Inform the email associated with your account</string>
-    <string name="reset_password_loading_dialog_title">Please, wait</string>
+    <string name="reset_password_loading_dialog_title">Please wait</string>
     <string name="reset_password_loading_dialog_message">Requesting password reset…</string>
     <string name="reset_password_feedback_dialog_title">Check your email</string>
     <string name="reset_password_feedback_dialog_message">Check the specified email to reset your account. If there is an email associated with a
@@ -169,4 +169,5 @@
     <string name="verb_and_tense_text">%1$s - %2$s</string>
     <string name="notification_channel_name">Notification channel name</string>
     <string name="notification_channel_description">Notification channel description</string>
+    <string name="loading_button_text">Please wait</string>
 </resources>

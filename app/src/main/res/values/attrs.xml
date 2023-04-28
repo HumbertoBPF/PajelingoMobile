@@ -26,4 +26,9 @@
     <declare-styleable name="LabeledSpinner">
         <attr name="spinnerLabel" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="LoadingButton">
+        <attr name="loadingButtonText" format="string" />
+        <attr name="loadingButtonIcon" format="integer" />
+    </declare-styleable>
 </resources>

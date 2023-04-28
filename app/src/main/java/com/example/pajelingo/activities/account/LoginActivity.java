@@ -1,18 +1,16 @@
 package com.example.pajelingo.activities.account;
 
 import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
-import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 import static com.example.pajelingo.utils.SharedPreferences.saveToken;
+import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
@@ -24,6 +22,7 @@ import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 import com.example.pajelingo.ui.LabeledEditText;
+import com.example.pajelingo.ui.LoadingButton;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView resetPasswordLinkTextView;
     private LabeledEditText usernameInput;
     private LabeledEditText passwordInput;
-    private Button loginButton;
+    private LoadingButton loginButton;
 
     private WordDao wordDao;
 
@@ -58,9 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
 
-        loginButton.setOnClickListener(v -> {
-            login();
-        });
+        loginButton.setOnClickListener(v -> login());
 
         signupLinkTextView.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, FormUserActivity.class));
@@ -74,14 +71,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(){
-        AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this).setTitle(R.string.login_dialog_title)
-                .setMessage(R.string.login_dialog_message).setCancelable(false).create();
-        dialog.show();
-
         String username = usernameInput.getEditText().getText().toString();
         String password = passwordInput.getEditText().getText().toString();
 
         Call<Token> tokenCall = languageSchoolAPI.getToken(new User("", username, password, null));
+        loginButton.setLoading(true);
 
         tokenCall.enqueue(new Callback<Token>() {
             @Override
@@ -89,50 +83,50 @@ public class LoginActivity extends AppCompatActivity {
                 Token token = response.body();
                 if ((response.isSuccessful()) && (token != null)) {
                     saveToken(LoginActivity.this, token);
-                    getUserData(dialog);
+                    getUserData();
                 }else {
                     if (response.code() == 400) {
-                        onErrorRequest(dialog);
+                        onErrorRequest();
                     } else {
-                        dismissDialogDelayed(dialog);
+                        onErrorInternetConnection();
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                dismissDialogDelayed(dialog);
+                onErrorInternetConnection();
             }
         });
 
 
     }
 
-    private void getUserData(AlertDialog dialog) {
+    private void getUserData() {
         Call<User> call = languageSchoolAPI.login(getAuthToken(LoginActivity.this));
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 User user = response.body();
                 if ((response.isSuccessful()) && (user != null)){
-                    getWords(dialog, user);
+                    getWords(user);
                 }else {
                     if (response.code() == 401) {
-                        onErrorRequest(dialog);
+                        onErrorRequest();
                     } else {
-                        onErrorInternetConnection(dialog);
+                        onErrorInternetConnection();
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                onErrorInternetConnection(dialog);
+                onErrorInternetConnection();
             }
         });
     }
 
-    private void getWords(AlertDialog dialog, User user) {
+    private void getWords(User user) {
         Call<List<Word>> call = languageSchoolAPI.getWords(getAuthToken(LoginActivity.this));
         call.enqueue(new Callback<List<Word>>() {
             @Override
@@ -143,37 +137,33 @@ public class LoginActivity extends AppCompatActivity {
                         new Handler().postDelayed(() -> {
                             saveUserData(getApplicationContext(), user);
                             Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
-                            dialog.dismiss();
+                            loginButton.setLoading(false);
                             finish();
                         }, 2000);
                     });
                 }else {
                     if (response.code() == 401) {
-                        onErrorRequest(dialog);
+                        onErrorRequest();
                     } else {
-                        dismissDialogDelayed(dialog);
+                        onErrorInternetConnection();
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Word>> call, @NonNull Throwable t) {
-                onErrorInternetConnection(dialog);
+                onErrorInternetConnection();
             }
         });
     }
 
-    private void onErrorRequest(AlertDialog dialog) {
-        dialog.setMessage(getString(R.string.warning_invalid_credientials));
-        dismissDialogDelayed(dialog);
+    private void onErrorRequest() {
+        Toast.makeText(this, R.string.warning_invalid_credientials, Toast.LENGTH_SHORT).show();
+        loginButton.setLoading(false);
     }
 
-    private void onErrorInternetConnection(AlertDialog dialog) {
-        dialog.setMessage(getString(R.string.warning_connection_error));
-        dismissDialogDelayed(dialog);
-    }
-
-    private void dismissDialogDelayed(AlertDialog dialog){
-        new Handler().postDelayed(dialog::dismiss,2000);
+    private void onErrorInternetConnection() {
+        Toast.makeText(this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+        loginButton.setLoading(false);
     }
 }

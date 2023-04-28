@@ -12,6 +12,6 @@ import com.example.pajelingo.R;
 public class LoadingSpinner extends ConstraintLayout {
     public LoadingSpinner(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        inflate(context, R.layout.loading_spinner, this);
+        inflate(context, R.layout.loading_spinner_layout, this);
     }
 }

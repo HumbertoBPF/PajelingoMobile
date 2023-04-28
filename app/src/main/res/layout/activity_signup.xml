@@ -105,7 +105,7 @@
             android:layout_marginTop="16dp"
             app:type="password"/>
 
-        <Button
+        <com.example.pajelingo.ui.LoadingButton
             android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_confirmation_input"
             android:layout_marginTop="16dp"
-            android:text="@string/signup_button_text"/>
+            app:loadingButtonText="@string/signup_button_text"/>
 
         <TextView
             android:id="@+id/login_link_text_view"
