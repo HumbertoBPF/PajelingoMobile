@@ -39,7 +39,7 @@
             android:inputType="text"
             android:minHeight="48dp" />
 
-        <Button
+        <com.example.pajelingo.ui.LoadingButton
             android:id="@+id/confirm_deletion_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,8 +48,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@color/danger"
-            android:text="@string/delete_account"/>
+            app:loadingButtonColor="@color/color_states_danger_button"
+            app:loadingButtonText="@string/delete_account"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

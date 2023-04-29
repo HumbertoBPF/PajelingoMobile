@@ -19,7 +19,7 @@
     </style>
 
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/color_states_material_button</item>
+        <item name="backgroundTint">@color/color_states_primary_button</item>
         <item name="android:textColor">@color/white</item>
         <item name="iconTint">@color/white</item>
     </style>

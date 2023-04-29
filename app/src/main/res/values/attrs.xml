@@ -29,6 +29,7 @@
 
     <declare-styleable name="LoadingButton">
         <attr name="loadingButtonText" format="string" />
+        <attr name="loadingButtonColor" format="reference" />
         <attr name="loadingButtonIcon" format="integer" />
     </declare-styleable>
 </resources>
