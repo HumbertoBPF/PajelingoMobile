@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     tools:context=".activities.account.ProfileActivity">
 
     <ScrollView
@@ -25,8 +26,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginHorizontal="8dp">
+                app:layout_constraintBottom_toTopOf="@id/edit_account_button"
+                android:layout_marginTop="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/account_credentials"
@@ -67,7 +68,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:src="@drawable/profile"
-                    android:adjustViewBounds="true"/>
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/profile_picture_content_description" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,6 +81,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/personal_data"
+                app:layout_constraintBottom_toTopOf="@id/delete_account_button"
                 android:layout_marginTop="16dp"
                 android:text="@string/update_account"
                 app:icon="@drawable/ic_edit"/>
@@ -91,6 +94,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_account_button"
+                app:layout_constraintBottom_toTopOf="@id/score_header_text_view"
                 android:text="@string/delete_account"
                 app:icon="@drawable/ic_delete"/>
 
@@ -101,21 +105,23 @@
                 app:layout_constraintTop_toBottomOf="@id/delete_account_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/language_spinner"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                android:layout_marginHorizontal="8dp"
                 android:text="@string/score_header_text"/>
 
             <Spinner
                 android:id="@+id/language_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/score_header_text_view"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginVertical="8dp"
+                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="8dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/score_header_text_view"
+                app:layout_constraintBottom_toTopOf="@id/score_recycler_view"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/score_recycler_view"
@@ -124,6 +130,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/language_spinner"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
@@ -141,8 +148,8 @@
         android:src="@drawable/ic_favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:contentDescription="@string/favorite_button_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

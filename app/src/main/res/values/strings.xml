@@ -170,4 +170,13 @@
     <string name="notification_channel_name">Notification channel name</string>
     <string name="notification_channel_description">Notification channel description</string>
     <string name="loading_button_text">Please wait</string>
+    <string name="no_data_content_description">No data</string>
+    <string name="meaning_image_content_description">Meaning image</string>
+    <string name="on_boarding_image_content_description">On boarding image</string>
+    <string name="profile_picture_content_description">Profile picture</string>
+    <string name="your_email_hint">Your email</string>
+    <string name="logo_content_description">Logo</string>
+    <string name="loading_content_description">Loading</string>
+    <string name="default_label_text">Default label</string>
+    <string name="fulfilled_requirement_content_description">Fulfilled</string>
 </resources>

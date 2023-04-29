@@ -17,37 +17,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_25"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_75"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75"/>
+
+        <ImageView
+            android:id="@+id/warning_image_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline_25"
+            app:layout_constraintBottom_toTopOf="@id/guideline_75"
+            android:adjustViewBounds="true"
+            android:src="@drawable/loading"
+            android:contentDescription="@string/loading_content_description" />
 
-            <ImageView
-                android:id="@+id/warning_image_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:adjustViewBounds="true"
-                android:src="@drawable/loading"/>
-
-            <TextView
-                android:id="@+id/warning_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/warning_image_view"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:text="@string/loading_message"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/warning_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/warning_image_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="@string/loading_message"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

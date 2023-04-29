@@ -16,6 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/logo"
-        />
+        android:contentDescription="@string/logo_content_description" />
     
 </androidx.constraintlayout.widget.ConstraintLayout>

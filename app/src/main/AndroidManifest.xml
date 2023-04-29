@@ -15,12 +15,15 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".activities.account.FavoriteWordsActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.WordListActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.account.RequestResetPasswordActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -28,6 +31,7 @@
         </activity>
         <activity
             android:name=".activities.account.DeletionConfirmationActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -35,6 +39,7 @@
         </activity>
         <activity
             android:name=".activities.account.ProfileActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -42,6 +47,7 @@
         </activity>
         <activity
             android:name=".activities.account.FormUserActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -49,6 +55,7 @@
         </activity>
         <activity
             android:name=".activities.OnBoardingActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
@@ -57,6 +64,7 @@
         </activity>
         <activity
             android:name=".activities.FaqActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -64,6 +72,7 @@
         </activity>
         <activity
             android:name=".activities.FaqListActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,6 +80,7 @@
         </activity>
         <activity
             android:name=".activities.search_tool.SearchWithFiltersActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -78,6 +88,7 @@
         </activity>
         <activity
             android:name=".activities.MenuActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -85,18 +96,23 @@
         </activity>
         <activity
             android:name=".activities.RankingActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.account.LoginActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.search_tool.MeaningActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.search_tool.SearchActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.SplashScreen"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -107,18 +123,23 @@
         </activity>
         <activity
             android:name=".activities.games.ConjugationGameActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.games.GuessTheArticleActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.games.VocabularyTrainingActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.games.GameActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <meta-data

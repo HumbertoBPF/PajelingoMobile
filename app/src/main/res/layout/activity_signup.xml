@@ -4,130 +4,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     tools:context=".activities.account.FormUserActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="8dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.example.pajelingo.ui.LabeledEditText
-            android:id="@+id/email_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:label="@string/email_label"
-            app:type="email"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.example.pajelingo.ui.LabeledEditText
-            android:id="@+id/username_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/email_input"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:label="@string/username_label"
-            android:layout_marginTop="16dp"/>
+            <com.example.pajelingo.ui.LabeledEditText
+                android:id="@+id/email_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:label="@string/email_label"
+                app:type="email"/>
 
-        <com.example.pajelingo.ui.LabeledEditText
-            android:id="@+id/password_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/username_input"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:label="@string/password_label"
-            android:layout_marginTop="16dp"
-            app:type="password"/>
+            <com.example.pajelingo.ui.LabeledEditText
+                android:id="@+id/username_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/email_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:label="@string/username_label"
+                android:layout_marginTop="8dp"/>
 
-        <TextView
-            android:id="@+id/password_requirements_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/password_input"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/password_requirements_label"/>
+            <com.example.pajelingo.ui.LabeledEditText
+                android:id="@+id/password_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/username_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:label="@string/password_label"
+                android:layout_marginTop="8dp"
+                app:type="password"/>
 
-        <com.example.pajelingo.ui.PasswordRequirement
-            android:id="@+id/requirement_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_requirements_label"
-            app:requirementText="@string/password_requirement_1"
-            android:layout_marginTop="16dp"/>
+            <TextView
+                android:id="@+id/password_requirements_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/password_input"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/password_requirements_label"/>
 
-        <com.example.pajelingo.ui.PasswordRequirement
-            android:id="@+id/requirement_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requirement_1"
-            app:requirementText="@string/password_requirement_2"/>
+            <com.example.pajelingo.ui.PasswordRequirement
+                android:id="@+id/requirement_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/password_requirements_label"
+                app:requirementText="@string/password_requirement_1"
+                android:layout_marginTop="8dp"/>
 
-        <com.example.pajelingo.ui.PasswordRequirement
-            android:id="@+id/requirement_3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requirement_2"
-            app:requirementText="@string/password_requirement_3"/>
+            <com.example.pajelingo.ui.PasswordRequirement
+                android:id="@+id/requirement_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/requirement_1"
+                app:requirementText="@string/password_requirement_2"/>
 
-        <com.example.pajelingo.ui.PasswordRequirement
-            android:id="@+id/requirement_4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requirement_3"
-            app:requirementText="@string/password_requirement_4"/>
+            <com.example.pajelingo.ui.PasswordRequirement
+                android:id="@+id/requirement_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/requirement_2"
+                app:requirementText="@string/password_requirement_3"/>
 
-        <com.example.pajelingo.ui.LabeledEditText
-            android:id="@+id/password_confirmation_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/requirement_4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:label="@string/password_confirmation_label"
-            android:layout_marginTop="16dp"
-            app:type="password"/>
+            <com.example.pajelingo.ui.PasswordRequirement
+                android:id="@+id/requirement_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/requirement_3"
+                app:requirementText="@string/password_requirement_4"/>
 
-        <com.example.pajelingo.ui.LoadingButton
-            android:id="@+id/submit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_confirmation_input"
-            android:layout_marginTop="16dp"
-            app:loadingButtonText="@string/signup_button_text"/>
+            <com.example.pajelingo.ui.LabeledEditText
+                android:id="@+id/password_confirmation_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/requirement_4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:label="@string/password_confirmation_label"
+                android:layout_marginTop="8dp"
+                app:type="password"/>
 
-        <TextView
-            android:id="@+id/login_link_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/submit_button"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@color/raw_blue"
-            android:text="@string/login_link"/>
+            <com.example.pajelingo.ui.LoadingButton
+                android:id="@+id/submit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/password_confirmation_input"
+                android:layout_marginTop="8dp"
+                app:loadingButtonText="@string/signup_button_text"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/login_link_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/submit_button"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/raw_blue"
+                android:text="@string/login_link"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LanguageSchoolAPIHelper {
 
-    protected static final String BASE_URL = "http://192.168.15.4:8000/api/";
+    protected static final String BASE_URL = "http://192.168.15.2:8000/api/";
 
     public static LanguageSchoolAPI getApiObject() {
         Retrofit retrofit = new Retrofit.Builder()

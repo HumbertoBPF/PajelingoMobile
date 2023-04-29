@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     tools:context=".activities.search_tool.MeaningActivity">
 
     <ScrollView
@@ -26,8 +27,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:adjustViewBounds="true"
-                android:layout_margin="8dp"
-                tools:src="@drawable/logo"/>
+                tools:src="@drawable/logo"
+                android:contentDescription="@string/meaning_image_content_description" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/meanings_recycler_view"
@@ -50,7 +51,7 @@
                 app:icon="@drawable/ic_favorite"
                 app:iconTint="@color/danger"
                 android:backgroundTint="@color/info"
-                android:layout_marginVertical="8dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/add_to_favorite_words"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
