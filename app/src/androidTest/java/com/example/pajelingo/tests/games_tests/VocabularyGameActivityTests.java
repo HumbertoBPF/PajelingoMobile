@@ -15,7 +15,6 @@ import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatche
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
@@ -95,7 +94,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationVocabularyGame(){
+    public void testCorrectAnswerWithoutAuthenticationVocabularyGame() throws InterruptedException {
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
@@ -107,7 +106,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationVocabularyGame(){
+    public void testWrongAnswerWithoutAuthenticationVocabularyGame() throws InterruptedException {
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
@@ -248,10 +247,9 @@ public class VocabularyGameActivityTests extends GameActivityTests {
      * @param targetLanguage selected target language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language baseLanguage, Language targetLanguage, boolean isCorrect) {
+    private void inputAnswerAndCheckFeedback(Language baseLanguage, Language targetLanguage, boolean isCorrect) throws InterruptedException {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        waitUntil(withId(R.id.loading_progress_bar), 5000, true);
-        waitUntil(withId(R.id.loading_progress_bar), 10000, false);
+        Thread.sleep(3000);
         onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, isCorrect));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));

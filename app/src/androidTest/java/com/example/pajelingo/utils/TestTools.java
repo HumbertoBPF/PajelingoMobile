@@ -21,6 +21,7 @@ import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 
 import java.io.IOException;

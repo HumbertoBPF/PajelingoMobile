@@ -15,7 +15,6 @@ import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatche
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
@@ -122,7 +121,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationConjugationGame(){
+    public void testCorrectAnswerWithoutAuthenticationConjugationGame() throws InterruptedException {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -133,7 +132,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationConjugationGame(){
+    public void testWrongAnswerWithoutAuthenticationConjugationGame() throws InterruptedException {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -281,10 +280,9 @@ public class ConjugationGameActivityTests extends GameActivityTests {
      * @param randomLanguage selected language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
+    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) throws InterruptedException {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        waitUntil(withId(R.id.loading_progress_bar), 5000, true);
-        waitUntil(withId(R.id.loading_progress_bar), 10000, false);
+        Thread.sleep(3000);
         onView(isRoot())
                 .perform(inputConjugationGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button))

@@ -15,7 +15,6 @@ import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatche
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
@@ -91,13 +90,13 @@ public class ArticleGameActivityTests extends GameActivityTests {
         onView(withId(R.id.answer_input))
                 .check(matches(answerInputMatcher));
 
-        Matcher<View> checkButtonMatcher = allOf(withHint(R.string.check_button_text), isDisplayed());
+        Matcher<View> checkButtonMatcher = allOf(withText(R.string.check_button_text), isDisplayed());
         onView(withId(R.id.check_button))
                 .check(matches(checkButtonMatcher));
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationArticleGame(){
+    public void testCorrectAnswerWithoutAuthenticationArticleGame() throws InterruptedException {
         Language randomLanguage = getRandomLanguage(context, "English");
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -108,7 +107,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationArticleGame(){
+    public void testWrongAnswerWithoutAuthenticationArticleGame() throws InterruptedException {
         Language randomLanguage = getRandomLanguage(context, "English");
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -262,10 +261,9 @@ public class ArticleGameActivityTests extends GameActivityTests {
      * @param randomLanguage selected language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
+    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) throws InterruptedException {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        waitUntil(withId(R.id.loading_progress_bar), 5000, true);
-        waitUntil(withId(R.id.loading_progress_bar), 10000, false);
+        Thread.sleep(3000);
         onView(isRoot())
                 .perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button))
