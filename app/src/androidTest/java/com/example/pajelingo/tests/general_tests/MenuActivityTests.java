@@ -37,14 +37,19 @@ public class MenuActivityTests extends UITests {
     private void assertMenu(boolean isAuthenticated) {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_menu)).perform(click());
+        onView(withId(R.id.action_menu))
+                .perform(click());
 
         if (isAuthenticated){
-            onView(withId(R.id.menu_item_profile)).check(matches(isDisplayed()));
+            onView(withId(R.id.menu_item_profile))
+                    .check(matches(isDisplayed()));
         }else{
-            onView(withId(R.id.menu_item_profile)).check(matches(not(isDisplayed())));
+            onView(withId(R.id.menu_item_profile))
+                    .check(matches(not(isDisplayed())));
         }
-        onView(withId(R.id.menu_item_faq)).check(matches(isDisplayed()));
-        onView(withId(R.id.menu_item_rankings)).check(matches(isDisplayed()));
+        onView(withId(R.id.menu_item_faq))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.menu_item_rankings))
+                .check(matches(isDisplayed()));
     }
 }

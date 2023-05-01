@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.atPosition;
@@ -86,11 +87,16 @@ public class ProfileActivityTests extends UITests {
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
 
-        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_delete_account_message), 5000, true));
-        onView(withText(R.string.dialog_delete_account_title)).check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_message)).check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_confirm)).check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_decline)).check(matches(isDisplayed()));
+        onView(isRoot())
+                .perform(waitUntil(withText(R.string.dialog_delete_account_message), 5000, true));
+        onView(withText(R.string.dialog_delete_account_title))
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_delete_account_message))
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_delete_account_confirm))
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_delete_account_decline))
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -98,12 +104,22 @@ public class ProfileActivityTests extends UITests {
         authenticateUser(context, testUser);
 
         browseToProfileActivity();
-        onView(withId(R.id.delete_account_button)).perform(click());
-        onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
+        onView(withId(R.id.delete_account_button))
+                .perform(click());
+        onView(withText(R.string.dialog_delete_account_confirm))
+                .perform(click());
 
-        onView(allOf(withId(R.id.confirm_deletion_text_view), withText(R.string.confirm_deletion_text))).check(matches(isDisplayed()));
-        onView(withId(R.id.confirm_deletion_edit_text)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.confirm_deletion_button), withText(R.string.delete_account))).check(matches(isDisplayed()));
+        Matcher<View> confirmDeletionTextViewMatcher = allOf(withText(R.string.confirm_deletion_text), isDisplayed());
+        onView(withId(R.id.confirm_deletion_text_view))
+                .check(matches(confirmDeletionTextViewMatcher));
+
+        Matcher<View> confirmDeletionString = allOf(withHint(R.string.confirm_deletion_string), isDisplayed());
+        onView(withId(R.id.confirm_deletion_edit_text))
+                .check(matches(confirmDeletionString));
+
+        Matcher<View> confirmDeletionButtonMatcher = allOf(hasDescendant(withText(R.string.delete_account)), isDisplayed());
+        onView(withId(R.id.confirm_deletion_button))
+                .check(matches(confirmDeletionButtonMatcher));
     }
 
     @Test
@@ -123,11 +139,15 @@ public class ProfileActivityTests extends UITests {
 
         browseToProfileActivity();
 
-        onView(withId(R.id.delete_account_button)).perform(click());
-        onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
+        onView(withId(R.id.delete_account_button))
+                .perform(click());
+        onView(withText(R.string.dialog_delete_account_confirm))
+                .perform(click());
 
-        onView(withId(R.id.confirm_deletion_edit_text)).perform(typeText(context.getString(R.string.confirm_deletion_string)), closeSoftKeyboard());
-        onView(withId(R.id.confirm_deletion_button)).perform(click());
+        onView(withId(R.id.confirm_deletion_edit_text))
+                .perform(typeText(context.getString(R.string.confirm_deletion_string)), closeSoftKeyboard());
+        onView(withId(R.id.confirm_deletion_button))
+                .perform(click());
         Thread.sleep(5000);
 
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
@@ -143,8 +163,10 @@ public class ProfileActivityTests extends UITests {
         onView(withId(R.id.delete_account_button)).perform(click());
         onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
 
-        onView(withId(R.id.confirm_deletion_edit_text)).perform(typeText(getRandomAlphabeticalString(10)), closeSoftKeyboard());
-        onView(withId(R.id.confirm_deletion_button)).perform(click());
+        onView(withId(R.id.confirm_deletion_edit_text))
+                .perform(typeText(getRandomAlphabeticalString(10)), closeSoftKeyboard());
+        onView(withId(R.id.confirm_deletion_button))
+                .perform(click());
         Thread.sleep(5000);
 
         assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), true);
@@ -181,10 +203,21 @@ public class ProfileActivityTests extends UITests {
         String usernameText = context.getString(R.string.username_label) + ": " + testUser.getUsername();
         String emailText = context.getString(R.string.email_label) + ": " + testUser.getEmail();
 
-        onView(allOf(withId(R.id.username_credential_text_view), withText(usernameText))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.email_credential_text_view), withText(emailText))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.edit_account_button), withText(R.string.update_account))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.delete_account_button), withText(R.string.delete_account))).check(matches(isDisplayed()));
+        Matcher<View> usernameMatcher = allOf(withText(usernameText), isDisplayed());
+        onView(withId(R.id.username_credential_text_view))
+                .check(matches(usernameMatcher));
+
+        Matcher<View> emailMatcher = allOf(withText(emailText), isDisplayed());
+        onView(withId(R.id.email_credential_text_view))
+                .check(matches(emailMatcher));
+
+        Matcher<View> editAccountButtonMatcher = allOf(withText(R.string.update_account), isDisplayed());
+        onView(withId(R.id.edit_account_button))
+                .check(matches(editAccountButtonMatcher));
+
+        Matcher<View> deleteAccountButtonMatcher = allOf(withText(R.string.delete_account), isDisplayed());
+        onView(withId(R.id.delete_account_button))
+                .check(matches(deleteAccountButtonMatcher));
     }
 
     /**

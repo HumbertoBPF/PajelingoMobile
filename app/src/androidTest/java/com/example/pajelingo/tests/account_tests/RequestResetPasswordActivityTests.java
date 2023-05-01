@@ -5,8 +5,10 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
@@ -15,12 +17,15 @@ import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static org.hamcrest.Matchers.allOf;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.tests.abstract_tests.UITests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 public class RequestResetPasswordActivityTests extends UITests {
@@ -35,7 +40,8 @@ public class RequestResetPasswordActivityTests extends UITests {
     public void testRequestResetPasswordWithoutEmailInput(){
         browseToRequestResetPasswordActivity();
 
-        onView(withId(R.id.reset_password_button)).perform(click());
+        onView(withId(R.id.reset_password_button))
+                .perform(click());
         assertRequestResetPasswordActivityViews();
     }
 
@@ -44,8 +50,10 @@ public class RequestResetPasswordActivityTests extends UITests {
         browseToRequestResetPasswordActivity();
 
         String randomString = getRandomString(getRandomInteger(1, 10), true, true, false);
-        onView(withId(R.id.email_edit_text)).perform(typeText(randomString), closeSoftKeyboard());
-        onView(withId(R.id.reset_password_button)).perform(click());
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(randomString), closeSoftKeyboard());
+        onView(withId(R.id.reset_password_button))
+                .perform(click());
         assertRequestResetPasswordActivityViews();
     }
 
@@ -54,16 +62,26 @@ public class RequestResetPasswordActivityTests extends UITests {
         browseToRequestResetPasswordActivity();
 
         String randomEmail = getRandomEmail();
-        onView(withId(R.id.email_edit_text)).perform(typeText(randomEmail), closeSoftKeyboard());
-        onView(withId(R.id.reset_password_button)).perform(click());
+        onView(withId(R.id.email_edit_text))
+                .perform(typeText(randomEmail), closeSoftKeyboard());
+        onView(withId(R.id.reset_password_button))
+                .perform(click());
 
-        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 10000, true));
-        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
+        Matcher<View> loadingButtonMatcher = hasDescendant(allOf(withText(R.string.loading_button_text), isDisplayed()));
+        onView(withId(R.id.reset_password_button))
+                .check(matches(loadingButtonMatcher));
+
+        Matcher<View> resetButtonMatcher = allOf(withId(R.id.reset_password_button), hasDescendant(withText(R.string.reset_button_text)));
+        onView(isRoot())
+                .perform(waitUntil(resetButtonMatcher, 5000, true));
         // Check that the feedback dialog is displayed and dismiss it
-        Thread.sleep(5000);
-        onView(withText(R.string.reset_password_feedback_dialog_title)).check(matches(isDisplayed()));
-        onView(withText(R.string.reset_password_feedback_dialog_message)).check(matches(isDisplayed()));
-        onView(withText(R.string.reset_password_positive_button_text)).perform(click());
+        Thread.sleep(1000);
+        onView(withText(R.string.reset_password_feedback_dialog_title))
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.reset_password_feedback_dialog_message))
+                .check(matches(isDisplayed()));
+        onView(withText(R.string.reset_password_positive_button_text))
+                .perform(click());
         // Check if user is back to MenuActivity
         assertIsMainActivity(true);
     }
@@ -71,15 +89,24 @@ public class RequestResetPasswordActivityTests extends UITests {
     private void browseToRequestResetPasswordActivity() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_login_logout)).perform(click());
-        onView(withId(R.id.reset_password_link_text_view)).perform(click());
+        onView(withId(R.id.action_login_logout))
+                .perform(click());
+        onView(withId(R.id.reset_password_link_text_view))
+                .perform(click());
     }
 
     private void assertRequestResetPasswordActivityViews() {
-        onView(allOf(withId(R.id.reset_password_instructions_text_view), withText(R.string.reset_password_instructions)))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.email_edit_text)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reset_password_button), withText(R.string.reset_button_text))).check(matches(isDisplayed()));
+        Matcher<View> resetPasswordInstructionsMatcher = allOf(withText(R.string.reset_password_instructions), isDisplayed());
+        onView(withId(R.id.reset_password_instructions_text_view))
+                .check(matches(resetPasswordInstructionsMatcher));
+
+        Matcher<View> emailEditTextMatcher = allOf(withHint(R.string.your_email_hint), isDisplayed());
+        onView(withId(R.id.email_edit_text))
+                .check(matches(emailEditTextMatcher));
+
+        Matcher<View> resetPasswordButton = allOf(hasDescendant(withText(R.string.reset_button_text)), isDisplayed());
+        onView(withId(R.id.reset_password_button))
+                .check(matches(resetPasswordButton));
     }
 
 }

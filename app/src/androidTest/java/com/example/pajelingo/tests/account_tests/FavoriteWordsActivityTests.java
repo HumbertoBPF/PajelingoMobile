@@ -17,6 +17,8 @@ import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertFalse;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
@@ -29,6 +31,7 @@ import com.example.pajelingo.models.Meaning;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.WordListActivityTest;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -42,7 +45,8 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         browseToActivity();
-        onView(withId(R.id.action_filter)).perform(click());
+        onView(withId(R.id.action_filter))
+                .perform(click());
         assertFilterWordsForm();
     }
 
@@ -74,9 +78,9 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
         performSearch(searchPattern, randomLanguage);
         assertLoadingPage();
         // Checking that the results are correctly displayed
+        Matcher<View> searchRecyclerViewMatcher = allOf(hasLength(favoriteWords.size()), isDisplayed());
         onView(withId(R.id.search_recycler_view))
-                .check(matches(isDisplayed()))
-                .check(matches(hasLength(favoriteWords.size())));
+                .check(matches(searchRecyclerViewMatcher));
 
         for (int i = 0;i < favoriteWords.size();i++){
             Word favoriteWord = favoriteWords.get(i);
@@ -127,16 +131,19 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
                 .perform(actionOnItemAtPosition(randomPosition, click()));
 
         onView(withText(randomWord.getWordName())).check(matches(isDisplayed()));
+
+        Matcher<View>  meaningsRecyclerViewMatcher = allOf(hasLength(meanings.size()), isDisplayed());
         onView(withId(R.id.meanings_recycler_view))
-                .check(matches(isDisplayed()))
-                .check(matches(hasLength(meanings.size())));
+                .check(matches(meaningsRecyclerViewMatcher));
 
         for (int i = 0;i < meanings.size();i++){
             Meaning meaning = meanings.get(i);
             assertMeaning(meaning, i);
         }
 
-        onView(allOf(withId(R.id.favorite_word_button), withText(R.string.remove_from_favorite_words))).check(matches(isDisplayed()));
+        Matcher<View> favoriteWordButtonMatcher = allOf(withText(R.string.remove_from_favorite_words), isDisplayed());
+        onView(withId(R.id.favorite_word_button))
+                .check(matches(favoriteWordButtonMatcher));
     }
 
     @Test
@@ -156,12 +163,15 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
                 .perform(scrollToPosition(randomPosition))
                 .perform(actionOnItemAtPosition(randomPosition, click()));
 
-        onView(withId(R.id.meanings_recycler_view)).check(matches(isDisplayed()));
-        onView(withText(word.getWordName())).check(matches(isDisplayed()));
+        onView(withId(R.id.meanings_recycler_view))
+                .check(matches(isDisplayed()));
+        onView(withText(word.getWordName()))
+                .check(matches(isDisplayed()));
 
         onView(withId(R.id.favorite_word_button)).perform(click());
         // Checking if the word has been toggled in the database
-        onView(isRoot()).perform(waitUntil(allOf(withId(R.id.favorite_word_button), withText(R.string.add_to_favorite_words)), 5000, true));
+        onView(isRoot())
+                .perform(waitUntil(allOf(withId(R.id.favorite_word_button), withText(R.string.add_to_favorite_words)), 5000, true));
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         Word wordUpdated = wordDao.getRecordById(word.getId());
         assertFalse(wordUpdated.getFavorite());
@@ -169,9 +179,12 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
 
     @Override
     protected void browseToActivity() {
-        onView(withId(R.id.action_menu)).perform(click());
-        onView(withId(R.id.menu_item_profile)).perform(click());
-        onView(withId(R.id.favorite_button)).perform(click());
+        onView(withId(R.id.action_menu))
+                .perform(click());
+        onView(withId(R.id.menu_item_profile))
+                .perform(click());
+        onView(withId(R.id.favorite_button))
+                .perform(click());
         assertLoadingPage();
     }
 

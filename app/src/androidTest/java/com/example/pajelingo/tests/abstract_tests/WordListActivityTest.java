@@ -11,10 +11,10 @@ import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.atPosition;
-import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
@@ -81,19 +81,33 @@ public abstract class WordListActivityTest extends UITests {
     }
 
     protected void assertFilterWordsForm() {
-        String labelLanguageSpinner = context.getString(R.string.choose_language_label);
-        onView(withId(R.id.search_edit_text)).check(matches(isDisplayed()));
-        onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
-        onView(allOf(withId(R.id.search_button), withText(R.string.search_button_text))).check(matches(isDisplayed()));
+        Matcher<View> searchEditTextMatcher = allOf(withHint(R.string.search_edit_text_hint), isDisplayed());
+        onView(withId(R.id.search_edit_text))
+                .check(matches(searchEditTextMatcher));
+
+        Matcher<View> languageInputLabelMatcher = allOf(withId(R.id.label), withText(R.string.choose_language_label), isDisplayed());
+        Matcher<View> languageInputMatcher = allOf(hasDescendant(languageInputLabelMatcher), isDisplayed());
+        onView(withId(R.id.language_input))
+                .check(matches(languageInputMatcher));
+
+        Matcher<View> searchButtonMatcher = allOf(withText(R.string.search_button_text), isDisplayed());
+        onView(withId(R.id.search_button))
+                .check(matches(searchButtonMatcher));
     }
 
     protected void assertNoResults() {
         // Checking that loading image and text are shown
-        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+        Matcher<View> warningTextView = allOf(withText(R.string.loading_message), isDisplayed());
+        onView(withId(R.id.warning_text_view))
+                .check(matches(warningTextView));
+        onView(withId(R.id.warning_image_view))
+                .check(matches(isDisplayed()));
         // Checking that no results image and message are shown
-        onView(isRoot()).perform(waitUntil(allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message)), 5000, true));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+        warningTextView = allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message));
+        onView(isRoot())
+                .perform(waitUntil(warningTextView, 5000, true));
+        onView(withId(R.id.warning_image_view))
+                .check(matches(isDisplayed()));
     }
 
     protected void assertSearchResult(Word word, int position, String searchPattern, boolean hasFavoriteIcon) {
@@ -121,21 +135,31 @@ public abstract class WordListActivityTest extends UITests {
     }
 
     protected void performSearch(String searchPattern, Language language){
-        onView(withId(R.id.action_filter)).perform(click());
+        onView(withId(R.id.action_filter))
+                .perform(click());
         // Type pattern to search
-        onView(withId(R.id.search_edit_text)).perform(typeText(searchPattern), closeSoftKeyboard());
+        onView(withId(R.id.search_edit_text))
+                .perform(typeText(searchPattern), closeSoftKeyboard());
         // Select language
-        onView(withId(R.id.language_input)).perform(expandSpinner());
-        onData(is(language)).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.search_button)).perform(click());
+        onView(withId(R.id.language_input))
+                .perform(expandSpinner());
+        onData(is(language))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onView(withId(R.id.search_button))
+                .perform(click());
     }
 
     protected void assertLoadingPage() {
         // Checking that loading image and text are shown
-        onView(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message))).check(matches(isDisplayed()));
-        onView(withId(R.id.warning_image_view)).check(matches(isDisplayed()));
+        Matcher<View> warningTextViewMatcher = allOf(withText(R.string.loading_message), isDisplayed());
+        onView(withId(R.id.warning_text_view))
+                .check(matches(warningTextViewMatcher));
+        onView(withId(R.id.warning_image_view))
+                .check(matches(isDisplayed()));
         // Checking that loading image and message disappear when the results are shown
+        warningTextViewMatcher = allOf(withId(R.id.warning_text_view), withText(R.string.loading_message));
         onView(isRoot())
-                .perform(waitUntil(allOf(withId(R.id.warning_text_view), withText(R.string.loading_message)), 5000, false));
+                .perform(waitUntil(warningTextViewMatcher, 5000, false));
     }
 }

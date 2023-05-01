@@ -1,5 +1,12 @@
 package com.example.pajelingo.utils;
 
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.not;
+
 import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.TextView;
@@ -7,11 +14,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
 
+import com.example.pajelingo.R;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LabeledView;
-import com.example.pajelingo.ui.PasswordRequirement;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.hamcrest.Description;
@@ -115,65 +121,30 @@ public class CustomMatchers {
         };
     }
 
-    /**
-     * Checks if the text in the label of a LabeledView matches the specified string.
-     * @param label string to be compared to the label text.
-     * @return Matcher that performs the mentioned validation.
-     */
-    public static Matcher<? super View> hasLabel(String label){
-        return new BoundedMatcher<View, LabeledView>(LabeledView.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Verifying if the label of the LabeledView is "+label);
-            }
+    public static Matcher<View> getPasswordRequirementMatcher(int textResourceId, boolean isDisplayed) {
+        Matcher<View> displayedMatcher = isDisplayed?isDisplayed():not(isDisplayed());
 
-            @Override
-            protected boolean matchesSafely(LabeledView labeledView) {
-                return labeledView.getLabel().toString().equals(label);
-            }
-        };
+        Matcher<View> passwordRequirementText = allOf(withId(R.id.requirement_text_view), withText(textResourceId));
+        Matcher<View> passwordRequirementCheck = allOf(withId(R.id.requirement_image_view), displayedMatcher);
+
+        return allOf(hasDescendant(passwordRequirementText), isDisplayed(), hasDescendant(passwordRequirementCheck));
     }
 
-    public static Matcher<? super View> hasInput(String text){
-        return new BoundedMatcher<View, LabeledEditText>(LabeledEditText.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Verifying if the label of the LabeledEditText is "+text);
-            }
-
-            @Override
-            protected boolean matchesSafely(LabeledEditText labeledView) {
-                return labeledView.getEditText().getText().toString().equals(text);
-            }
-        };
+    public static Matcher<View> getLabeledEditTextMatcher(int labelResourceId, String editTextContent) {
+        Matcher<View> labelMatcher = hasDescendant(allOf(withId(R.id.label), withText(labelResourceId), isDisplayed()));
+        Matcher<View> editTextMatcher = hasDescendant(allOf(withId(R.id.edit_text), withText(editTextContent), isDisplayed()));
+        return allOf(labelMatcher, editTextMatcher, isDisplayed());
     }
 
-    public static Matcher<? super View> hasRequirementText(String text){
-        return new BoundedMatcher<View, PasswordRequirement>(PasswordRequirement.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Verifying if the text of the PasswordRequirement view is "+text);
-            }
-
-            @Override
-            protected boolean matchesSafely(PasswordRequirement passwordRequirement) {
-                return passwordRequirement.getText().toString().equals(text);
-            }
-        };
+    public static Matcher<View> getLabeledEditTextMatcher(String label, String editTextContent) {
+        Matcher<View> labelMatcher = hasDescendant(allOf(withId(R.id.label), withText(label), isDisplayed()));
+        Matcher<View> editTextMatcher = hasDescendant(allOf(withId(R.id.edit_text), withText(editTextContent), isDisplayed()));
+        return allOf(labelMatcher, editTextMatcher, isDisplayed());
     }
 
-    public static Matcher<? super View> isChecked(boolean isChecked){
-        return new BoundedMatcher<View, PasswordRequirement>(PasswordRequirement.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Verifying if the text of the PasswordRequirement view is checked");
-            }
-
-            @Override
-            protected boolean matchesSafely(PasswordRequirement passwordRequirement) {
-                return passwordRequirement.isChecked() == isChecked;
-            }
-        };
+    public static Matcher<View> getLabeledSpinnerMatcher(int labelResourceId) {
+        Matcher<View> labelMatcher = hasDescendant(allOf(withId(R.id.label), withText(labelResourceId), isDisplayed()));
+        return allOf(labelMatcher, isDisplayed());
     }
 
     /**

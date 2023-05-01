@@ -90,11 +90,14 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void submit(boolean isSignup) {
+        submitButton.setLoading(true);
+
         String email = emailInput.getEditText().getText().toString();
         String username = usernameInput.getEditText().getText().toString();
         String password = passwordInput.getEditText().getText().toString();
 
         if (!isInputValid()) {
+            submitButton.setLoading(false);
             return;
         }
 
@@ -106,8 +109,6 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void submitSignup(String email, String username, String password) {
-        submitButton.setLoading(true);
-
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password, null));
         call.enqueue(new Callback<User>() {
             @Override
@@ -133,8 +134,6 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void submitUpdate(String email, String username, String password) {
-        submitButton.setLoading(true);
-
         Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(FormUserActivity.this),
                 new User(email, username, password, null));
         call.enqueue(new Callback<User>() {

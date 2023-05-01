@@ -43,12 +43,18 @@ public class RankingActivityTests extends UITests {
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_menu)).perform(click());
-        onView(withId(R.id.menu_item_rankings)).perform(click());
-        onView(withId(R.id.language_spinner)).perform(click());
-        onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.action_menu))
+                .perform(click());
+        onView(withId(R.id.menu_item_rankings))
+                .perform(click());
+        onView(withId(R.id.language_spinner))
+                .perform(click());
+        onData(is(randomLanguage))
+                .inRoot(isPlatformPopup())
+                .perform(click());
 
-        onView(withId(R.id.ranking_recycler_view)).check(matches(hasLength(scores.size())));
+        onView(withId(R.id.ranking_recycler_view))
+                .check(matches(hasLength(scores.size())));
 
         for (int i=0;i<scores.size();i++){
             Score score = scores.get(i);

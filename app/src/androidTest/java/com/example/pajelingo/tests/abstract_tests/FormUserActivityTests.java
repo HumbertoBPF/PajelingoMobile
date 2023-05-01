@@ -3,19 +3,23 @@ package com.example.pajelingo.tests.abstract_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.hasRequirementText;
-import static com.example.pajelingo.utils.CustomMatchers.isChecked;
+import static com.example.pajelingo.utils.CustomMatchers.getPasswordRequirementMatcher;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
 
+import android.view.View;
+
 import com.example.pajelingo.R;
+
+import org.hamcrest.Matcher;
 
 import java.io.IOException;
 
@@ -41,20 +45,18 @@ public abstract class FormUserActivityTests extends UITests{
      * @param hasValidLength boolean indicating if the concerned password has a length between 8 and 30
      */
     protected void assertPasswordRequirements(boolean hasLetter, boolean hasDigit, boolean hasSpecialCharacter, boolean hasValidLength) {
-        String requirementText1 = context.getString(R.string.password_requirement_1);
-        String requirementText2 = context.getString(R.string.password_requirement_2);
-        String requirementText3 = context.getString(R.string.password_requirement_3);
-        String requirementText4 = context.getString(R.string.password_requirement_4);
+        Matcher<View> passwordRequirementsLabel = allOf(withText(R.string.password_requirements_label), isDisplayed());
+        onView(withId(R.id.password_requirements_label))
+                .check(matches(passwordRequirementsLabel));
 
-        onView(allOf(withId(R.id.password_requirements_label), withText(R.string.password_requirements_label))).check(matches(isDisplayed()));
-        onView(withId(R.id.requirement_1)).check(matches(isDisplayed()))
-                .check(matches(hasRequirementText(requirementText1))).check(matches(isChecked(hasDigit)));
-        onView(withId(R.id.requirement_2)).check(matches(isDisplayed()))
-                .check(matches(hasRequirementText(requirementText2))).check(matches(isChecked(hasLetter)));
-        onView(withId(R.id.requirement_3)).check(matches(isDisplayed()))
-                .check(matches(hasRequirementText(requirementText3))).check(matches(isChecked(hasSpecialCharacter)));
-        onView(withId(R.id.requirement_4)).check(matches(isDisplayed()))
-                .check(matches(hasRequirementText(requirementText4))).check(matches(isChecked(hasValidLength)));
+        onView(withId(R.id.requirement_1))
+                .check(matches(getPasswordRequirementMatcher(R.string.password_requirement_1, hasDigit)));
+        onView(withId(R.id.requirement_2))
+                .check(matches(getPasswordRequirementMatcher(R.string.password_requirement_2, hasLetter)));
+        onView(withId(R.id.requirement_3))
+                .check(matches(getPasswordRequirementMatcher(R.string.password_requirement_3, hasSpecialCharacter)));
+        onView(withId(R.id.requirement_4))
+                .check(matches(getPasswordRequirementMatcher(R.string.password_requirement_4, hasValidLength)));
     }
 
     /**
@@ -75,10 +77,11 @@ public abstract class FormUserActivityTests extends UITests{
         fillForm(email, username, password, password);
         assertPasswordRequirements(true, true, true, true);
 
-        onView(withId(R.id.submit_button)).perform(click());
-
-        onView(isRoot()).perform(waitUntil(withText((R.string.login_dialog_title)), 5000, true));
-        onView(isRoot()).perform(waitUntil(withText(R.string.login_dialog_title), 30000, false));
+        Matcher<View> loadingButtonMatcher = allOf(hasDescendant(withText(R.string.loading_button_text)), isDisplayed());
+        onView(withId(R.id.submit_button))
+                .perform(click())
+                .check(matches(loadingButtonMatcher));
+        onView(isRoot()).perform(waitUntil(withId(R.id.submit_button), 10000, false));
     }
 
     /**
@@ -103,7 +106,8 @@ public abstract class FormUserActivityTests extends UITests{
         fillForm(email, username, password, passwordConfirmation);
         assertPasswordRequirements(hasLetter, hasDigit, hasSpecialCharacter, hasValidLength);
 
-        onView(withId(R.id.submit_button)).perform(click());
+        onView(withId(R.id.submit_button))
+                .perform(click());
 
         assertUserExistsInDjangoApp(email, username, password, false);
     }

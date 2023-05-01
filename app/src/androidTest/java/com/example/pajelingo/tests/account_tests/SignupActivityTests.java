@@ -3,10 +3,11 @@ package com.example.pajelingo.tests.account_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomMatchers.getLabeledEditTextMatcher;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
@@ -16,6 +17,8 @@ import static com.example.pajelingo.utils.RandomTools.getRandomValidPassword;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.pajelingo.R;
@@ -23,6 +26,7 @@ import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.tests.abstract_tests.FormUserActivityTests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,22 +36,33 @@ public class SignupActivityTests extends FormUserActivityTests {
     
     @Test
     public void testRenderingSignupActivity(){
-        String emailLabel = context.getString(R.string.email_label);
-        String usernameLabel = context.getString(R.string.username_label);
-        String passwordLabel = context.getString(R.string.password_label);
-        String passwordConfirmationLabel = context.getString(R.string.password_confirmation_label);
-
         browseToForm();
 
-        onView(withId(R.id.email_input)).check(matches(isDisplayed())).check(matches(hasLabel(emailLabel)));
-        onView(withId(R.id.username_input)).check(matches(isDisplayed())).check(matches(hasLabel(usernameLabel)));
-        onView(withId(R.id.password_input)).check(matches(isDisplayed())).check(matches(hasLabel(passwordLabel)));
-        onView(withId(R.id.password_confirmation_input)).check(matches(isDisplayed())).check(matches(hasLabel(passwordConfirmationLabel)));
+        Matcher<View> emailInputMatcher = getLabeledEditTextMatcher(R.string.email_label, "");
+        onView(withId(R.id.email_input))
+                .check(matches(emailInputMatcher));
+
+        Matcher<View> usernameInputMatcher = getLabeledEditTextMatcher(R.string.username_label, "");
+        onView(withId(R.id.username_input))
+                .check(matches(usernameInputMatcher));
+
+        Matcher<View> passwordInputMatcher = getLabeledEditTextMatcher(R.string.password_label, "");
+        onView(withId(R.id.password_input))
+                .check(matches(passwordInputMatcher));
+
+        Matcher<View> passwordConfirmationInputMatcher = getLabeledEditTextMatcher(R.string.password_confirmation_label, "");
+        onView(withId(R.id.password_confirmation_input))
+                .check(matches(passwordConfirmationInputMatcher));
 
         assertPasswordRequirements(false, false, false, false);
 
-        onView(allOf(withId(R.id.submit_button), withText(R.string.signup_button_text))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.login_link_text_view), withText(R.string.login_link))).check(matches(isDisplayed()));
+        Matcher<View> submitButtonMatcher = allOf(hasDescendant(withText(R.string.signup_button_text)), isDisplayed());
+        onView(withId(R.id.submit_button))
+                .check(matches(submitButtonMatcher));
+
+        Matcher<View> loginLinkMatcher = allOf(withText(R.string.login_link), isDisplayed());
+        onView(withId(R.id.login_link_text_view))
+                .check(matches(loginLinkMatcher));
     }
 
     @Test
@@ -176,7 +191,9 @@ public class SignupActivityTests extends FormUserActivityTests {
     protected void browseToForm() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_login_logout)).perform(click());
-        onView(withId(R.id.signup_link_text_view)).perform(click());
+        onView(withId(R.id.action_login_logout))
+                .perform(click());
+        onView(withId(R.id.signup_link_text_view))
+                .perform(click());
     }
 }

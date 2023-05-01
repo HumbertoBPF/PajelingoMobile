@@ -67,7 +67,7 @@ public class CustomViewActions {
                 while (System.currentTimeMillis() < endTime) {
                     for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
                         // found view with required ID
-                        if (viewMatcher.matches(child) && (isVisible || !child.isShown())) {
+                        if (viewMatcher.matches(child) && (child.isShown()) == isVisible) {
                             return;
                         }
                     }

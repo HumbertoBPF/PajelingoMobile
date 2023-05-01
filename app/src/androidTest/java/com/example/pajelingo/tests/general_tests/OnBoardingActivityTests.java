@@ -51,8 +51,10 @@ public class OnBoardingActivityTests extends UITests {
     public void testFirstThenSecondThenThirdPageOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
 
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.next_button)).perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
 
         assertIsLastOnBoardingPage();
         assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
@@ -62,9 +64,12 @@ public class OnBoardingActivityTests extends UITests {
     public void testFirstThenSecondThenThirdThenSecondPageOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
 
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.back_button)).perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.back_button))
+                .perform(click());
 
         assertIsIntermediaryOnBoardingPage(R.string.on_boarding_2);
         assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
@@ -74,8 +79,10 @@ public class OnBoardingActivityTests extends UITests {
     public void testFirstThenSecondThenFirstPageOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
 
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.back_button)).perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.back_button))
+                .perform(click());
 
         assertIsFirstOnBoardingPage();
         assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
@@ -85,10 +92,14 @@ public class OnBoardingActivityTests extends UITests {
     public void testFirstThenSecondThenThirdThenSecondThenFirstPageOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
 
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.back_button)).perform(click());
-        onView(withId(R.id.back_button)).perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.back_button))
+                .perform(click());
+        onView(withId(R.id.back_button))
+                .perform(click());
 
         assertIsFirstOnBoardingPage();
         assertFalse(sp.getBoolean(context.getString(R.string.is_first_access), false));
@@ -98,9 +109,12 @@ public class OnBoardingActivityTests extends UITests {
     public void testCompleteOnBoarding(){
         activityScenario = ActivityScenario.launch(OnBoardingActivity.class);
         // User completes the onBoarding flow
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.next_button)).perform(click());
-        onView(withId(R.id.get_started_button)).perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.next_button))
+                .perform(click());
+        onView(withId(R.id.get_started_button))
+                .perform(click());
         // Verifies if the user is in the MainActivity
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
 
@@ -122,20 +136,26 @@ public class OnBoardingActivityTests extends UITests {
 
     private void assertOnBoardingViews(int descriptionResource, boolean isBackEnabled,
                                        boolean isNextEnabled, boolean isGetStartedVisible){
-        onView(withId(R.id.on_boarding_image_view)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.on_boarding_text_view), withText(descriptionResource))).check(matches(isDisplayed()));
+        onView(withId(R.id.on_boarding_image_view))
+                .check(matches(isDisplayed()));
+
+        Matcher<View> descriptionMatcher = allOf(withText(descriptionResource), isDisplayed());
+        onView(withId(R.id.on_boarding_text_view))
+                .check(matches(descriptionMatcher));
+
         assertFloatingActionButton(R.id.back_button, isBackEnabled);
         assertFloatingActionButton(R.id.next_button, isNextEnabled);
-        onView(withId(R.id.get_started_button)).check(matches(isGetStartedVisible ?isDisplayed():not(isDisplayed())));
+        onView(withId(R.id.get_started_button))
+                .check(matches(isGetStartedVisible?isDisplayed():not(isDisplayed())));
     }
 
     private void assertFloatingActionButton(int fabId, boolean isEnabled){
         int colorResourceId = isEnabled?R.color.blue:R.color.gray;
         Matcher<View> isEnabledMatcher = isEnabled?isEnabled():not(isEnabled());
 
+        Matcher<View> fabMatcher = allOf(floatActionButtonHasColor(context.getResources().getColor(colorResourceId)), isEnabledMatcher, isDisplayed());
+
         onView(withId(fabId))
-                .check(matches(isDisplayed()))
-                .check(matches(isEnabledMatcher))
-                .check(matches(floatActionButtonHasColor(context.getResources().getColor(colorResourceId))));
+                .check(matches(fabMatcher));
     }
 }

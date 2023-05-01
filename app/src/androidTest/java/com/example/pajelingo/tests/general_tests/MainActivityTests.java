@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 
 import androidx.test.core.app.ActivityScenario;
@@ -28,10 +29,10 @@ public class MainActivityTests extends UITests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_synchro)).perform(click());
-        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_download_resources_title), 5000, true));
-        onView(withText(R.string.dialog_download_resources_confirm)).perform(click());
-        onView(isRoot()).perform(waitUntil(withText(R.string.progress_download_title), 5000, true));
-        onView(isRoot()).perform(waitUntil(withText(R.string.progress_download_title), 150000, false));
+        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_confirm_resources_sync_title), 5000, true));
+        onView(withText(R.string.dialog_confirm_resources_sync_confirm)).perform(click());
+        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_confirm_resources_sync_title), 5000, true));
+        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_confirm_resources_sync_title), 150000, false));
     }
 
     @Test
@@ -39,9 +40,9 @@ public class MainActivityTests extends UITests {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_synchro)).perform(click());
-        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_download_resources_title), 5000, true));
-        onView(withText(R.string.dialog_download_resources_decline)).perform(click());
-        onView(withText(R.string.progress_download_title)).check(doesNotExist());
+        onView(isRoot()).perform(waitUntil(withText(R.string.dialog_confirm_resources_sync_title), 5000, true));
+        onView(withText(R.string.dialog_confirm_resources_sync_decline)).perform(click());
+        onView(withText(R.string.dialog_confirm_resources_sync_title)).check(doesNotExist());
         assertIsMainActivity(true);
     }
 

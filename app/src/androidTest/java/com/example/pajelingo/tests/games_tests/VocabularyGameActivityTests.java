@@ -11,7 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatcher;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputVocabularyGameAnswer;
@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
@@ -37,6 +39,7 @@ import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -75,15 +78,20 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         List<Word> wordsInLanguage = wordDao.getWordsByLanguage(Objects.requireNonNull(targetLanguage).getLanguageName());
 
         String answerInputHint = context.getString(R.string.instruction_vocabulary_game)+baseLanguage.getLanguageName();
-        String textCheckButton = context.getString(R.string.check_button_text);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupVocabularyGame(baseLanguage, targetLanguage);
 
         onView(withId(R.id.word_text_view)).check(matches(isTextViewWordInList(wordsInLanguage)));
-        onView(allOf(withId(R.id.answer_input), withHint(answerInputHint))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
+
+        Matcher<View> answerInputMatcher = allOf(withHint(answerInputHint), isDisplayed());
+        onView(withId(R.id.answer_input))
+                .check(matches(answerInputMatcher));
+
+        Matcher<View> checkButtonMatcher = allOf(withText(R.string.check_button_text), isDisplayed());
+        onView(withId(R.id.check_button))
+                .check(matches(checkButtonMatcher));
     }
 
     @Test
@@ -267,13 +275,20 @@ public class VocabularyGameActivityTests extends GameActivityTests {
      * Verifies if the setup layout is displayed.
      */
     private void assertRenderingSetupLayout(){
-        String labelBaseLanguageSpinner = context.getString(R.string.base_language_label);
-        String labelTargetLanguageSpinner = context.getString(R.string.target_language_label);
-        String textPlayButton = context.getString(R.string.play_button_text);
+        Matcher<View> baseLanguageInputMatcher = getLabeledSpinnerMatcher(R.string.base_language_label);
+        onView(withId(R.id.base_language_input))
+                .check(matches(baseLanguageInputMatcher));
 
-        onView(withId(R.id.base_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelBaseLanguageSpinner)));
-        onView(withId(R.id.instructions_text_view)).check(matches(withText(game.getInstructions())));
-        onView(withId(R.id.target_language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelTargetLanguageSpinner)));
-        onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches(isDisplayed()));
+        Matcher<View> instructionsTextViewMatcher = allOf(withText(game.getInstructions()), isDisplayed());
+        onView(withId(R.id.instructions_text_view))
+                .check(matches(instructionsTextViewMatcher));
+
+        Matcher<View> targetLanguageInputMatcher = getLabeledSpinnerMatcher(R.string.target_language_label);
+        onView(withId(R.id.target_language_input))
+                .check(matches(targetLanguageInputMatcher));
+
+        Matcher<View> playButton = allOf(withText(R.string.play_button_text), isDisplayed());
+        onView(withId(R.id.play_button))
+                .check(matches(playButton));
     }
 }

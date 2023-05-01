@@ -10,7 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomMatchers.getLabeledEditTextMatcher;
+import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatcher;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewVerbAndConjugationInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputConjugationGameAnswer;
@@ -25,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
@@ -38,6 +41,7 @@ import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -53,15 +57,22 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
     @Test
     public void testRenderingSetupConjugationGame() {
-        String labelLanguageSpinner = context.getString(R.string.choose_language_label);
-        String textPlayButton = context.getString(R.string.play_button_text);
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
-        onView(withId(R.id.instructions_text_view)).check(matches(withText(game.getInstructions())));
-        onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
-        onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches((isDisplayed())));
+        onView(withId(R.id.games_recycler_view))
+                .perform(actionOnItemAtPosition(2, click()));
+
+        Matcher<View> instructionsTextViewMatcher = allOf(withText(game.getInstructions()), isDisplayed());
+        onView(withId(R.id.instructions_text_view))
+                .check(matches(instructionsTextViewMatcher));
+
+        Matcher<View> languageInputMatcher = getLabeledSpinnerMatcher(R.string.choose_language_label);
+        onView(withId(R.id.language_input))
+                .check(matches(languageInputMatcher));
+
+        Matcher<View> playButtonMatcher = allOf(withText(R.string.play_button_text), isDisplayed());
+        onView(withId(R.id.play_button))
+                .check(matches(playButtonMatcher));
     }
 
     @Test
@@ -78,17 +89,36 @@ public class ConjugationGameActivityTests extends GameActivityTests {
 
         setupConjugationGame(randomLanguage);
 
-        onView(withId(R.id.verb_and_tense_text_view)).check(matches(isTextViewVerbAndConjugationInList(verbsInLanguage, conjugations)));
-
-        String textCheckButton = context.getString(R.string.check_button_text);
+        onView(withId(R.id.verb_and_tense_text_view))
+                .check(matches(isTextViewVerbAndConjugationInList(verbsInLanguage, conjugations)));
         // Checking if the pronouns are all displayed
-        onView(withId(R.id.conjugation_1)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun1())));
-        onView(withId(R.id.conjugation_2)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun2())));
-        onView(withId(R.id.conjugation_3)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun3())));
-        onView(withId(R.id.conjugation_4)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun4())));
-        onView(withId(R.id.conjugation_5)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun5())));
-        onView(withId(R.id.conjugation_6)).check(matches(isDisplayed())).check(matches(hasLabel(randomLanguage.getPersonalPronoun6())));
-        onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
+        Matcher<View> conjugation1Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun1(), "");
+        onView(withId(R.id.conjugation_1))
+                .check(matches(conjugation1Matcher));
+
+        Matcher<View> conjugation2Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun2(), "");
+        onView(withId(R.id.conjugation_2))
+                .check(matches(conjugation2Matcher));
+
+        Matcher<View> conjugation3Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun3(), "");
+        onView(withId(R.id.conjugation_3))
+                .check(matches(conjugation3Matcher));
+
+        Matcher<View> conjugation4Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun4(), "");
+        onView(withId(R.id.conjugation_4))
+                .check(matches(conjugation4Matcher));
+
+        Matcher<View> conjugation5Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun5(), "");
+        onView(withId(R.id.conjugation_5))
+                .check(matches(conjugation5Matcher));
+
+        Matcher<View> conjugation6Matcher = getLabeledEditTextMatcher(randomLanguage.getPersonalPronoun6(), "");
+        onView(withId(R.id.conjugation_6))
+                .check(matches(conjugation6Matcher));
+
+        Matcher<View> checkButtonMatcher = allOf(withText(R.string.check_button_text), isDisplayed());
+        onView(withId(R.id.check_button))
+                .check(matches(checkButtonMatcher));
     }
 
     @Test
@@ -255,9 +285,12 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
         waitUntil(withId(R.id.loading_progress_bar), 5000, true);
         waitUntil(withId(R.id.loading_progress_bar), 10000, false);
-        onView(isRoot()).perform(inputConjugationGameAnswer(context, randomLanguage, isCorrect));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));
+        onView(isRoot())
+                .perform(inputConjugationGameAnswer(context, randomLanguage, isCorrect));
+        onView(withId(R.id.check_button))
+                .perform(click());
+        onView(withId(R.id.feedback_text_view))
+                .check(matches(withText(startsWith(expectedFeedback))));
     }
 
     /**
@@ -265,10 +298,15 @@ public class ConjugationGameActivityTests extends GameActivityTests {
      * @param language language that must be set.
      */
     private void setupConjugationGame(Language language) {
-        onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(2, click()));
-        onView(withId(R.id.language_input)).perform(expandSpinner());
-        onData(is(language)).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.play_button)).perform(click());
+        onView(withId(R.id.games_recycler_view))
+                .perform(actionOnItemAtPosition(2, click()));
+        onView(withId(R.id.language_input))
+                .perform(expandSpinner());
+        onData(is(language))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onView(withId(R.id.play_button))
+                .perform(click());
     }
 
 }

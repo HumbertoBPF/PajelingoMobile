@@ -29,7 +29,7 @@ import org.junit.Before;
 import java.io.IOException;
 
 public abstract class UITests {
-    public ActivityScenario activityScenario;
+    public ActivityScenario<?> activityScenario;
     protected final Context context = ApplicationProvider.getApplicationContext();
     protected final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
     protected final User testUser = new User("test-android@test.com", "test-android", "str0ng-p4ssw0rd", null);

@@ -11,7 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.hasLabel;
+import static com.example.pajelingo.utils.CustomMatchers.getLabeledSpinnerMatcher;
 import static com.example.pajelingo.utils.CustomMatchers.isTextViewWordInList;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
 import static com.example.pajelingo.utils.CustomViewActions.inputArticleGameAnswer;
@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
@@ -37,6 +39,7 @@ import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.tests.abstract_tests.GameActivityTests;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -52,15 +55,22 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
     @Test
     public void testRenderingSetupArticleGame() {
-        String labelLanguageSpinner = context.getString(R.string.choose_language_label);
-        String textPlayButton = context.getString(R.string.play_button_text);
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.instructions_text_view)).check(matches(withText(game.getInstructions())));
-        onView(withId(R.id.language_input)).check(matches(isDisplayed())).check(matches(hasLabel(labelLanguageSpinner)));
-        onView(allOf(withId(R.id.play_button), withText(textPlayButton))).check(matches((isDisplayed())));
+        onView(withId(R.id.games_recycler_view))
+                .perform(actionOnItemAtPosition(1, click()));
+
+        Matcher<View> instructionsTextViewMatcher = allOf(withText(game.getInstructions()), isDisplayed());
+        onView(withId(R.id.instructions_text_view))
+                .check(matches(instructionsTextViewMatcher));
+
+        Matcher<View> languageInputMatcher = getLabeledSpinnerMatcher(R.string.choose_language_label);
+        onView(withId(R.id.language_input))
+                .check(matches(languageInputMatcher));
+
+        Matcher<View> playButtonMatcher = allOf(withText(R.string.play_button_text), isDisplayed());
+        onView(withId(R.id.play_button))
+                .check(matches(playButtonMatcher));
     }
 
     @Test
@@ -70,16 +80,20 @@ public class ArticleGameActivityTests extends GameActivityTests {
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         List<Word> wordsInLanguage = wordDao.getNounsByLanguage(Objects.requireNonNull(randomLanguage).getLanguageName());
 
-        String answerInputHint = context.getString(R.string.article_game_hint_input_text);
-        String textCheckButton = context.getString(R.string.check_button_text);
-
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         setupArticleGame(randomLanguage);
 
-        onView(withId(R.id.word_text_view)).check(matches(isTextViewWordInList(wordsInLanguage)));
-        onView(allOf(withId(R.id.answer_input), withHint(answerInputHint))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.check_button), withText(textCheckButton))).check(matches(isDisplayed()));
+        onView(withId(R.id.word_text_view))
+                .check(matches(isTextViewWordInList(wordsInLanguage)));
+
+        Matcher<View> answerInputMatcher = allOf(withHint(R.string.article_game_hint_input_text), isDisplayed());
+        onView(withId(R.id.answer_input))
+                .check(matches(answerInputMatcher));
+
+        Matcher<View> checkButtonMatcher = allOf(withHint(R.string.check_button_text), isDisplayed());
+        onView(withId(R.id.check_button))
+                .check(matches(checkButtonMatcher));
     }
 
     @Test
@@ -236,8 +250,10 @@ public class ArticleGameActivityTests extends GameActivityTests {
 
         setupArticleGame(randomLanguage);
 
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, false));
-        onView(withId(R.id.check_button)).perform(click());
+        onView(isRoot())
+                .perform(inputArticleGameAnswer(context, randomLanguage, false));
+        onView(withId(R.id.check_button))
+                .perform(click());
         assertIsMainActivity(true);
     }
 
@@ -250,9 +266,12 @@ public class ArticleGameActivityTests extends GameActivityTests {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
         waitUntil(withId(R.id.loading_progress_bar), 5000, true);
         waitUntil(withId(R.id.loading_progress_bar), 10000, false);
-        onView(isRoot()).perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
-        onView(withId(R.id.check_button)).perform(click());
-        onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));
+        onView(isRoot())
+                .perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
+        onView(withId(R.id.check_button))
+                .perform(click());
+        onView(withId(R.id.feedback_text_view))
+                .check(matches(withText(startsWith(expectedFeedback))));
     }
 
     /**
@@ -260,10 +279,14 @@ public class ArticleGameActivityTests extends GameActivityTests {
      * @param language language that must be set.
      */
     private void setupArticleGame(Language language) {
-        onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.language_input)).perform(expandSpinner());
-        onData(is(language)).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.play_button)).perform(click());
+        onView(withId(R.id.games_recycler_view))
+                .perform(actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.language_input))
+                .perform(expandSpinner());
+        onData(is(language))
+                .inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.play_button))
+                .perform(click());
     }
 
 }
