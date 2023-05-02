@@ -71,9 +71,9 @@ public class RequestResetPasswordActivityTests extends UITests {
         onView(withId(R.id.reset_password_button))
                 .check(matches(loadingButtonMatcher));
 
-        Matcher<View> resetButtonMatcher = allOf(withId(R.id.reset_password_button), hasDescendant(withText(R.string.reset_button_text)));
+        Matcher<View> resetButtonMatcher = allOf(withId(R.id.reset_password_button), hasDescendant(withText(R.string.reset_button_text)), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(resetButtonMatcher, 5000, true));
+                .perform(waitUntil(resetButtonMatcher, 5000));
         // Check that the feedback dialog is displayed and dismiss it
         Thread.sleep(1000);
         onView(withText(R.string.reset_password_feedback_dialog_title))

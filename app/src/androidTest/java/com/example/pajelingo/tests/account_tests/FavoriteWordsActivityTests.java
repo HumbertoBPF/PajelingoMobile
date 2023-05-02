@@ -170,8 +170,10 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
 
         onView(withId(R.id.favorite_word_button)).perform(click());
         // Checking if the word has been toggled in the database
+        Matcher<View> loadingButtonMatcher = allOf(withId(R.id.favorite_word_button), withText(R.string.add_to_favorite_words), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(allOf(withId(R.id.favorite_word_button), withText(R.string.add_to_favorite_words)), 5000, true));
+                .perform(waitUntil(loadingButtonMatcher, 5000));
+
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         Word wordUpdated = wordDao.getRecordById(word.getId());
         assertFalse(wordUpdated.getFavorite());

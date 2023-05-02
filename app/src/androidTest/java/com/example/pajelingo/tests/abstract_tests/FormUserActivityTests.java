@@ -14,6 +14,7 @@ import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.not;
 
 import android.view.View;
 
@@ -81,7 +82,10 @@ public abstract class FormUserActivityTests extends UITests{
         onView(withId(R.id.submit_button))
                 .perform(click())
                 .check(matches(loadingButtonMatcher));
-        onView(isRoot()).perform(waitUntil(withId(R.id.submit_button), 10000, false));
+
+        loadingButtonMatcher = allOf(withId(R.id.submit_button), not(isDisplayed()));
+        onView(isRoot())
+                .perform(waitUntil(loadingButtonMatcher, 10000));
     }
 
     /**

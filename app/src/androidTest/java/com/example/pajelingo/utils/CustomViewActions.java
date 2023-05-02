@@ -10,6 +10,7 @@ import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalStrin
 import static com.example.pajelingo.utils.TestTools.getDisplayedWord;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,12 +41,11 @@ import java.util.concurrent.TimeoutException;
 
 public class CustomViewActions {
     /**
-     * Perform waits until the element is accessible and has the specified visibility.
+     * Perform waits until the element is accessible.
      * @param viewMatcher A view matcher for the view to wait for.
      * @param millis The timeout of until when to wait for.
-     * @param isVisible Boolean indicating the visibility that is awaited.
      */
-    public static ViewAction waitUntil(Matcher<View> viewMatcher, final long millis, boolean isVisible) {
+    public static ViewAction waitUntil(Matcher<View> viewMatcher, final long millis) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -54,8 +54,7 @@ public class CustomViewActions {
 
             @Override
             public String getDescription() {
-                return "Wait for a specific view to be " +
-                        (isVisible ? "visible" : "invisible") + " during " + millis + " millis.";
+                return "Wait for a specific view to match the specified assertions.";
             }
 
             @Override
@@ -67,7 +66,7 @@ public class CustomViewActions {
                 while (System.currentTimeMillis() < endTime) {
                     for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
                         // found view with required ID
-                        if (viewMatcher.matches(child) && (child.isShown()) == isVisible) {
+                        if (viewMatcher.matches(child)) {
                             return;
                         }
                     }

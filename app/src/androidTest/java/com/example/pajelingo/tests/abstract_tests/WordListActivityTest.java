@@ -103,9 +103,9 @@ public abstract class WordListActivityTest extends UITests {
         onView(withId(R.id.warning_image_view))
                 .check(matches(isDisplayed()));
         // Checking that no results image and message are shown
-        warningTextView = allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message));
+        warningTextView = allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(warningTextView, 5000, true));
+                .perform(waitUntil(warningTextView, 5000));
         onView(withId(R.id.warning_image_view))
                 .check(matches(isDisplayed()));
     }
@@ -158,8 +158,8 @@ public abstract class WordListActivityTest extends UITests {
         onView(withId(R.id.warning_image_view))
                 .check(matches(isDisplayed()));
         // Checking that loading image and message disappear when the results are shown
-        warningTextViewMatcher = allOf(withId(R.id.warning_text_view), withText(R.string.loading_message));
+        warningTextViewMatcher = allOf(withId(R.id.warning_text_view), withText(R.string.loading_message), not(isDisplayed()));
         onView(isRoot())
-                .perform(waitUntil(warningTextViewMatcher, 5000, false));
+                .perform(waitUntil(warningTextViewMatcher, 5000));
     }
 }

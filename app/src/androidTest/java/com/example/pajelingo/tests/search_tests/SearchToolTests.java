@@ -131,9 +131,10 @@ public class SearchToolTests extends WordListActivityTest {
         // Checking if the word has been toggled in the database
         int expectedStringResource = wasFavorite?R.string.add_to_favorite_words:R.string.remove_from_favorite_words;
 
-        Matcher<View> favoriteWordButtonMatcher = allOf(withId(R.id.favorite_word_button), withText(expectedStringResource));
+        Matcher<View> favoriteWordButtonMatcher = allOf(withId(R.id.favorite_word_button), withText(expectedStringResource), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(favoriteWordButtonMatcher, 5000, true));
+                .perform(waitUntil(favoriteWordButtonMatcher, 5000));
+
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         Word wordUpdated = wordDao.getRecordById(word.getId());
         assertEquals(wordUpdated.getFavorite(), !wasFavorite);

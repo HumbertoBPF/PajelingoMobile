@@ -87,8 +87,9 @@ public class ProfileActivityTests extends UITests {
         browseToProfileActivity();
         onView(withId(R.id.delete_account_button)).perform(click());
 
+        Matcher<View> deleteAccountDialogMatcher = allOf(withText(R.string.dialog_delete_account_message), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(withText(R.string.dialog_delete_account_message), 5000, true));
+                .perform(waitUntil(deleteAccountDialogMatcher, 5000));
         onView(withText(R.string.dialog_delete_account_title))
                 .check(matches(isDisplayed()));
         onView(withText(R.string.dialog_delete_account_message))

@@ -17,7 +17,6 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import com.example.pajelingo.R;
 import com.example.pajelingo.models.Conjugation;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.ui.LabeledView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.hamcrest.Description;

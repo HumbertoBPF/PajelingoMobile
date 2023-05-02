@@ -18,6 +18,7 @@ import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalStrin
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -85,7 +86,7 @@ public class LoginActivityTests extends UITests {
 
         Matcher<View> loginButtonMatcher = allOf(withId(R.id.login_button), hasDescendant(withText(R.string.login_button_text)), isDisplayed());
         onView(isRoot())
-                .perform(waitUntil(loginButtonMatcher, 5000, true));
+                .perform(waitUntil(loginButtonMatcher, 5000));
 
         assertFalse(isUserAuthenticated(context));
     }
@@ -106,8 +107,9 @@ public class LoginActivityTests extends UITests {
                 .perform(click())
                 .check(matches(loadingButtonMatcher));
 
+        Matcher<View> loginButtonMatcher = allOf(withId(R.id.login_button), not(isDisplayed()));
         onView(isRoot())
-                .perform(waitUntil(withId(R.id.login_button), 10000, false));
+                .perform(waitUntil(loginButtonMatcher, 10000));
 
         assertTrue(isUserAuthenticated(context));
 
