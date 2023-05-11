@@ -10,7 +10,6 @@ import static com.example.pajelingo.utils.Notifications.showSyncFeedbackNotifica
 import static com.example.pajelingo.utils.Notifications.updateProgressBarNotification;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -19,7 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.interfaces.OnTaskListener;
-import com.example.pajelingo.synchronization.ArticleSynchro;
+import com.example.pajelingo.retrofit_calls.synchronization.ArticleSynchro;
 
 public class Synchronization {
     /**
@@ -51,20 +50,17 @@ public class Synchronization {
         // Delete database and internal storage files before synchronization
         context.deleteDatabase(NAME_DB);
         clearFolder(context.getFilesDir());
-        Handler handler = new Handler();
 
-        new ArticleSynchro(context).execute(1, (isSuccessful, currentStep) -> {
+        new ArticleSynchro(context).execute((isSuccessful, currentStep) -> {
             int percentage = Math.min(Math.round(currentStep*100f/nbSteps), 100);
 
             updateProgressBarNotification(context, notificationBuilder, percentage);
 
             if ((!isSuccessful) || (currentStep == nbSteps)) {
-                handler.postDelayed(() -> {
-                    loadingDialog.dismiss();
-                    showSyncFeedbackNotification(context, notificationBuilder, isSuccessful);
-                    showSyncFeedbackToast(context, isSuccessful);
-                    onTaskListener.onTask();
-                }, 2000);
+                loadingDialog.dismiss();
+                showSyncFeedbackNotification(context, notificationBuilder, isSuccessful);
+                showSyncFeedbackToast(context, isSuccessful);
+                onTaskListener.onTask();
             }
         });
     }

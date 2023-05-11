@@ -3,19 +3,12 @@ package com.example.pajelingo.utils;
 import android.content.Context;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.example.pajelingo.R;
-import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.Word;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Tools{
 
@@ -76,27 +69,6 @@ public class Tools{
         }
 
         return passwordMap;
-    }
-
-    public static void handleGameAnswerFeedback(Context context, Call<GameAnswerFeedback> call) {
-        call.enqueue(new Callback<GameAnswerFeedback>() {
-            @Override
-            public void onResponse(@NonNull Call<GameAnswerFeedback> call, @NonNull Response<GameAnswerFeedback> response) {
-                GameAnswerFeedback gameAnswerFeedback = response.body();
-                String currentGameScore = context.getString(R.string.current_game_score);
-
-                if ((response.isSuccessful()) && (gameAnswerFeedback != null)) {
-                    Toast.makeText(context, currentGameScore + " " + gameAnswerFeedback.getScore(), Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<GameAnswerFeedback> call, @NonNull Throwable t) {
-                Toast.makeText(context, R.string.error_game_score, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     /**

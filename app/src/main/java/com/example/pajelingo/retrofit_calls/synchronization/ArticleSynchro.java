@@ -1,4 +1,4 @@
-package com.example.pajelingo.synchronization;
+package com.example.pajelingo.retrofit_calls.synchronization;
 
 import android.content.Context;
 

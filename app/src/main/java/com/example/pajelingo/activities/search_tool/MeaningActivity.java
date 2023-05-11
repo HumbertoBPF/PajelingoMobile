@@ -1,7 +1,6 @@
 package com.example.pajelingo.activities.search_tool;
 
 import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
-import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 import static com.example.pajelingo.utils.Tools.displayFavoriteWordError;
 
 import android.os.Bundle;
@@ -16,17 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.MeaningAdapter;
 import com.example.pajelingo.daos.MeaningDao;
-import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.FavoriteWordPayload;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.FavoriteWordCall;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,10 +35,6 @@ public class MeaningActivity extends AppCompatActivity {
     private RecyclerView meaningsRecyclerView;
     private MaterialButton favoriteWordButton;
 
-    private LanguageSchoolAPI languageSchoolAPI;
-
-    private WordDao wordDao;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +43,6 @@ public class MeaningActivity extends AppCompatActivity {
         meaningImageView = findViewById(R.id.meaning_image);
         meaningsRecyclerView = findViewById(R.id.meanings_recycler_view);
         favoriteWordButton = findViewById(R.id.favorite_word_button);
-
-        languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
-
-        wordDao = AppDatabase.getInstance(this).getWordDao();
 
         word = (Word) getIntent().getSerializableExtra("word");
 
@@ -88,29 +75,22 @@ public class MeaningActivity extends AppCompatActivity {
     }
 
     private void toggleFavoriteWord(){
-        Boolean isFavorite = word.getFavorite();
-        FavoriteWordPayload payload =  new FavoriteWordPayload(!isFavorite);
-        Call<Word> call = languageSchoolAPI.favoriteWord(getAuthToken(MeaningActivity.this), payload, word.getId());
+        FavoriteWordCall favoriteWordCall = new FavoriteWordCall(this);
 
-        call.enqueue(new Callback<Word>() {
+        favoriteWordCall.execute(word, new HttpResponseInterface<Word>() {
             @Override
-            public void onResponse(@NonNull Call<Word> call, @NonNull Response<Word> response) {
-                Word returnedWord = response.body();
-
-                if ((response.isSuccessful()) && (returnedWord != null)) {
-                    List<Word> wordList = new ArrayList<>();
-                    wordList.add(returnedWord);
-                    wordDao.save(wordList, result -> {
-                        word = returnedWord;
-                        setFavoriteWordButtonLayout();
-                    });
-                }else {
-                    displayFavoriteWordError(MeaningActivity.this, word);
-                }
+            public void onSuccess(Word returnedWord) {
+                word = returnedWord;
+                setFavoriteWordButtonLayout();
             }
 
             @Override
-            public void onFailure(@NonNull Call<Word> call, @NonNull Throwable t) {
+            public void onError(Response<Word> response) {
+                displayFavoriteWordError(MeaningActivity.this, word);
+            }
+
+            @Override
+            public void onFailure() {
                 Toast.makeText(MeaningActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });

@@ -1,6 +1,5 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
 import static com.example.pajelingo.utils.Tools.validatePassword;
 
@@ -12,12 +11,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.SignupCall;
+import com.example.pajelingo.retrofit_calls.UpdateProfileCall;
 import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LoadingButton;
 import com.example.pajelingo.ui.PasswordRequirement;
@@ -29,8 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FormUserActivity extends AppCompatActivity {
@@ -109,55 +107,49 @@ public class FormUserActivity extends AppCompatActivity {
     }
 
     private void submitSignup(String email, String username, String password) {
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password, null));
-        call.enqueue(new Callback<User>() {
+        SignupCall call = new SignupCall();
+        call.execute(email, username, password, new HttpResponseInterface<User>() {
             @Override
-            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+            public void onSuccess(User user) {
                 submitButton.setLoading(false);
-                if (response.code() == 201) {
-                    Toast.makeText(FormUserActivity.this, R.string.successful_signup_message, Toast.LENGTH_SHORT).show();
-                    finish();
-                }else if (response.code() == 400) {
-                    String error = getValidationErrorMessage(response);
-                    Toast.makeText(FormUserActivity.this, error, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(FormUserActivity.this, R.string.successful_signup_message, Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override
-            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                submitButton.setLoading(false);
-                Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+            public void onError(Response<User> response) {
+                FormUserActivity.this.onError(response);
+            }
+
+            @Override
+            public void onFailure() {
+
+                FormUserActivity.this.onFailure();
             }
         });
     }
 
     private void submitUpdate(String email, String username, String password) {
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(FormUserActivity.this),
-                new User(email, username, password, null));
-        call.enqueue(new Callback<User>() {
+        UpdateProfileCall call = new UpdateProfileCall(this);
+
+        call.execute(email, username, password, new HttpResponseInterface<User>() {
             @Override
-            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+            public void onSuccess(User user) {
                 submitButton.setLoading(false);
-                User user = response.body();
-                if ((response.code() == 200) && (user != null)) {
-                    Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
-                    user.setPassword(password);
-                    saveUserData(FormUserActivity.this, user);
-                    finish();
-                }else if (response.code() == 400) {
-                    String error = getValidationErrorMessage(response);
-                    Toast.makeText(FormUserActivity.this, error, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
+                user.setPassword(password);
+                saveUserData(FormUserActivity.this, user);
+                finish();
             }
 
             @Override
-            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                submitButton.setLoading(false);
-                Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+            public void onError(Response<User> response) {
+                FormUserActivity.this.onError(response);
+            }
+
+            @Override
+            public void onFailure() {
+                FormUserActivity.this.onFailure();
             }
         });
     }
@@ -235,5 +227,16 @@ public class FormUserActivity extends AppCompatActivity {
         }
 
         return error;
+    }
+
+    private void onError(Response<User> response) {
+        submitButton.setLoading(false);
+        String error = getValidationErrorMessage(response);
+        Toast.makeText(FormUserActivity.this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void onFailure() {
+        submitButton.setLoading(false);
+        Toast.makeText(FormUserActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
     }
 }

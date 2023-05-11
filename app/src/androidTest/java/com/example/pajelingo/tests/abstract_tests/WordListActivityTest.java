@@ -10,13 +10,11 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPositio
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.CustomViewActions.expandSpinner;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static org.hamcrest.Matchers.allOf;
@@ -96,16 +94,10 @@ public abstract class WordListActivityTest extends UITests {
     }
 
     protected void assertNoResults() {
-        // Checking that loading image and text are shown
-        Matcher<View> warningTextView = allOf(withText(R.string.loading_message), isDisplayed());
+        // Checking that "no results" image and message are shown
+        Matcher<View> warningTextView = allOf(withText(R.string.no_results_message), isDisplayed());
         onView(withId(R.id.warning_text_view))
                 .check(matches(warningTextView));
-        onView(withId(R.id.warning_image_view))
-                .check(matches(isDisplayed()));
-        // Checking that no results image and message are shown
-        warningTextView = allOf(withId(R.id.warning_text_view), withText(R.string.no_results_message), isDisplayed());
-        onView(isRoot())
-                .perform(waitUntil(warningTextView, 5000));
         onView(withId(R.id.warning_image_view))
                 .check(matches(isDisplayed()));
     }
@@ -148,18 +140,5 @@ public abstract class WordListActivityTest extends UITests {
                 .perform(click());
         onView(withId(R.id.search_button))
                 .perform(click());
-    }
-
-    protected void assertLoadingPage() {
-        // Checking that loading image and text are shown
-        Matcher<View> warningTextViewMatcher = allOf(withText(R.string.loading_message), isDisplayed());
-        onView(withId(R.id.warning_text_view))
-                .check(matches(warningTextViewMatcher));
-        onView(withId(R.id.warning_image_view))
-                .check(matches(isDisplayed()));
-        // Checking that loading image and message disappear when the results are shown
-        warningTextViewMatcher = allOf(withId(R.id.warning_text_view), withText(R.string.loading_message), not(isDisplayed()));
-        onView(isRoot())
-                .perform(waitUntil(warningTextViewMatcher, 5000));
     }
 }

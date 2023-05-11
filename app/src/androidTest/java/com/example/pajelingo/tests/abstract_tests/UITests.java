@@ -6,6 +6,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.pajelingo.retrofit_calls.IdlingResource.getIdlingResource;
 import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.RetrofitTools.saveEntitiesFromAPI;
 import static org.hamcrest.Matchers.allOf;
@@ -15,6 +16,8 @@ import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -33,6 +36,8 @@ public abstract class UITests {
     protected final Context context = ApplicationProvider.getApplicationContext();
     protected final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
     protected final User testUser = new User("test-android@test.com", "test-android", "str0ng-p4ssw0rd", null);
+    protected CountingIdlingResource idlingResource;
+    protected IdlingRegistry idlingRegistry = IdlingRegistry.getInstance();
 
     @Before
     public void setUp() throws IOException {
@@ -47,6 +52,8 @@ public abstract class UITests {
         saveEntitiesFromAPI(languageSchoolAPI.getMeanings(), appDatabase.getMeaningDao());
         saveEntitiesFromAPI(languageSchoolAPI.getScores(), appDatabase.getScoreDao());
         saveEntitiesFromAPI(languageSchoolAPI.getWords(), appDatabase.getWordDao());
+        idlingResource = getIdlingResource();
+        idlingRegistry.register(idlingResource);
     }
 
     /**
@@ -81,6 +88,11 @@ public abstract class UITests {
         if (activityScenario != null) {
             activityScenario.close();
         }
+
+        if (idlingResource != null) {
+            idlingRegistry.unregister(idlingResource);
+        }
+
         context.deleteSharedPreferences(context.getString(R.string.sp_file_name));
     }
 }

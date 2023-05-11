@@ -12,6 +12,7 @@ import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Game;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.GameScoreCall;
 
 public abstract class GameActivity extends AppCompatActivity {
 
@@ -19,6 +20,7 @@ public abstract class GameActivity extends AppCompatActivity {
     protected LanguageDao languageDao;
     protected WordDao wordDao;
     protected Game game;
+    protected GameScoreCall gameScoreCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public abstract class GameActivity extends AppCompatActivity {
         wordDao = AppDatabase.getInstance(this).getWordDao();
         languageDao = AppDatabase.getInstance(this).getLanguageDao();
         game = (Game) getIntent().getSerializableExtra("game");
+        gameScoreCall = new GameScoreCall(this);
         setTitle(game.getGameName());
         setup();
     }

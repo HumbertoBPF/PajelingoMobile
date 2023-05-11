@@ -121,7 +121,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationConjugationGame() throws InterruptedException {
+    public void testCorrectAnswerWithoutAuthenticationConjugationGame() {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -132,7 +132,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationConjugationGame() throws InterruptedException {
+    public void testWrongAnswerWithoutAuthenticationConjugationGame() {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -143,7 +143,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoCorrectAnswersWithAuthenticationConjugationGame() throws IOException, InterruptedException {
+    public void testTwoCorrectAnswersWithAuthenticationConjugationGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
@@ -167,7 +167,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
+    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationConjugationGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
@@ -191,7 +191,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationConjugationGame() throws IOException, InterruptedException {
+    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationConjugationGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
@@ -215,7 +215,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoWrongAnswersWithAuthenticationConjugationGame() throws IOException, InterruptedException {
+    public void testTwoWrongAnswersWithAuthenticationConjugationGame() throws IOException {
         saveUserData(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context);
@@ -244,6 +244,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
         assertIsMainActivity(true);
     }
@@ -257,6 +258,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupConjugationGame(randomLanguage);
         assertIsMainActivity(true);
     }
@@ -271,6 +273,7 @@ public class ConjugationGameActivityTests extends GameActivityTests {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupConjugationGame(randomLanguage);
         assertIsMainActivity(true);
     }
@@ -280,9 +283,8 @@ public class ConjugationGameActivityTests extends GameActivityTests {
      * @param randomLanguage selected language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) throws InterruptedException {
+    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        Thread.sleep(3000);
         onView(isRoot())
                 .perform(inputConjugationGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button))

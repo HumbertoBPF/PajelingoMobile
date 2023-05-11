@@ -3,7 +3,6 @@ package com.example.pajelingo.activities.games;
 import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 import static com.example.pajelingo.utils.Tools.getRandomItemFromList;
-import static com.example.pajelingo.utils.Tools.handleGameAnswerFeedback;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,22 +11,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.daos.ArticleDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.ArticleGameAnswer;
 import com.example.pajelingo.models.GameAnswerFeedback;
 import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Word;
+import com.example.pajelingo.retrofit_calls.GameRoundCall;
 import com.example.pajelingo.ui.LabeledSpinner;
 import com.example.pajelingo.ui.LoadingSpinner;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GuessTheArticleActivity extends GameActivity {
@@ -97,27 +96,29 @@ public class GuessTheArticleActivity extends GameActivity {
     private void getWordFromAPI() {
         Call<GameRoundWord> call =
                 this.languageSchoolAPI.getWordForArticleGame(getAuthToken(this), language.getLanguageName());
-        call.enqueue(new Callback<GameRoundWord>() {
+
+        GameRoundCall gameRoundCall = new GameRoundCall(call);
+
+        gameRoundCall.execute(new HttpResponseInterface<GameRoundWord>() {
             @Override
-            public void onResponse(@NonNull Call<GameRoundWord> call, @NonNull Response<GameRoundWord> response) {
-                GameRoundWord gameRoundWord = response.body();
+            public void onSuccess(GameRoundWord gameRoundWord) {
+                wordDao.getRecordById(gameRoundWord.getId(), word -> {
+                    if (word == null) {
+                        getWordFromLocalDatabase();
+                        return;
+                    }
 
-                if ((response.isSuccessful()) && (gameRoundWord != null)) {
-                    wordDao.getRecordById(gameRoundWord.getId(), word -> {
-                        if (word == null) {
-                            getWordFromLocalDatabase();
-                            return;
-                        }
-
-                        fillGameLayout(word);
-                    });
-                }else {
-                    getWordFromLocalDatabase();
-                }
+                    fillGameLayout(word);
+                });
             }
 
             @Override
-            public void onFailure(@NonNull Call<GameRoundWord> call, @NonNull Throwable t) {
+            public void onError(Response<GameRoundWord> response) {
+                getWordFromLocalDatabase();
+            }
+
+            @Override
+            public void onFailure() {
                 getWordFromLocalDatabase();
             }
         });
@@ -195,7 +196,7 @@ public class GuessTheArticleActivity extends GameActivity {
                     ArticleGameAnswer articleGameAnswer = new ArticleGameAnswer(word.getId(), answerString);
                     Call<GameAnswerFeedback> call =
                             this.languageSchoolAPI.submitArticleGameAnswer(getAuthToken(GuessTheArticleActivity.this), articleGameAnswer);
-                    handleGameAnswerFeedback(GuessTheArticleActivity.this, call);
+                    gameScoreCall.execute(call);
                 }
 
                 feedback = getString(R.string.correct_answer_message) +result.getArticleName()+" "+word.getWordName();

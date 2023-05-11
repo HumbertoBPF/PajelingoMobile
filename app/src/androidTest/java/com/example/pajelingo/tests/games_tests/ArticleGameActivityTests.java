@@ -96,7 +96,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationArticleGame() throws InterruptedException {
+    public void testCorrectAnswerWithoutAuthenticationArticleGame() {
         Language randomLanguage = getRandomLanguage(context, "English");
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -107,7 +107,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationArticleGame() throws InterruptedException {
+    public void testWrongAnswerWithoutAuthenticationArticleGame() {
         Language randomLanguage = getRandomLanguage(context, "English");
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
@@ -118,7 +118,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoCorrectAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testTwoCorrectAnswersWithAuthenticationArticleGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context, "English");
@@ -142,7 +142,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationArticleGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context, "English");
@@ -166,7 +166,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context, "English");
@@ -190,7 +190,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException {
         saveUserData(context, testUser);
 
         Language randomLanguage = getRandomLanguage(context, "English");
@@ -219,6 +219,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         assertIsMainActivity(true);
     }
@@ -232,6 +233,7 @@ public class ArticleGameActivityTests extends GameActivityTests {
         Language randomLanguage = getRandomLanguage(context, "English");
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupArticleGame(randomLanguage);
         assertIsMainActivity(true);
     }
@@ -261,9 +263,8 @@ public class ArticleGameActivityTests extends GameActivityTests {
      * @param randomLanguage selected language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) throws InterruptedException {
+    private void inputAnswerAndCheckFeedback(Language randomLanguage, boolean isCorrect) {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        Thread.sleep(3000);
         onView(isRoot())
                 .perform(inputArticleGameAnswer(context, randomLanguage, isCorrect));
         onView(withId(R.id.check_button))

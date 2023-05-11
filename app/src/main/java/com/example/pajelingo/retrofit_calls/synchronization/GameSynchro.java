@@ -1,4 +1,4 @@
-package com.example.pajelingo.synchronization;
+package com.example.pajelingo.retrofit_calls.synchronization;
 
 import static com.example.pajelingo.utils.Files.saveImage;
 

@@ -36,11 +36,8 @@ public class RetrofitTools {
      * @param password user password
      * @param userExists boolean indicating if the assertion must check if the user exists or not
      * @throws IOException thrown when some error related with HTTP communication occurs
-     * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    public static void assertUserExistsInDjangoApp(String email, String username, String password, boolean userExists) throws IOException, InterruptedException {
-        Thread.sleep(5000);
-
+    public static void assertUserExistsInDjangoApp(String email, String username, String password, boolean userExists) throws IOException {
         Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", username, password, null));
         Response<Token> tokenResponse = tokenCall.execute();
         Token token = tokenResponse.body();

@@ -1,46 +1,27 @@
 package com.example.pajelingo.activities.account;
 
-import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
-import static com.example.pajelingo.utils.SharedPreferences.saveToken;
-import static com.example.pajelingo.utils.SharedPreferences.saveUserData;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.daos.WordDao;
-import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.Token;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.models.Word;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.LoginCall;
 import com.example.pajelingo.ui.LabeledEditText;
 import com.example.pajelingo.ui.LoadingButton;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private final LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
-
     private TextView signupLinkTextView;
     private TextView resetPasswordLinkTextView;
     private LabeledEditText usernameInput;
     private LabeledEditText passwordInput;
     private LoadingButton loginButton;
-
-    private WordDao wordDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +29,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         setTitle(R.string.login_activity_title);
-
-        wordDao = AppDatabase.getInstance(this).getWordDao();
 
         signupLinkTextView = findViewById(R.id.signup_link_text_view);
         resetPasswordLinkTextView = findViewById(R.id.reset_password_link_text_view);
@@ -74,96 +53,29 @@ public class LoginActivity extends AppCompatActivity {
         String username = usernameInput.getEditText().getText().toString();
         String password = passwordInput.getEditText().getText().toString();
 
-        Call<Token> tokenCall = languageSchoolAPI.getToken(new User("", username, password, null));
         loginButton.setLoading(true);
 
-        tokenCall.enqueue(new Callback<Token>() {
+        LoginCall call = new LoginCall(this);
+
+        call.execute(username, password, new HttpResponseInterface<User>() {
             @Override
-            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
-                Token token = response.body();
-                if ((response.isSuccessful()) && (token != null)) {
-                    saveToken(LoginActivity.this, token);
-                    getUserData();
-                }else {
-                    if (response.code() == 400) {
-                        onErrorRequest();
-                    } else {
-                        onErrorInternetConnection();
-                    }
-                }
+            public void onSuccess(User user) {
+                Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
+                loginButton.setLoading(false);
+                finish();
             }
 
             @Override
-            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                onErrorInternetConnection();
-            }
-        });
-
-
-    }
-
-    private void getUserData() {
-        Call<User> call = languageSchoolAPI.login(getAuthToken(LoginActivity.this));
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                User user = response.body();
-                if ((response.isSuccessful()) && (user != null)){
-                    getWords(user);
-                }else {
-                    if (response.code() == 401) {
-                        onErrorRequest();
-                    } else {
-                        onErrorInternetConnection();
-                    }
-                }
+            public void onError(Response<User> response) {
+                Toast.makeText(LoginActivity.this, R.string.warning_invalid_credientials, Toast.LENGTH_SHORT).show();
+                loginButton.setLoading(false);
             }
 
             @Override
-            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                onErrorInternetConnection();
+            public void onFailure() {
+                Toast.makeText(LoginActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                loginButton.setLoading(false);
             }
         });
-    }
-
-    private void getWords(User user) {
-        Call<List<Word>> call = languageSchoolAPI.getWords(getAuthToken(LoginActivity.this));
-        call.enqueue(new Callback<List<Word>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Word>> call, @NonNull Response<List<Word>> response) {
-                List<Word> words = response.body();
-                if ((response.isSuccessful()) && (words != null)){
-                    wordDao.save(words, result -> {
-                        new Handler().postDelayed(() -> {
-                            saveUserData(getApplicationContext(), user);
-                            Toast.makeText(LoginActivity.this, "Welcome, "+user.getUsername(), Toast.LENGTH_LONG).show();
-                            loginButton.setLoading(false);
-                            finish();
-                        }, 2000);
-                    });
-                }else {
-                    if (response.code() == 401) {
-                        onErrorRequest();
-                    } else {
-                        onErrorInternetConnection();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Word>> call, @NonNull Throwable t) {
-                onErrorInternetConnection();
-            }
-        });
-    }
-
-    private void onErrorRequest() {
-        Toast.makeText(this, R.string.warning_invalid_credientials, Toast.LENGTH_SHORT).show();
-        loginButton.setLoading(false);
-    }
-
-    private void onErrorInternetConnection() {
-        Toast.makeText(this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
-        loginButton.setLoading(false);
     }
 }

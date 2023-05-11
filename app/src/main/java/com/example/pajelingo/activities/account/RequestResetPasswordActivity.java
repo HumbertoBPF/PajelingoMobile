@@ -3,21 +3,17 @@ package com.example.pajelingo.activities.account;
 import static android.util.Patterns.EMAIL_ADDRESS;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.models.ResetEmail;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
+import com.example.pajelingo.retrofit_calls.RequestResetPasswordCall;
 import com.example.pajelingo.ui.LoadingButton;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RequestResetPasswordActivity extends AppCompatActivity {
@@ -57,27 +53,34 @@ public class RequestResetPasswordActivity extends AppCompatActivity {
                 })
                 .setCancelable(false).create();
 
-        new Handler().postDelayed(() -> {
-            Call<Void> call = LanguageSchoolAPIHelper.getApiObject().resetAccount(new ResetEmail(email.toString()));
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                    resetPasswordButton.setLoading(false);
-                    if (!response.isSuccessful()){
-                        feedbackDialog.setTitle(R.string.reset_password_error_dialog_title);
-                        feedbackDialog.setMessage(getString(R.string.warning_connection_error));
-                    }
-                    feedbackDialog.show();
-                }
+        RequestResetPasswordCall requestResetPasswordCall = new RequestResetPasswordCall();
 
-                @Override
-                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    resetPasswordButton.setLoading(false);
-                    feedbackDialog.setTitle(R.string.reset_password_error_dialog_title);
-                    feedbackDialog.setMessage(getString(R.string.warning_connection_error));
-                    feedbackDialog.show();
-                }
-            });
-        }, 2000);
+        requestResetPasswordCall.execute(email.toString(), new HttpResponseInterface<Void>() {
+            @Override
+            public void onSuccess(Void v) {
+                onResponse(feedbackDialog);
+            }
+
+            @Override
+            public void onError(Response<Void> response) {
+                onErrorOrFailure(feedbackDialog);
+            }
+
+            @Override
+            public void onFailure() {
+                onErrorOrFailure(feedbackDialog);
+            }
+        });
+    }
+
+    private void onResponse(AlertDialog feedbackDialog) {
+        resetPasswordButton.setLoading(false);
+        feedbackDialog.show();
+    }
+
+    private void onErrorOrFailure(AlertDialog feedbackDialog) {
+        feedbackDialog.setTitle(R.string.reset_password_error_dialog_title);
+        feedbackDialog.setMessage(getString(R.string.warning_connection_error));
+        onResponse(feedbackDialog);
     }
 }

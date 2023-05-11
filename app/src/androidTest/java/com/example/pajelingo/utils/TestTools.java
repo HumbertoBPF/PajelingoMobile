@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.example.pajelingo.daos.WordDao;
@@ -36,11 +35,8 @@ public class TestTools {
      * @param language language of the score
      * @param gameId id of the concerned game
      * @throws IOException thrown when some error related with HTTP communication occurs
-     * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
-    public static Long getScore(User user, Language language, Long gameId) throws IOException, InterruptedException {
-        Thread.sleep(3000);
-
+    public static Long getScore(User user, Language language, Long gameId) throws IOException {
         Response<Token> responseToken = LanguageSchoolAPIHelper.getApiObject().getToken(user).execute();
         Token token = responseToken.body();
 
@@ -101,8 +97,6 @@ public class TestTools {
     }
 
     public static Word getDisplayedWord(TextView textView, List<Word> words) {
-        Log.i("HELLO HELLO HELLO", textView.getText().toString());
-
         for (Word word: words){
             if (word.getWordName().equals(textView.getText().toString())){
                 return word;

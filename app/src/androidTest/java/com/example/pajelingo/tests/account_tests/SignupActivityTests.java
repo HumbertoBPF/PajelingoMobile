@@ -33,7 +33,7 @@ import java.io.IOException;
 
 public class SignupActivityTests extends FormUserActivityTests {
     private final User newUser = new User("new-test-android@test.com", "new-test-android", "new-str0ng-p4ssw0rd", null);
-    
+
     @Test
     public void testRenderingSignupActivity(){
         browseToForm();

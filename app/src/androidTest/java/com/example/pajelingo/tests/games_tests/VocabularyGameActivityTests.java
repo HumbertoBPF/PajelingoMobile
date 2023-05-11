@@ -55,6 +55,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     @Test
     public void testRenderingSetupVocabularyGame() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(actionOnItemAtPosition(0, click()));
         assertRenderingSetupLayout();
     }
@@ -64,6 +65,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         Language randomLanguage = getRandomLanguage(context);
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupVocabularyGame(randomLanguage, randomLanguage);
         assertRenderingSetupLayout();
     }
@@ -94,7 +96,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testCorrectAnswerWithoutAuthenticationVocabularyGame() throws InterruptedException {
+    public void testCorrectAnswerWithoutAuthenticationVocabularyGame() {
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
@@ -106,7 +108,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testWrongAnswerWithoutAuthenticationVocabularyGame() throws InterruptedException {
+    public void testWrongAnswerWithoutAuthenticationVocabularyGame() {
         Language baseLanguage = getRandomLanguage(context);
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
@@ -118,7 +120,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoCorrectAnswersWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
+    public void testTwoCorrectAnswersWithAuthenticationVocabularyGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
@@ -143,7 +145,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationVocabularyGame() throws IOException, InterruptedException {
+    public void testOneWrongAnswerOneCorrectAnswerWithAuthenticationVocabularyGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
@@ -168,7 +170,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testOneCorrectAnswerOneWrongAnswerWithAuthenticationArticleGame() throws IOException {
         authenticateUser(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
@@ -193,7 +195,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
     }
 
     @Test
-    public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException, InterruptedException {
+    public void testTwoWrongAnswersWithAuthenticationArticleGame() throws IOException {
         saveUserData(context, testUser);
 
         Language baseLanguage = getRandomLanguage(context);
@@ -223,6 +225,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         saveEntitiesFromAPI(languageSchoolAPI.getGames(), AppDatabase.getInstance(context).getGameDao());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         onView(withId(R.id.games_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         assertIsMainActivity(true);
     }
@@ -237,6 +240,7 @@ public class VocabularyGameActivityTests extends GameActivityTests {
         Language targetLanguage = getRandomLanguage(context, Objects.requireNonNull(baseLanguage).getLanguageName());
 
         activityScenario = ActivityScenario.launch(MainActivity.class);
+
         setupVocabularyGame(baseLanguage, targetLanguage);
         assertIsMainActivity(true);
     }
@@ -247,9 +251,8 @@ public class VocabularyGameActivityTests extends GameActivityTests {
      * @param targetLanguage selected target language
      * @param isCorrect boolean indicating if the answer is correct or wrong
      */
-    private void inputAnswerAndCheckFeedback(Language baseLanguage, Language targetLanguage, boolean isCorrect) throws InterruptedException {
+    private void inputAnswerAndCheckFeedback(Language baseLanguage, Language targetLanguage, boolean isCorrect) {
         String expectedFeedback =  isCorrect?"Correct :)":"Wrong answer";
-        Thread.sleep(3000);
         onView(isRoot()).perform(inputVocabularyGameAnswer(context, baseLanguage, targetLanguage, isCorrect));
         onView(withId(R.id.check_button)).perform(click());
         onView(withId(R.id.feedback_text_view)).check(matches(withText(startsWith(expectedFeedback))));

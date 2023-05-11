@@ -2,19 +2,16 @@ package com.example.pajelingo.tests.abstract_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.getPasswordRequirementMatcher;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.not;
 
 import android.view.View;
 
@@ -78,14 +75,11 @@ public abstract class FormUserActivityTests extends UITests{
         fillForm(email, username, password, password);
         assertPasswordRequirements(true, true, true, true);
 
-        Matcher<View> loadingButtonMatcher = allOf(hasDescendant(withText(R.string.loading_button_text)), isDisplayed());
         onView(withId(R.id.submit_button))
-                .perform(click())
-                .check(matches(loadingButtonMatcher));
+                .perform(click());
 
-        loadingButtonMatcher = allOf(withId(R.id.submit_button), not(isDisplayed()));
-        onView(isRoot())
-                .perform(waitUntil(loadingButtonMatcher, 10000));
+        onView(withId(R.id.submit_button))
+                .check(doesNotExist());
     }
 
     /**
@@ -99,10 +93,9 @@ public abstract class FormUserActivityTests extends UITests{
      * @param hasSpecialCharacter if the password contains a special character
      * @param hasValidLength if the password has a valid length
      * @throws IOException thrown when some error related with HTTP communication occurs
-     * @throws InterruptedException thrown when some error related with main thread manipulation occurs
      */
     protected void testInvalidSubmission(String email, String username, String password, boolean passwordsMatch, boolean hasLetter,
-                                         boolean hasDigit, boolean hasSpecialCharacter, boolean hasValidLength) throws IOException, InterruptedException {
+                                         boolean hasDigit, boolean hasSpecialCharacter, boolean hasValidLength) throws IOException {
         browseToForm();
 
         String passwordConfirmation = passwordsMatch?password:getRandomString(password.length(), true, true, true);

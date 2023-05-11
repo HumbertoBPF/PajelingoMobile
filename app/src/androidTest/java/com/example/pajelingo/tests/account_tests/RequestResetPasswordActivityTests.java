@@ -7,11 +7,9 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomString;
@@ -58,7 +56,7 @@ public class RequestResetPasswordActivityTests extends UITests {
     }
 
     @Test
-    public void testRequestResetPasswordWithValidEmailInput() throws InterruptedException {
+    public void testRequestResetPasswordWithValidEmailInput() {
         browseToRequestResetPasswordActivity();
 
         String randomEmail = getRandomEmail();
@@ -66,16 +64,7 @@ public class RequestResetPasswordActivityTests extends UITests {
                 .perform(typeText(randomEmail), closeSoftKeyboard());
         onView(withId(R.id.reset_password_button))
                 .perform(click());
-
-        Matcher<View> loadingButtonMatcher = hasDescendant(allOf(withText(R.string.loading_button_text), isDisplayed()));
-        onView(withId(R.id.reset_password_button))
-                .check(matches(loadingButtonMatcher));
-
-        Matcher<View> resetButtonMatcher = allOf(withId(R.id.reset_password_button), hasDescendant(withText(R.string.reset_button_text)), isDisplayed());
-        onView(isRoot())
-                .perform(waitUntil(resetButtonMatcher, 5000));
         // Check that the feedback dialog is displayed and dismiss it
-        Thread.sleep(1000);
         onView(withText(R.string.reset_password_feedback_dialog_title))
                 .check(matches(isDisplayed()));
         onView(withText(R.string.reset_password_feedback_dialog_message))

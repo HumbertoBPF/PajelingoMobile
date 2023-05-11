@@ -9,13 +9,11 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.atPosition;
 import static com.example.pajelingo.utils.CustomMatchers.hasLength;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
@@ -85,11 +83,9 @@ public class ProfileActivityTests extends UITests {
         authenticateUser(context, testUser);
 
         browseToProfileActivity();
-        onView(withId(R.id.delete_account_button)).perform(click());
+        onView(withId(R.id.delete_account_button))
+                .perform(click());
 
-        Matcher<View> deleteAccountDialogMatcher = allOf(withText(R.string.dialog_delete_account_message), isDisplayed());
-        onView(isRoot())
-                .perform(waitUntil(deleteAccountDialogMatcher, 5000));
         onView(withText(R.string.dialog_delete_account_title))
                 .check(matches(isDisplayed()));
         onView(withText(R.string.dialog_delete_account_message))
@@ -135,7 +131,7 @@ public class ProfileActivityTests extends UITests {
     }
 
     @Test
-    public void testDeleteAccountSuccessful() throws IOException, InterruptedException {
+    public void testDeleteAccountSuccessful() throws IOException {
         authenticateUser(context, userToDelete);
 
         browseToProfileActivity();
@@ -149,14 +145,13 @@ public class ProfileActivityTests extends UITests {
                 .perform(typeText(context.getString(R.string.confirm_deletion_string)), closeSoftKeyboard());
         onView(withId(R.id.confirm_deletion_button))
                 .perform(click());
-        Thread.sleep(5000);
 
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
         assertUserExistsInDjangoApp(userToDelete.getEmail(), userToDelete.getUsername(), userToDelete.getPassword(), false);
     }
 
     @Test
-    public void testDeleteAccountFailedConfirmText() throws IOException, InterruptedException {
+    public void testDeleteAccountFailedConfirmText() throws IOException {
         authenticateUser(context, testUser);
 
         browseToProfileActivity();
@@ -168,7 +163,6 @@ public class ProfileActivityTests extends UITests {
                 .perform(typeText(getRandomAlphabeticalString(10)), closeSoftKeyboard());
         onView(withId(R.id.confirm_deletion_button))
                 .perform(click());
-        Thread.sleep(5000);
 
         assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), true);
     }

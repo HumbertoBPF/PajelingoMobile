@@ -1,4 +1,4 @@
-package com.example.pajelingo.synchronization;
+package com.example.pajelingo.retrofit_calls.synchronization;
 
 import android.os.Handler;
 import android.util.Log;
@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.pajelingo.daos.BaseDao;
+import com.example.pajelingo.retrofit_calls.IdlingResource;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ import retrofit2.Response;
  * A chain of responsibility design pattern is used to call the different steps in the correct order.
  * @param <E> Model entity representing the resource concerned.
  */
-public abstract class ResourcesSynchro<E> {
+public abstract class ResourcesSynchro<E> extends IdlingResource {
 
-    private int currentStep;
+    private int currentStep = 1;
     private final BaseDao<E> dao;
     private final ResourcesInterface<E> resourcesInterface;
     private final ResourcesSynchro<?> nextTask;
@@ -32,9 +33,18 @@ public abstract class ResourcesSynchro<E> {
         this.resourcesInterface = resourcesInterface;
         this.nextTask = nextTask;
     }
+    public void execute(OnSyncListener onSyncListener) {
+        incrementIdlingResource();
 
-    public void execute(int currentStep, OnSyncListener onSyncListener) {
+        executeCurrentSyncStep(onSyncListener);
+    }
+
+    private void execute(int currentStep, OnSyncListener onSyncListener) {
         this.currentStep = currentStep;
+        executeCurrentSyncStep(onSyncListener);
+    }
+
+    private void executeCurrentSyncStep(OnSyncListener onSyncListener) {
         this.onSyncListener = onSyncListener;
 
         Call<List<E>> callObject = this.resourcesInterface.getCallForResources();
@@ -47,6 +57,7 @@ public abstract class ResourcesSynchro<E> {
                 }else{
                     Log.e("ResourcesSynchro", "doInBackground:onResponse not successful");
                     onSyncListener.onSync(false, currentStep);
+                    decrementIdlingResource();
                 }
             }
 
@@ -54,6 +65,7 @@ public abstract class ResourcesSynchro<E> {
             public void onFailure(@NonNull Call<List<E>> call, @NonNull Throwable t) {
                 Log.e("ResourcesSynchro", "doInBackground:onFailure");
                 onSyncListener.onSync(false, currentStep);
+                decrementIdlingResource();
             }
         });
     }
@@ -74,6 +86,8 @@ public abstract class ResourcesSynchro<E> {
 
             if (nextTask != null) {
                 nextTask.execute(currentStep + 1, this.onSyncListener);
+            }else{
+                decrementIdlingResource();
             }
         },2000);
     }

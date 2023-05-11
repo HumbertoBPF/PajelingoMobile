@@ -4,21 +4,19 @@ import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.getLabeledEditTextMatcher;
 import static com.example.pajelingo.utils.CustomViewActions.fillLabeledEditText;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -79,14 +77,12 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_input))
                 .perform(fillLabeledEditText(password), closeSoftKeyboard());
 
-        Matcher<View> loadingButtonMatcher = hasDescendant(allOf(withText(R.string.loading_button_text), isDisplayed()));
         onView(withId(R.id.login_button))
-                .perform(click())
-                .check(matches(loadingButtonMatcher));
+                .perform(click());
 
-        Matcher<View> loginButtonMatcher = allOf(withId(R.id.login_button), hasDescendant(withText(R.string.login_button_text)), isDisplayed());
-        onView(isRoot())
-                .perform(waitUntil(loginButtonMatcher, 5000));
+        Matcher<View> loginButtonMatcher = allOf(hasDescendant(withText(R.string.login_button_text)), isDisplayed());
+        onView(withId(R.id.login_button))
+                .check(matches(loginButtonMatcher));
 
         assertFalse(isUserAuthenticated(context));
     }
@@ -102,14 +98,11 @@ public class LoginActivityTests extends UITests {
         onView(withId(R.id.password_input))
                 .perform(fillLabeledEditText(testUser.getPassword()), closeSoftKeyboard());
 
-        Matcher<View> loadingButtonMatcher = hasDescendant(allOf(withText(R.string.loading_button_text), isDisplayed()));
         onView(withId(R.id.login_button))
-                .perform(click())
-                .check(matches(loadingButtonMatcher));
+                .perform(click());
 
-        Matcher<View> loginButtonMatcher = allOf(withId(R.id.login_button), not(isDisplayed()));
-        onView(isRoot())
-                .perform(waitUntil(loginButtonMatcher, 10000));
+        onView(withId(R.id.login_button))
+                .check(doesNotExist());
 
         assertTrue(isUserAuthenticated(context));
 

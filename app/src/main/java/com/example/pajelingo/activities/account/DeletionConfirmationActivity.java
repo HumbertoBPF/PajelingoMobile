@@ -1,21 +1,18 @@
 package com.example.pajelingo.activities.account;
 
 import static com.example.pajelingo.utils.SharedPreferences.deleteUserData;
-import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
+import com.example.pajelingo.retrofit_calls.AccountDeletionCall;
 import com.example.pajelingo.ui.LoadingButton;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DeletionConfirmationActivity extends AppCompatActivity {
@@ -40,22 +37,25 @@ public class DeletionConfirmationActivity extends AppCompatActivity {
         confirmDeletionButton.setLoading(true);
 
         if (confirmationText.equals(getString(R.string.confirm_deletion_string))){
-            Call<Void> call = LanguageSchoolAPIHelper.getApiObject().deleteAccount(getAuthToken(DeletionConfirmationActivity.this));
-            call.enqueue(new Callback<Void>() {
+            AccountDeletionCall accountDeletionCall = new AccountDeletionCall(DeletionConfirmationActivity.this);
+
+            accountDeletionCall.execute(new HttpResponseInterface<Void>() {
                 @Override
-                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                public void onSuccess(Void unused) {
                     confirmDeletionButton.setLoading(false);
-                    if (response.isSuccessful()){
-                        Toast.makeText(DeletionConfirmationActivity.this, R.string.account_deletion_success, Toast.LENGTH_SHORT).show();
-                        deleteUserData(DeletionConfirmationActivity.this);
-                        finish();
-                    }else{
-                        Toast.makeText(DeletionConfirmationActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(DeletionConfirmationActivity.this, R.string.account_deletion_success, Toast.LENGTH_SHORT).show();
+                    deleteUserData(DeletionConfirmationActivity.this);
+                    finish();
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                public void onError(Response<Void> response) {
+                    confirmDeletionButton.setLoading(false);
+                    Toast.makeText(DeletionConfirmationActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure() {
                     confirmDeletionButton.setLoading(false);
                     Toast.makeText(DeletionConfirmationActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
                 }

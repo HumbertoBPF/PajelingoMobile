@@ -6,12 +6,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.hasLength;
 import static com.example.pajelingo.utils.CustomViewActions.clickChildViewWithId;
-import static com.example.pajelingo.utils.CustomViewActions.waitUntil;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
@@ -60,7 +58,7 @@ public class SearchToolTests extends WordListActivityTest {
     }
 
     @Test
-    public void testSearchWithResultsToggleWord() throws IOException, InterruptedException {
+    public void testSearchWithResultsToggleWord() throws IOException {
         authenticateUser(context, testUser);
 
         List<Word> words = getAllWords();
@@ -75,12 +73,13 @@ public class SearchToolTests extends WordListActivityTest {
         onView(withId(R.id.search_recycler_view))
                 .perform(scrollToPosition(randomPosition))
                 .perform(actionOnItemAtPosition(randomPosition, clickChildViewWithId(R.id.ic_heart)));
-        Thread.sleep(5000);
+
+        word.setFavorite(!wasFavorite);
+        assertSearchResult(word, randomPosition, "", true);
         // Checking if the word is now a favorite
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         Word wordUpdated = wordDao.getRecordById(word.getId());
         assertEquals(wordUpdated.getFavorite(), !wasFavorite);
-        assertSearchResult(wordUpdated, randomPosition, "", true);
     }
 
     @Test
@@ -131,9 +130,9 @@ public class SearchToolTests extends WordListActivityTest {
         // Checking if the word has been toggled in the database
         int expectedStringResource = wasFavorite?R.string.add_to_favorite_words:R.string.remove_from_favorite_words;
 
-        Matcher<View> favoriteWordButtonMatcher = allOf(withId(R.id.favorite_word_button), withText(expectedStringResource), isDisplayed());
-        onView(isRoot())
-                .perform(waitUntil(favoriteWordButtonMatcher, 5000));
+        Matcher<View> favoriteWordButtonMatcher = allOf(withText(expectedStringResource), isDisplayed());
+        onView(withId(R.id.favorite_word_button))
+                .check(matches(favoriteWordButtonMatcher));
 
         WordDao wordDao = AppDatabase.getInstance(context).getWordDao();
         Word wordUpdated = wordDao.getRecordById(word.getId());
@@ -153,7 +152,6 @@ public class SearchToolTests extends WordListActivityTest {
 
         browseToActivity();
         performSearch(searchPattern, randomLanguage);
-        assertLoadingPage();
         // Checking that the results are correctly displayed
         Matcher<View> searchRecyclerViewMatcher = allOf(hasLength(words.size()), isDisplayed());
         onView(withId(R.id.search_recycler_view))
@@ -224,6 +222,5 @@ public class SearchToolTests extends WordListActivityTest {
     protected void browseToActivity() {
         onView(withId(R.id.search_button))
                 .perform(click());
-        assertLoadingPage();
     }
 }

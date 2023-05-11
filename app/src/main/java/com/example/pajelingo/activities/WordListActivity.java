@@ -1,11 +1,9 @@
 package com.example.pajelingo.activities;
 
-import static com.example.pajelingo.utils.SharedPreferences.getAuthToken;
 import static com.example.pajelingo.utils.Tools.displayFavoriteWordError;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,17 +23,15 @@ import com.example.pajelingo.activities.search_tool.SearchWithFiltersActivity;
 import com.example.pajelingo.adapters.SearchResultsAdapter;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.interfaces.OnResultListener;
-import com.example.pajelingo.models.FavoriteWordPayload;
 import com.example.pajelingo.models.Word;
 import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.FavoriteWordCall;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public abstract class WordListActivity extends AppCompatActivity implements OnResultListener<List<Word>> {
@@ -96,42 +92,35 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
 
     @Override
     public void onResult(List<Word> words) {
-        new Handler().postDelayed(() -> {
-            if (words.size() == 0){
-                showWarning(R.drawable.no_result, R.string.no_results_message);
-            }else{
-                warningConstraintLayout.setVisibility(View.GONE);
-                resultsRecyclerView.setVisibility(View.VISIBLE);
-            }
+        if (words.size() == 0){
+            showWarning(R.drawable.no_result, R.string.no_results_message);
+        }else{
+            warningConstraintLayout.setVisibility(View.GONE);
+            resultsRecyclerView.setVisibility(View.VISIBLE);
+        }
 
-            adapter = new SearchResultsAdapter(WordListActivity.this, words, (word, position) -> {
-                Boolean isFavorite = word.getFavorite();
-                FavoriteWordPayload payload =  new FavoriteWordPayload(!isFavorite);
-                Call<Word> call = languageSchoolAPI.favoriteWord(getAuthToken(WordListActivity.this), payload, word.getId());
+        adapter = new SearchResultsAdapter(WordListActivity.this, words, (word, position) -> {
+            FavoriteWordCall favoriteWordCall = new FavoriteWordCall(WordListActivity.this);
 
-                call.enqueue(new Callback<Word>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Word> call, @NonNull Response<Word> response) {
-                        Word returnedWord = response.body();
+            favoriteWordCall.execute(word, new HttpResponseInterface<Word>() {
+                @Override
+                public void onSuccess(Word word) {
+                    adapter.setWordAtPosition(word, position);
+                }
 
-                        if ((response.isSuccessful()) && (returnedWord != null)) {
-                            List<Word> wordList = new ArrayList<>();
-                            wordList.add(returnedWord);
-                            wordDao.save(wordList, result -> adapter.setWordAtPosition(returnedWord, position));
-                        }else {
-                            displayFavoriteWordError(WordListActivity.this, word);
-                        }
-                    }
+                @Override
+                public void onError(Response<Word> response) {
+                    displayFavoriteWordError(WordListActivity.this, word);
+                }
 
-                    @Override
-                    public void onFailure(@NonNull Call<Word> call, @NonNull Throwable t) {
-                        Toast.makeText(WordListActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                @Override
+                public void onFailure() {
+                    Toast.makeText(WordListActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                }
             });
+        });
 
-            resultsRecyclerView.setAdapter(adapter);
-        }, 2000);
+        resultsRecyclerView.setAdapter(adapter);
     }
 
     private void showWarning(int warningImage, int warningText) {
