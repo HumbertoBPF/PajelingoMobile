@@ -101,9 +101,9 @@ public class VocabularyTrainingActivity extends GameActivity {
                 languageSchoolAPI.getWordForVocabularyGame(getAuthToken(this),
                         baseLanguage.getLanguageName(), targetLanguage.getLanguageName());
 
-        GameRoundCall gameRoundCall = new GameRoundCall(call);
+        GameRoundCall gameRoundCall = new GameRoundCall();
 
-        gameRoundCall.execute(new HttpResponseInterface<GameRoundWord>() {
+        gameRoundCall.execute(call, new HttpResponseInterface<GameRoundWord>() {
             @Override
             public void onSuccess(GameRoundWord gameRoundWord) {
                 wordDao.getRecordById(gameRoundWord.getId(), word -> {

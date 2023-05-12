@@ -94,9 +94,9 @@ public class ConjugationGameActivity extends GameActivity {
         Call<GameRoundWord> call
                 = languageSchoolAPI.getWordForConjugationGame(getAuthToken(this), language.getLanguageName());
 
-        GameRoundCall gameRoundSynchro = new GameRoundCall(call);
+        GameRoundCall gameRoundSynchro = new GameRoundCall();
 
-        gameRoundSynchro.execute(new HttpResponseInterface<GameRoundWord>() {
+        gameRoundSynchro.execute(call, new HttpResponseInterface<GameRoundWord>() {
             @Override
             public void onSuccess(GameRoundWord gameRoundWord) {
                 wordDao.getRecordById(gameRoundWord.getId(), verb -> {

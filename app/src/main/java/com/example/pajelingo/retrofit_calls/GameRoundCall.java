@@ -10,13 +10,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GameRoundCall extends IdlingResource {
-    private final Call<GameRoundWord> call;
-
-    public GameRoundCall(Call<GameRoundWord> call) {
-        this.call = call;
-    }
-
-    public void execute(HttpResponseInterface<GameRoundWord> httpResponseInterface) {
+    public void execute(Call<GameRoundWord> call, HttpResponseInterface<GameRoundWord> httpResponseInterface) {
         incrementIdlingResource();
 
         call.enqueue(new Callback<GameRoundWord>() {

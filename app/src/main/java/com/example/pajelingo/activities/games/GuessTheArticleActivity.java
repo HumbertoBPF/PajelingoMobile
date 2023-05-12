@@ -97,9 +97,9 @@ public class GuessTheArticleActivity extends GameActivity {
         Call<GameRoundWord> call =
                 this.languageSchoolAPI.getWordForArticleGame(getAuthToken(this), language.getLanguageName());
 
-        GameRoundCall gameRoundCall = new GameRoundCall(call);
+        GameRoundCall gameRoundCall = new GameRoundCall();
 
-        gameRoundCall.execute(new HttpResponseInterface<GameRoundWord>() {
+        gameRoundCall.execute(call, new HttpResponseInterface<GameRoundWord>() {
             @Override
             public void onSuccess(GameRoundWord gameRoundWord) {
                 wordDao.getRecordById(gameRoundWord.getId(), word -> {
