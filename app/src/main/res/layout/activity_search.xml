@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    tools:context=".activities.search_tool.SearchWithFiltersActivity">
+    tools:context=".activities.dictionary.DictionaryFiltersActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_bar"

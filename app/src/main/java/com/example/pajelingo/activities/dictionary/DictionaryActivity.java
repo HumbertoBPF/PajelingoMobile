@@ -1,11 +1,11 @@
-package com.example.pajelingo.activities.search_tool;
+package com.example.pajelingo.activities.dictionary;
 
 import android.os.Bundle;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.WordListActivity;
 
-public class SearchActivity extends WordListActivity {
+public class DictionaryActivity extends WordListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.search_tool.SearchActivity">
+    tools:context=".activities.dictionary.DictionaryActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/warning_constraint_layout"

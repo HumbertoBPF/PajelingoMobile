@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.Guideline;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.search_tool.MeaningActivity;
+import com.example.pajelingo.activities.dictionary.MeaningActivity;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.OnFavoriteItem;
@@ -25,14 +25,14 @@ import com.example.pajelingo.models.Word;
 
 import java.util.List;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultsViewHolder> {
+public class DictionaryItemAdapter extends RecyclerView.Adapter<DictionaryItemAdapter.SearchResultsViewHolder> {
 
     private final Context context;
     private final List<Word> words;
     private final LanguageDao languageDao;
     private final OnFavoriteItem onFavoriteItem;
 
-    public SearchResultsAdapter(Context context, List<Word> words, OnFavoriteItem onFavoriteItem){
+    public DictionaryItemAdapter(Context context, List<Word> words, OnFavoriteItem onFavoriteItem){
         this.context = context;
         this.words = words;
         this.languageDao = AppDatabase.getInstance(context).getLanguageDao();
@@ -41,13 +41,13 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
     @NonNull
     @Override
-    public SearchResultsAdapter.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DictionaryItemAdapter.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_results_item_layout, parent, false);
-        return new SearchResultsAdapter.SearchResultsViewHolder(view);
+        return new DictionaryItemAdapter.SearchResultsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchResultsAdapter.SearchResultsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DictionaryItemAdapter.SearchResultsViewHolder holder, int position) {
         holder.bind(position);
     }
 

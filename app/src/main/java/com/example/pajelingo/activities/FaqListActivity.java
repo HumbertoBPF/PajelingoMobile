@@ -2,13 +2,20 @@ package com.example.pajelingo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.ui.SimpleListItem;
+import com.example.pajelingo.adapters.MenuAdapter;
+import com.example.pajelingo.models.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FaqListActivity extends AppCompatActivity {
+    private RecyclerView faqRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,20 +24,27 @@ public class FaqListActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.faq_activity_title));
 
-        SimpleListItem[] faqItems = {
-                findViewById(R.id.faq_1),
-                findViewById(R.id.faq_2),
-                findViewById(R.id.faq_3),
-                findViewById(R.id.faq_4)
-        };
+        faqRecyclerView = findViewById(R.id.faq_recycler_view);
 
-        for (SimpleListItem faqItem: faqItems){
-            faqItem.setOnClickListener(v -> {
-                Intent intent = new Intent(FaqListActivity.this, FaqActivity.class);
-                intent.putExtra("question", faqItem.getTitle());
-                intent.putExtra("answer", faqItem.getDescription());
-                startActivity(intent);
-            });
-        }
+        List<MenuItem> items = new ArrayList<>();
+
+        items.add(getMenuItem(R.string.faq_1_title, R.string.faq_1_description));
+        items.add(getMenuItem(R.string.faq_2_title, R.string.faq_2_description));
+        items.add(getMenuItem(R.string.faq_3_title, R.string.faq_3_description));
+        items.add(getMenuItem(R.string.faq_4_title, R.string.faq_4_description));
+
+        faqRecyclerView.setAdapter(new MenuAdapter(items));
+    }
+
+    private MenuItem getMenuItem(int titleResource, int descriptionResource) {
+        String title = getString(titleResource);
+        String description = getString(descriptionResource);
+
+        return new MenuItem(title, description, null, (View.OnClickListener) view -> {
+            Intent intent = new Intent(FaqListActivity.this, FaqActivity.class);
+            intent.putExtra("question", title);
+            intent.putExtra("answer", description);
+            startActivity(intent);
+        });
     }
 }

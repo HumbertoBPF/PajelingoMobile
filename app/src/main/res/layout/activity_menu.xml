@@ -6,34 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.MenuActivity">
 
-    <com.example.pajelingo.ui.SimpleListItem
-        android:id="@+id/menu_item_profile"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menu_recycler_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:icon="@drawable/ic_profile"
-        app:title="@string/profile_menu_item_title"/>
-
-    <com.example.pajelingo.ui.SimpleListItem
-        android:id="@+id/menu_item_rankings"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/menu_item_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:icon="@drawable/ic_rankings"
-        app:title="@string/rankings_menu_item_title"/>
-
-    <com.example.pajelingo.ui.SimpleListItem
-        android:id="@+id/menu_item_faq"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/menu_item_rankings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:icon="@drawable/ic_faq"
-        app:title="@string/faq_menu_item_title"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

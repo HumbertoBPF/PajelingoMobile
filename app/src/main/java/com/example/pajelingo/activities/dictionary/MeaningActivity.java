@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities.search_tool;
+package com.example.pajelingo.activities.dictionary;
 
 import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
 import static com.example.pajelingo.utils.Tools.displayFavoriteWordError;

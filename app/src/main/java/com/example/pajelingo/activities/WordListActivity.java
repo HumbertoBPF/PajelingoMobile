@@ -19,8 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.search_tool.SearchWithFiltersActivity;
-import com.example.pajelingo.adapters.SearchResultsAdapter;
+import com.example.pajelingo.activities.dictionary.DictionaryFiltersActivity;
+import com.example.pajelingo.adapters.DictionaryItemAdapter;
 import com.example.pajelingo.daos.WordDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.interfaces.HttpResponseInterface;
@@ -44,7 +44,7 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
     protected LanguageSchoolAPI languageSchoolAPI;
     protected String selectedLanguage;
     protected String pattern;
-    protected SearchResultsAdapter adapter;
+    protected DictionaryItemAdapter adapter;
 
     protected ActivityResultLauncher<Intent> startActivityIntent;
 
@@ -99,7 +99,7 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
             resultsRecyclerView.setVisibility(View.VISIBLE);
         }
 
-        adapter = new SearchResultsAdapter(WordListActivity.this, words, (word, position) -> {
+        adapter = new DictionaryItemAdapter(WordListActivity.this, words, (word, position) -> {
             FavoriteWordCall favoriteWordCall = new FavoriteWordCall(WordListActivity.this);
 
             favoriteWordCall.execute(word, new HttpResponseInterface<Word>() {
@@ -141,7 +141,7 @@ public abstract class WordListActivity extends AppCompatActivity implements OnRe
         int selectedItemId = item.getItemId();
 
         if (selectedItemId == R.id.action_filter) {
-            Intent intent = new Intent(this, SearchWithFiltersActivity.class);
+            Intent intent = new Intent(this, DictionaryFiltersActivity.class);
             intent.putExtra("pattern", pattern);
             intent.putExtra("selectedLanguage", selectedLanguage);
             startActivityIntent.launch(intent);

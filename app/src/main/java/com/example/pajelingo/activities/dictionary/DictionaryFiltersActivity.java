@@ -1,4 +1,4 @@
-package com.example.pajelingo.activities.search_tool;
+package com.example.pajelingo.activities.dictionary;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.example.pajelingo.ui.LabeledSpinner;
 import java.util.List;
 import java.util.Objects;
 
-public class SearchWithFiltersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class DictionaryFiltersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private EditText searchEditText;
     private Spinner languageSpinner;
     private Button searchButton;
@@ -55,17 +55,17 @@ public class SearchWithFiltersActivity extends AppCompatActivity implements Adap
 
         languageDao.getAllRecords(result -> {
             result.add(new Language(getString(R.string.all_languages_spinner_option)));
-            ArrayAdapter<Language> adapter = new ArrayAdapter<>(SearchWithFiltersActivity.this,
+            ArrayAdapter<Language> adapter = new ArrayAdapter<>(DictionaryFiltersActivity.this,
                     android.R.layout.simple_spinner_item, result);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             languageSpinner.setAdapter(adapter);
-            languageSpinner.setOnItemSelectedListener(SearchWithFiltersActivity.this);
+            languageSpinner.setOnItemSelectedListener(DictionaryFiltersActivity.this);
             int position = getLanguageItemPosition(result);
             languageSpinner.setSelection(position);
         });
 
         searchButton.setOnClickListener(v -> {
-            Intent resultIntent = new Intent(SearchWithFiltersActivity.this, SearchActivity.class);
+            Intent resultIntent = new Intent(DictionaryFiltersActivity.this, DictionaryActivity.class);
             resultIntent.putExtra("pattern", searchEditText.getText().toString());
             resultIntent.putExtra("selectedLanguage", selectedLanguage);
             setResult(RESULT_OK, resultIntent);

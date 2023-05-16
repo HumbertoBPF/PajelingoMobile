@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.activities.account.LoginActivity;
-import com.example.pajelingo.activities.search_tool.SearchActivity;
+import com.example.pajelingo.activities.dictionary.DictionaryActivity;
 import com.example.pajelingo.adapters.GameAdapter;
 import com.example.pajelingo.daos.GameDao;
 import com.example.pajelingo.database.settings.AppDatabase;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         sp = getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
 
-        searchButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SearchActivity.class)));
+        searchButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DictionaryActivity.class)));
     }
 
     private void loadGames() {

@@ -115,4 +115,10 @@ public interface LanguageSchoolAPI {
 
     @POST("request-reset-account/")
     Call<Void> resetAccount(@Body ResetEmail resetEmail);
+
+    @GET("accounts")
+    Call<List<User>> getAccounts(@Query("q") String q);
+
+    @GET("accounts/{username}")
+    Call<List<User>> getAccount(@Path("username") String username);
 }

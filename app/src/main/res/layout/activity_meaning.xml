@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    tools:context=".activities.search_tool.MeaningActivity">
+    tools:context=".activities.dictionary.MeaningActivity">
 
     <ScrollView
         android:layout_width="0dp"
