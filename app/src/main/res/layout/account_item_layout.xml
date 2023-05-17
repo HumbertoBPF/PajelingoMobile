@@ -19,56 +19,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2"/>
+            app:layout_constraintGuide_percent="0.25"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8"/>
-
-        <TextView
-            android:id="@+id/position_text_view"
+        <ImageView
+            android:id="@+id/account_image_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_1"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginVertical="8dp"
-            android:textSize="16sp"
-            android:gravity="center"
-            tools:text="1"
-            />
+            android:src="@drawable/profile"
+            android:contentDescription="@string/account_picture_content_description" />
 
         <TextView
-            android:id="@+id/username_text_view"
+            android:id="@+id/account_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideline_1"
-            app:layout_constraintEnd_toStartOf="@id/guideline_2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textSize="16sp"
-            android:layout_marginVertical="8dp"
-            android:gravity="center"
-            tools:text="HumbertoBPF"/>
-
-
-        <TextView
-            android:id="@+id/score_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginVertical="8dp"
             android:textSize="16sp"
+            android:layout_margin="8dp"
             android:gravity="center"
-            tools:text="231"
-            />
+            tools:text="HumbertoBPF"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

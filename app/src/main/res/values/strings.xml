@@ -180,4 +180,12 @@
     <string name="loading_content_description">Loading</string>
     <string name="default_label_text">Default label</string>
     <string name="fulfilled_requirement_content_description">Fulfilled</string>
+    <string name="hint_edit_text_account_search">Search an account</string>
+    <string name="search_account_button">Search account</string>
+    <string name="account_picture_content_description">Account picture</string>
+    <string name="account_username">Username: %1$s</string>
+    <string name="account_email">Email: %1$s</string>
+    <string name="game_image_view_content_description">Game</string>
+    <string name="language_image_view_content_description">Language flag</string>
+    <string name="icon_heart_content_description">Icon heart</string>
 </resources>

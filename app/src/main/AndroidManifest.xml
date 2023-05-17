@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Pajelingo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.account.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.account.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.account.SearchAccountActivity"
             android:exported="false" />
         <activity
@@ -40,7 +46,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.account.ProfileActivity"
+            android:name=".activities.account.MyProfileActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize">
             <meta-data

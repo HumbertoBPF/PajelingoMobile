@@ -28,7 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_25"
             android:adjustViewBounds="true"
-            tools:src="@drawable/logo"/>
+            tools:src="@drawable/logo"
+            android:contentDescription="@string/game_image_view_content_description" />
 
         <TextView
             android:id="@+id/game_name_text_view"

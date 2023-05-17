@@ -25,14 +25,14 @@ import com.example.pajelingo.models.Word;
 
 import java.util.List;
 
-public class DictionaryItemAdapter extends RecyclerView.Adapter<DictionaryItemAdapter.SearchResultsViewHolder> {
+public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.SearchResultsViewHolder> {
 
     private final Context context;
     private final List<Word> words;
     private final LanguageDao languageDao;
     private final OnFavoriteItem onFavoriteItem;
 
-    public DictionaryItemAdapter(Context context, List<Word> words, OnFavoriteItem onFavoriteItem){
+    public DictionaryAdapter(Context context, List<Word> words, OnFavoriteItem onFavoriteItem){
         this.context = context;
         this.words = words;
         this.languageDao = AppDatabase.getInstance(context).getLanguageDao();
@@ -41,13 +41,13 @@ public class DictionaryItemAdapter extends RecyclerView.Adapter<DictionaryItemAd
 
     @NonNull
     @Override
-    public DictionaryItemAdapter.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DictionaryAdapter.SearchResultsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_results_item_layout, parent, false);
-        return new DictionaryItemAdapter.SearchResultsViewHolder(view);
+        return new DictionaryAdapter.SearchResultsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DictionaryItemAdapter.SearchResultsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DictionaryAdapter.SearchResultsViewHolder holder, int position) {
         holder.bind(position);
     }
 

@@ -52,7 +52,7 @@ public class RankingActivity extends AppCompatActivity implements AdapterView.On
         if (selectedItem != null){
             String selectedLanguage = languageSpinner.getSelectedItem().toString();
             scoreDao.getTotalScoresByLanguage(selectedLanguage,
-                    result -> rankingRecyclerView.setAdapter(new RankingAdapter(result)));
+                    result -> rankingRecyclerView.setAdapter(new RankingAdapter(this, result)));
         }
     }
 

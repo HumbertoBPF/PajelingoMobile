@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.activities.account.ProfileActivity;
+import com.example.pajelingo.activities.account.MyProfileActivity;
 import com.example.pajelingo.activities.account.SearchAccountActivity;
 import com.example.pajelingo.adapters.MenuAdapter;
 import com.example.pajelingo.models.MenuItem;
@@ -31,7 +31,7 @@ public class MenuActivity extends AppCompatActivity {
 
         if (isUserAuthenticated(MenuActivity.this)){
             items.add(new MenuItem(getString(R.string.profile_menu_item_title), null, R.drawable.ic_profile, view -> {
-                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+                startActivity(new Intent(MenuActivity.this, MyProfileActivity.class));
                 finish();
             }));
         }

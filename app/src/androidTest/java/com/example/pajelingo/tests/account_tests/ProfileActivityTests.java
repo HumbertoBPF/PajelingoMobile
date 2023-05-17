@@ -216,7 +216,7 @@ public class ProfileActivityTests extends UITests {
     }
 
     /**
-     * Verifies that the scores shown on the ProfileActivity match the scores of the authenticated
+     * Verifies that the scores shown on the MyProfileActivity match the scores of the authenticated
      * user in the specified language.
      * @param language selected language filter
      */

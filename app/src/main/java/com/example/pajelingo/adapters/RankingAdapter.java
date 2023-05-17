@@ -1,5 +1,7 @@
 package com.example.pajelingo.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.activities.account.ProfileActivity;
 import com.example.pajelingo.models.Score;
+import com.example.pajelingo.models.User;
 
 import java.util.List;
 
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingViewHolder> {
-
+    private final Context context;
     private final List<Score> scores;
 
-    public RankingAdapter(List<Score> scores) {
+    public RankingAdapter(Context context, List<Score> scores) {
+        this.context = context;
         this.scores = scores;
     }
 
@@ -55,6 +60,13 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
             this.positionTextView.setText(String.valueOf(position+1));
             this.usernameTextView.setText(score.getUser());
             this.scoreTextView.setText(String.valueOf(score.getScore()));
+
+            itemView.setOnClickListener(view -> {
+                User user = new User(null, score.getUser(), null, null);
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra("account", user);
+                context.startActivity(intent);
+            });
         }
 
     }

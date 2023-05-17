@@ -1,150 +1,76 @@
 package com.example.pajelingo.activities.account;
 
 import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
-import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
 import com.example.pajelingo.R;
-import com.example.pajelingo.adapters.ScoreAdapter;
-import com.example.pajelingo.daos.LanguageDao;
-import com.example.pajelingo.daos.ScoreDao;
-import com.example.pajelingo.database.settings.AppDatabase;
-import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.User;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.pajelingo.retrofit.LanguageSchoolAPI;
+import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
-public class ProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private SharedPreferences sp;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private TextView usernameCredentialTextView;
-    private TextView emailCredentialTextView;
-    private ImageView profilePictureImageView;
-    private MaterialButton editAccountButton;
-    private MaterialButton deleteAccountButton;
-    private Spinner languageSpinner;
-    private RecyclerView scoreRecyclerView;
-    private FloatingActionButton favoriteButton;
-
-    private LanguageDao languageDao;
-    private ScoreDao scoreDao;
+public class ProfileActivity extends AccountActivity {
+    private LanguageSchoolAPI languageSchoolAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
 
-        setTitle(getString(R.string.profile_activity_title));
+        emailCredentialTextView.setVisibility(View.GONE);
+        editAccountButton.setVisibility(View.GONE);
+        deleteAccountButton.setVisibility(View.GONE);
+        favoriteButton.setVisibility(View.GONE);
 
-        sp =  getSharedPreferences(getString(R.string.sp_file_name), MODE_PRIVATE);
+        languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
-        usernameCredentialTextView = findViewById(R.id.username_credential_text_view);
-        emailCredentialTextView = findViewById(R.id.email_credential_text_view);
-        profilePictureImageView = findViewById(R.id.profile_picture_image_view);
-        editAccountButton = findViewById(R.id.edit_account_button);
-        deleteAccountButton = findViewById(R.id.delete_account_button);
-        languageSpinner = findViewById(R.id.language_spinner);
-        scoreRecyclerView = findViewById(R.id.score_recycler_view);
-        favoriteButton = findViewById(R.id.favorite_button);
+        Intent intent = getIntent();
 
-        languageDao = AppDatabase.getInstance(this).getLanguageDao();
-        scoreDao = AppDatabase.getInstance(this).getScoreDao();
-
-        languageDao.getAllRecords(result -> {
-            ArrayAdapter<Language> adapter = new ArrayAdapter<>(ProfileActivity.this,
-                    android.R.layout.simple_spinner_item, result);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            languageSpinner.setAdapter(adapter);
-            languageSpinner.setOnItemSelectedListener(ProfileActivity.this);
-            applyLanguageFilter();
-        });
-
-        deleteAccountButton.setOnClickListener(v -> askConfirmationDeletion());
-
-        setProfilePicture();
-
-        favoriteButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, FavoriteWordsActivity.class));
-        });
-    }
-
-    private void setProfilePicture() {
-        String picture = sp.getString(getString(R.string.picture_sp), null);
-        if (picture != null){
-            profilePictureImageView.setImageBitmap(getPictureFromBase64String(picture));
-        }
-    }
-
-    private void askConfirmationDeletion() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.dialog_delete_account_title)
-                .setMessage(R.string.dialog_delete_account_message)
-                .setPositiveButton(R.string.dialog_delete_account_confirm, (dialog, id) -> {
-                    startActivity(new Intent(ProfileActivity.this, DeletionConfirmationActivity.class));
-                    dialog.dismiss();
-                })
-                .setNegativeButton(R.string.dialog_delete_account_decline, (dialog, which) -> dialog.dismiss());
-        AlertDialog confirmationDialog = builder.create();
-        confirmationDialog.setCancelable(false);
-        confirmationDialog.show();
-    }
-
-    private void applyLanguageFilter(){
-        Object selectedItem = languageSpinner.getSelectedItem();
-
-        if (selectedItem != null){
-            String username = sp.getString(getString(R.string.username_sp), null);
-            String selectedLanguage = languageSpinner.getSelectedItem().toString();
-            scoreDao.getScoresByUserAndByLanguage(username, selectedLanguage,
-                    result -> scoreRecyclerView.setAdapter(new ScoreAdapter(result)));
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateUserCredentials();
-        // Verifies if the user credentials were deleted while he was out from this activity
-        if (!isUserAuthenticated(this)){
+        if (intent == null) {
             finish();
+            return;
         }
-    }
 
-    private void updateUserCredentials() {
-        String username = sp.getString(getString(R.string.username_sp),  "");
-        String email = sp.getString(getString(R.string.email_sp), "");
+        user = (User) intent.getSerializableExtra("account");
+        setUserCredentials();
 
-        usernameCredentialTextView.setText(getString(R.string.username_label)+": "+username);
-        emailCredentialTextView.setText(getString(R.string.email_label)+": "+email);
+        Call<User> call = languageSchoolAPI.getAccount(user.getUsername());
 
-        editAccountButton.setOnClickListener(v -> {
-            User authenticatedUser = new User(email, username, null, null);
-            Intent intent = new Intent(ProfileActivity.this, FormUserActivity.class);
-            intent.putExtra("authenticatedUser", authenticatedUser);
-            startActivity(intent);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                User responseUser = response.body();
+
+                if (response.isSuccessful() && (responseUser != null)) {
+                    user = responseUser;
+                    setUserCredentials();
+                } else {
+                    Toast.makeText(ProfileActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                Toast.makeText(ProfileActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        applyLanguageFilter();
-    }
+    private void setUserCredentials() {
+        usernameCredentialTextView.setText(getString(R.string.account_username, user.getUsername()));
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+        String base64Picture = user.getPicture();
 
+        if (base64Picture != null) {
+            profilePictureImageView.setImageBitmap(getPictureFromBase64String(base64Picture));
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.example.pajelingo.models.GameRoundWord;
 import com.example.pajelingo.models.Image;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Meaning;
+import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.ResetEmail;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.Token;
@@ -117,8 +118,8 @@ public interface LanguageSchoolAPI {
     Call<Void> resetAccount(@Body ResetEmail resetEmail);
 
     @GET("accounts")
-    Call<List<User>> getAccounts(@Query("q") String q);
+    Call<Page<User>> getAccounts(@Query("q") String q);
 
     @GET("accounts/{username}")
-    Call<List<User>> getAccount(@Path("username") String username);
+    Call<User> getAccount(@Path("username") String username);
 }
