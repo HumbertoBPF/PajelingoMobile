@@ -118,7 +118,7 @@ public interface LanguageSchoolAPI {
     Call<Void> resetAccount(@Body ResetEmail resetEmail);
 
     @GET("accounts")
-    Call<Page<User>> getAccounts(@Query("q") String q);
+    Call<Page<User>> getAccounts(@Query("q") String q, @Query("page") int page);
 
     @GET("accounts/{username}")
     Call<User> getAccount(@Path("username") String username);

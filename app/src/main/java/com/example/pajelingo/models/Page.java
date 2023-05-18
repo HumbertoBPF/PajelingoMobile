@@ -3,9 +3,9 @@ package com.example.pajelingo.models;
 import java.util.List;
 
 public class Page<E> {
-    private String previous;
+    private final String previous;
     private String next;
-    private Integer count;
+    private final Integer count;
     private List<E> results;
 
     public Page(String previous, String next, Integer count, List<E> results) {
@@ -29,5 +29,13 @@ public class Page<E> {
 
     public List<E> getResults() {
         return results;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public void addResults(List<E> results) {
+        this.results.addAll(results);
     }
 }

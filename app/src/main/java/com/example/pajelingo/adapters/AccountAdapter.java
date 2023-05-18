@@ -60,6 +60,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
 
             if (base64Picture != null) {
                 accountImageView.setImageBitmap(getPictureFromBase64String(base64Picture));
+            } else {
+                accountImageView.setImageResource(R.drawable.profile);
             }
 
             accountTextView.setText(account.getUsername());

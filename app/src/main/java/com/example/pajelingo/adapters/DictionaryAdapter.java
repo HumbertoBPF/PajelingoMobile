@@ -66,7 +66,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Se
         private final TextView wordNameTextView;
         private final ImageView languageImageView;
         private final CardView rootView;
-        private final Guideline guideline75;
+        private final Guideline guideline85;
         private final ImageView heartIcon;
 
         public SearchResultsViewHolder(@NonNull View itemView) {
@@ -74,7 +74,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Se
             wordNameTextView = itemView.findViewById(R.id.word_name_text_view);
             languageImageView = itemView.findViewById(R.id.language_image_view);
             rootView = itemView.findViewById(R.id.root_view);
-            guideline75 = itemView.findViewById(R.id.guideline_75);
+            guideline85 = itemView.findViewById(R.id.guideline_85);
             heartIcon = itemView.findViewById(R.id.ic_heart);
         }
         
@@ -94,10 +94,10 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Se
             if ((word.getFavorite() == null) || (!isUserAuthenticated(context))){
                 heartIcon.setVisibility(View.GONE);
                 heartIcon.setOnClickListener(null);
-                guideline75.setGuidelinePercent(1.0f);
+                guideline85.setGuidelinePercent(1.0f);
             }else {
                 heartIcon.setVisibility(View.VISIBLE);
-                guideline75.setGuidelinePercent(0.75f);
+                guideline85.setGuidelinePercent(0.75f);
                 setHeartIcon(word.getFavorite());
 
                 heartIcon.setOnClickListener(v -> onFavoriteItem.favoriteItem(word, position));

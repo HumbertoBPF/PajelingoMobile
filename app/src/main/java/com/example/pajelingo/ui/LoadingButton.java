@@ -18,6 +18,7 @@ public class LoadingButton extends ConstraintLayout {
     private OnClickListener onClickListener = null;
     private final int icon;
     private final int color;
+    private boolean isLoading;
 
     public LoadingButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -43,6 +44,8 @@ public class LoadingButton extends ConstraintLayout {
     }
 
     public void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+
         if (isLoading) {
             loadingButton.setText(R.string.loading_button_text);
             loadingButton.setIconResource(R.drawable.ic_hourglass);
