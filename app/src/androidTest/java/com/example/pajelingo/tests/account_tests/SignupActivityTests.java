@@ -66,7 +66,7 @@ public class SignupActivityTests extends FormUserActivityTests {
     }
 
     @Test
-    public void testSuccessfulSignup() throws IOException, InterruptedException {
+    public void testSuccessfulSignup() throws IOException {
         String email = newUser.getEmail();
         String username = newUser.getUsername();
         String password = newUser.getPassword();
@@ -77,112 +77,112 @@ public class SignupActivityTests extends FormUserActivityTests {
     }
 
     @Test
-    public void testFailedSignupWithoutEmail() throws IOException, InterruptedException {
+    public void testFailedSignupWithoutEmail() throws IOException {
         testInvalidSubmission("", getRandomUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupWithoutUsername() throws IOException, InterruptedException {
+    public void testFailedSignupWithoutUsername() throws IOException {
         testInvalidSubmission(getRandomEmail(), "", getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupWithoutPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWithoutPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(), "", true,
                 false, false, false, false);
     }
 
     @Test
-    public void testFailedSignupEmailWithSpace() throws IOException, InterruptedException {
+    public void testFailedSignupEmailWithSpace() throws IOException {
         testInvalidSubmission(getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomEmail(),
                 getRandomUsername(), getRandomValidPassword(), true, true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupUsernameWithSpace() throws IOException, InterruptedException {
+    public void testFailedSignupUsernameWithSpace() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomUsername(),
                 getRandomValidPassword(), true, true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupNonAvailableEmail() throws IOException, InterruptedException {
+    public void testFailedSignupNonAvailableEmail() throws IOException {
         testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupNonAvailableUsername() throws IOException, InterruptedException {
+    public void testFailedSignupNonAvailableUsername() throws IOException {
         testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomValidPassword(), true,
                 true, true, true, true);
     }
 
     @Test
-    public void testFailedSignupWith3CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith3CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(3, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupWith4CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith4CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(4, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupWith5CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith5CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(5, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupWith6CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith6CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(6, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupWith7CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith7CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(7, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupWith31CharactersPassword() throws IOException, InterruptedException {
+    public void testFailedSignupWith31CharactersPassword() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(31, true, true, true), true,
                 true, true, true, false);
     }
 
     @Test
-    public void testFailedSignupNoDigit() throws IOException, InterruptedException {
+    public void testFailedSignupNoDigit() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true), true,
                 true, false, true, true);
     }
 
     @Test
-    public void testFailedSignupNoSpecialCharacter() throws IOException, InterruptedException {
+    public void testFailedSignupNoSpecialCharacter() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false), true,
                 true, true, false, true);
     }
 
     @Test
-    public void testFailedSignupNoLetter() throws IOException, InterruptedException {
+    public void testFailedSignupNoLetter() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(),
                 getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true), true,
                 false, true, true, true);
     }
 
     @Test
-    public void testFailedSignupPasswordsDoNotMatch() throws IOException, InterruptedException {
+    public void testFailedSignupPasswordsDoNotMatch() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomValidPassword(), false,
                 true, true, true, true);
     }

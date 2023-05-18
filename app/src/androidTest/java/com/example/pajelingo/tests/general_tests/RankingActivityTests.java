@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -45,8 +46,8 @@ public class RankingActivityTests extends UITests {
 
         onView(withId(R.id.action_menu))
                 .perform(click());
-        onView(withId(R.id.menu_item_rankings))
-                .perform(click());
+        onView(withId(R.id.menu_recycler_view))
+                .perform(actionOnItemAtPosition(1, click()));
         onView(withId(R.id.language_spinner))
                 .perform(click());
         onData(is(randomLanguage))

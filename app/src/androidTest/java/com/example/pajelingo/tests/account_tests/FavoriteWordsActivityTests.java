@@ -182,8 +182,8 @@ public class FavoriteWordsActivityTests extends WordListActivityTest {
     protected void browseToActivity() {
         onView(withId(R.id.action_menu))
                 .perform(click());
-        onView(withId(R.id.menu_item_profile))
-                .perform(click());
+        onView(withId(R.id.menu_recycler_view))
+                .perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.favorite_button))
                 .perform(click());
     }

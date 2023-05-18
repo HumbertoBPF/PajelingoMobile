@@ -6,6 +6,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -190,8 +191,10 @@ public class ProfileActivityTests extends UITests {
     private void browseToProfileActivity() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        onView(withId(R.id.action_menu)).perform(click());
-        onView(withId(R.id.menu_item_profile)).perform(click());
+        onView(withId(R.id.action_menu))
+                .perform(click());
+        onView(withId(R.id.menu_recycler_view))
+                .perform(actionOnItemAtPosition(0, click()));
     }
 
     private void assertViewsProfileActivity() {
