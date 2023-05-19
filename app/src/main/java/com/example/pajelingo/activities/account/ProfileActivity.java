@@ -7,19 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.example.pajelingo.R;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.SearchAccountCall;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfileActivity extends AccountActivity {
-    private LanguageSchoolAPI languageSchoolAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +24,6 @@ public class ProfileActivity extends AccountActivity {
         editAccountButton.setVisibility(View.GONE);
         deleteAccountButton.setVisibility(View.GONE);
         favoriteButton.setVisibility(View.GONE);
-
-        languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
         Intent intent = getIntent();
 
@@ -42,23 +35,22 @@ public class ProfileActivity extends AccountActivity {
         user = (User) intent.getSerializableExtra("account");
         setUserCredentials();
 
-        Call<User> call = languageSchoolAPI.getAccount(user.getUsername());
+        SearchAccountCall call = new SearchAccountCall();
 
-        call.enqueue(new Callback<User>() {
+        call.execute(user.getUsername(), new HttpResponseInterface<User>() {
             @Override
-            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                User responseUser = response.body();
-
-                if (response.isSuccessful() && (responseUser != null)) {
-                    user = responseUser;
-                    setUserCredentials();
-                } else {
-                    Toast.makeText(ProfileActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
-                }
+            public void onSuccess(User responseUser) {
+                user = responseUser;
+                setUserCredentials();
             }
 
             @Override
-            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+            public void onError(Response<User> response) {
+                Toast.makeText(ProfileActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure() {
                 Toast.makeText(ProfileActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
             }
         });

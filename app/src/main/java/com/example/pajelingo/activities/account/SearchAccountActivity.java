@@ -1,7 +1,6 @@
 package com.example.pajelingo.activities.account;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -14,16 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
 import com.example.pajelingo.adapters.AccountAdapter;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.retrofit.LanguageSchoolAPI;
-import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
+import com.example.pajelingo.retrofit_calls.SearchAccountsCall;
 import com.example.pajelingo.ui.LoadingButton;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchAccountActivity extends AppCompatActivity {
@@ -32,14 +29,12 @@ public class SearchAccountActivity extends AppCompatActivity {
     private RecyclerView accountsRecyclerView;
     private ProgressBar loadingIcon;
 
-    private LanguageSchoolAPI languageSchoolAPI;
+    private AccountAdapter adapter;
+
     private String q;
     private int pageIndex = 0;
     private Page<User> page = null;
 
-    private AccountAdapter adapter;
-
-    private final Handler handler = new Handler();
     private boolean isLoading;
 
     @Override
@@ -53,8 +48,6 @@ public class SearchAccountActivity extends AppCompatActivity {
         searchAccountButton = findViewById(R.id.search_account_button);
         accountsRecyclerView = findViewById(R.id.accounts_recycler_view);
         loadingIcon = findViewById(R.id.loading_spinner);
-
-        languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
 
         searchAccountButton.setOnClickListener(view -> {
             q = searchAccountEditText.getText().toString();
@@ -73,45 +66,46 @@ public class SearchAccountActivity extends AppCompatActivity {
             loadingIcon.setVisibility(View.VISIBLE);
         }
 
-        Call<Page<User>> accountsCall = languageSchoolAPI.getAccounts(q, index);
+        SearchAccountsCall accountCall = new SearchAccountsCall();
 
-        handler.postDelayed(() -> accountsCall.enqueue(new Callback<Page<User>>() {
+        accountCall.execute(q, index, new HttpResponseInterface<Page<User>>() {
             @Override
-            public void onResponse(@NonNull Call<Page<User>> call, @NonNull Response<Page<User>> response) {
-                Page<User> returnedPage = response.body();
-
-                if ((response.isSuccessful()) && (returnedPage != null)) {
-                    if (index == 1) {
-                        page = returnedPage;
-                        adapter = new AccountAdapter(SearchAccountActivity.this, page.getResults());
-                        accountsRecyclerView.setAdapter(adapter);
-                    } else {
-                        int pastNumberOfItems = page.getResults().size();
-                        List<User> accounts = returnedPage.getResults();
-
-                        page.setNext(returnedPage.getNext());
-                        page.addResults(accounts);
-                        adapter.notifyItemRangeInserted(pastNumberOfItems, page.getResults().size());
-                    }
-
-                    pageIndex = index;
+            public void onSuccess(Page<User> returnedPage) {
+                if (index == 1) {
+                    page = returnedPage;
+                    adapter = new AccountAdapter(SearchAccountActivity.this, page.getResults());
+                    accountsRecyclerView.setAdapter(adapter);
                 } else {
-                    Toast.makeText(SearchAccountActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
+                    int pastNumberOfItems = page.getResults().size();
+                    List<User> accounts = returnedPage.getResults();
+
+                    page.setNext(returnedPage.getNext());
+                    page.addResults(accounts);
+                    adapter.notifyItemRangeInserted(pastNumberOfItems, page.getResults().size());
                 }
 
-                searchAccountButton.setLoading(false);
-                loadingIcon.setVisibility(View.GONE);
-                isLoading = false;
+                pageIndex = index;
+                stopLoading();
             }
 
             @Override
-            public void onFailure(@NonNull Call<Page<User>> call, @NonNull Throwable t) {
-                Toast.makeText(SearchAccountActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
-                searchAccountButton.setLoading(false);
-                loadingIcon.setVisibility(View.GONE);
-                isLoading = false;
+            public void onError(Response<Page<User>> response) {
+                Toast.makeText(SearchAccountActivity.this, R.string.warning_request_error, Toast.LENGTH_SHORT).show();
+                stopLoading();
             }
-        }), 1000);
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(SearchAccountActivity.this, R.string.warning_connection_error, Toast.LENGTH_SHORT).show();
+                stopLoading();
+            }
+        });
+    }
+
+    private void stopLoading() {
+        searchAccountButton.setLoading(false);
+        loadingIcon.setVisibility(View.GONE);
+        isLoading = false;
     }
 
     private void addOnScrollListenerToRecyclerView() {

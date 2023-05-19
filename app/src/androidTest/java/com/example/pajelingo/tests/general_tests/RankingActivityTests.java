@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public class RankingActivityTests extends UITests {
     @Test
-    public void testSelectGame(){
+    public void testRankingActivitySelectGame(){
         Language randomLanguage = getRandomLanguage(context);
 
         ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();

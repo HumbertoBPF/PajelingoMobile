@@ -3,29 +3,17 @@ package com.example.pajelingo.tests.account_tests;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.pajelingo.utils.CustomMatchers.atPosition;
-import static com.example.pajelingo.utils.CustomMatchers.hasLength;
-import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
+import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
-import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
-import static com.example.pajelingo.utils.TestTools.authenticateUser;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
+import static com.example.pajelingo.utils.RetrofitTools.getAccountsPage;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.view.View;
+import static org.hamcrest.Matchers.is;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -35,160 +23,147 @@ import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
 import com.example.pajelingo.models.Language;
+import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
-import com.example.pajelingo.tests.abstract_tests.UITests;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class ProfileActivityTests extends UITests {
-    private final User userToDelete =
-            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null);
-
+public class ProfileActivityTests extends AccountActivityTests {
     @Test
-    public void testRenderingProfileActivity() throws IOException {
+    public void testSelectAccountOnSearchAccountActivity() throws IOException {
         LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
-
-        authenticateUser(context, testUser);
 
         List<Language> languages = languageDao.getAllRecords();
         Language defaultLanguage = languages.get(0);
 
-        browseToProfileActivity();
-        assertViewsProfileActivity();
+        String username = selectAccountOnSearchAccountActivity();
 
-        assertScoreHistory(defaultLanguage);
+        onView(withId(R.id.username_credential_text_view))
+                .check(matches(withText(context.getString(R.string.account_username, username))));
+
+        assertScoreHistory(username, defaultLanguage.getLanguageName());
     }
 
     @Test
-    public void testFilterScoreByLanguageOnProfileActivity() throws IOException {
-        authenticateUser(context, testUser);
-
+    public void testSelectAccountOnSearchAccountActivityFilterScoreByLanguage() throws IOException {
         Language randomLanguage = getRandomLanguage(context);
 
-        browseToProfileActivity();
+        String username = selectAccountOnSearchAccountActivity();
+
+        onView(withId(R.id.username_credential_text_view))
+                .check(matches(withText(context.getString(R.string.account_username, username))));
 
         onView(withId(R.id.language_spinner)).perform(click());
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
 
-        assertScoreHistory(randomLanguage);
+        assertScoreHistory(username, Objects.requireNonNull(randomLanguage).getLanguageName());
     }
 
     @Test
-    public void testRenderingProfileActivityDeleteAccountDialog() throws IOException {
-        authenticateUser(context, testUser);
+    public void testSelectAccountRankingActivityRendering() {
+        LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
 
-        browseToProfileActivity();
-        onView(withId(R.id.delete_account_button))
-                .perform(click());
+        List<Language> languages = languageDao.getAllRecords();
+        Language defaultLanguage = languages.get(0);
 
-        onView(withText(R.string.dialog_delete_account_title))
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_message))
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_confirm))
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.dialog_delete_account_decline))
-                .check(matches(isDisplayed()));
+        String username = selectAccountOnRankingActivity();
+
+        onView(withId(R.id.username_credential_text_view))
+                .check(matches(withText(context.getString(R.string.account_username, username))));
+
+        assertScoreHistory(username, defaultLanguage.getLanguageName());
     }
 
     @Test
-    public void testRenderingDeletionConfirmationActivity() throws IOException {
-        authenticateUser(context, testUser);
+    public void testSelectAccountRankingActivityFilterScoreByLanguage() {
+        Language randomLanguage = getRandomLanguage(context);
 
-        browseToProfileActivity();
-        onView(withId(R.id.delete_account_button))
-                .perform(click());
-        onView(withText(R.string.dialog_delete_account_confirm))
-                .perform(click());
+        String username = selectAccountOnRankingActivity();
 
-        Matcher<View> confirmDeletionTextViewMatcher = allOf(withText(R.string.confirm_deletion_text), isDisplayed());
-        onView(withId(R.id.confirm_deletion_text_view))
-                .check(matches(confirmDeletionTextViewMatcher));
+        onView(withId(R.id.username_credential_text_view))
+                .check(matches(withText(context.getString(R.string.account_username, username))));
 
-        Matcher<View> confirmDeletionString = allOf(withHint(R.string.confirm_deletion_string), isDisplayed());
-        onView(withId(R.id.confirm_deletion_edit_text))
-                .check(matches(confirmDeletionString));
+        onView(withId(R.id.language_spinner)).perform(click());
+        onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
 
-        Matcher<View> confirmDeletionButtonMatcher = allOf(hasDescendant(withText(R.string.delete_account)), isDisplayed());
-        onView(withId(R.id.confirm_deletion_button))
-                .check(matches(confirmDeletionButtonMatcher));
+        assertScoreHistory(username, Objects.requireNonNull(randomLanguage).getLanguageName());
     }
 
-    @Test
-    public void testDeclineProfileActivityDeleteAccountDialog() throws IOException {
-        authenticateUser(context, testUser);
+    /**
+     * Selects randomly an account among the search results on the AccountSearchActivity.
+     * @return The username of the account randomly selected
+     * @throws IOException Exception that may be raised due to database access
+     */
+    private String selectAccountOnSearchAccountActivity() throws IOException {
+        int currentPage = 1;
 
-        browseToProfileActivity();
-        onView(withId(R.id.delete_account_button)).perform(click());
-        onView(withText(R.string.dialog_delete_account_decline)).perform(click());
+        Page<User> accountsPage = getAccountsPage("", currentPage);
+        int numberOfAccounts = accountsPage.getCount();
+        List<User> accounts = accountsPage.getResults();
 
-        assertViewsProfileActivity();
-    }
+        while (accountsPage.getNext() != null) {
+            currentPage++;
+            accountsPage = getAccountsPage("", currentPage);
+            accounts.addAll(accountsPage.getResults());
+        }
 
-    @Test
-    public void testDeleteAccountSuccessful() throws IOException {
-        authenticateUser(context, userToDelete);
+        browseToSearchAccountActivity();
 
-        browseToProfileActivity();
-
-        onView(withId(R.id.delete_account_button))
-                .perform(click());
-        onView(withText(R.string.dialog_delete_account_confirm))
-                .perform(click());
-
-        onView(withId(R.id.confirm_deletion_edit_text))
-                .perform(typeText(context.getString(R.string.confirm_deletion_string)), closeSoftKeyboard());
-        onView(withId(R.id.confirm_deletion_button))
+        onView(withId(R.id.search_account_button))
                 .perform(click());
 
-        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
-        assertUserExistsInDjangoApp(userToDelete.getEmail(), userToDelete.getUsername(), userToDelete.getPassword(), false);
+        int numberOfPages = 0;
+
+        if (numberOfAccounts > 0) {
+            numberOfPages = (int) Math.ceil(((float) numberOfAccounts)/10f);
+        }
+
+        for (int i=1;i < numberOfPages;i++) {
+            onView(withId(R.id.accounts_recycler_view))
+                    .perform(scrollToPosition(10*i - 1));
+        }
+
+        int randomIndex = getRandomInteger(0, numberOfAccounts - 1);
+        String username = accounts.get(randomIndex).getUsername();
+
+        onView(withId(R.id.accounts_recycler_view))
+                .perform(scrollToPosition(randomIndex))
+                .perform(actionOnItemAtPosition(randomIndex, click()));
+
+        return username;
     }
 
-    @Test
-    public void testDeleteAccountFailedConfirmText() throws IOException {
-        authenticateUser(context, testUser);
+    /**
+     * Selects randomly an account among the rankings on the RankingActivity.
+     * @return The username of the account randomly selected
+     */
+    private String selectAccountOnRankingActivity() {
+        LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
 
-        browseToProfileActivity();
+        List<Language> languages = languageDao.getAllRecords();
+        Language defaultLanguage = languages.get(0);
 
-        onView(withId(R.id.delete_account_button)).perform(click());
-        onView(withText(R.string.dialog_delete_account_confirm)).perform(click());
+        ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
+        List<Score> scores = scoreDao.getTotalScoresByLanguage(Objects.requireNonNull(defaultLanguage).getLanguageName());
 
-        onView(withId(R.id.confirm_deletion_edit_text))
-                .perform(typeText(getRandomAlphabeticalString(10)), closeSoftKeyboard());
-        onView(withId(R.id.confirm_deletion_button))
-                .perform(click());
+        int randomIndex = getRandomInteger(0, scores.size() - 1);
+        String username = scores.get(randomIndex).getUser();
 
-        assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), true);
+        browseToRankingActivity();
+
+        onView(withId(R.id.ranking_recycler_view))
+                .perform(scrollToPosition(randomIndex))
+                .perform(actionOnItemAtPosition(randomIndex, click()));
+
+        return username;
     }
 
-    @Test
-    public void testLogout() throws IOException {
-        authenticateUser(context, testUser);
-
-        activityScenario = ActivityScenario.launch(MainActivity.class);
-        onView(withId(R.id.action_login_logout)).perform(click());
-
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), Context.MODE_PRIVATE);
-
-        String email = sp.getString(context.getString(R.string.email_sp), null);
-        String username = sp.getString(context.getString(R.string.username_sp), null);
-        String token = sp.getString(context.getString(R.string.token_sp), null);
-        String picture = sp.getString(context.getString(R.string.picture_sp), null);
-
-        assertNull(email);
-        assertNull(username);
-        assertNull(token);
-        assertNull(picture);
-    }
-
-    private void browseToProfileActivity() {
+    private void browseToSearchAccountActivity() {
         activityScenario = ActivityScenario.launch(MainActivity.class);
 
         onView(withId(R.id.action_menu))
@@ -197,52 +172,12 @@ public class ProfileActivityTests extends UITests {
                 .perform(actionOnItemAtPosition(0, click()));
     }
 
-    private void assertViewsProfileActivity() {
-        String usernameText = context.getString(R.string.username_label) + ": " + testUser.getUsername();
-        String emailText = context.getString(R.string.email_label) + ": " + testUser.getEmail();
+    private void browseToRankingActivity() {
+        activityScenario = ActivityScenario.launch(MainActivity.class);
 
-        Matcher<View> usernameMatcher = allOf(withText(usernameText), isDisplayed());
-        onView(withId(R.id.username_credential_text_view))
-                .check(matches(usernameMatcher));
-
-        Matcher<View> emailMatcher = allOf(withText(emailText), isDisplayed());
-        onView(withId(R.id.email_credential_text_view))
-                .check(matches(emailMatcher));
-
-        Matcher<View> editAccountButtonMatcher = allOf(withText(R.string.update_account), isDisplayed());
-        onView(withId(R.id.edit_account_button))
-                .check(matches(editAccountButtonMatcher));
-
-        Matcher<View> deleteAccountButtonMatcher = allOf(withText(R.string.delete_account), isDisplayed());
-        onView(withId(R.id.delete_account_button))
-                .check(matches(deleteAccountButtonMatcher));
-    }
-
-    /**
-     * Verifies that the scores shown on the MyProfileActivity match the scores of the authenticated
-     * user in the specified language.
-     * @param language selected language filter
-     */
-    private void assertScoreHistory(Language language) {
-        ScoreDao scoreDao = AppDatabase.getInstance(context).getScoreDao();
-
-        List<Score> scores = scoreDao.getScoresByUserAndByLanguage(testUser.getUsername(),
-                Objects.requireNonNull(language).getLanguageName());
-
-        onView(withId(R.id.score_recycler_view)).check(matches(hasLength(scores.size())));
-
-        for (int i = 0;i < scores.size();i++){
-            Score score = scores.get(i);
-
-            String gameName = score.getGame();
-            String scoreValue = score.getScore().toString();
-
-            Matcher<View> gameMatcher = allOf(withId(R.id.game_text_view), withText(gameName));
-            Matcher<View> scoreMatcher = allOf(withId(R.id.score_text_view), withText(scoreValue));
-
-            onView(withId(R.id.score_recycler_view))
-                    .check(matches(atPosition(hasDescendant(gameMatcher) , i)))
-                    .check(matches(atPosition(hasDescendant(scoreMatcher), i)));
-        }
+        onView(withId(R.id.action_menu))
+                .perform(click());
+        onView(withId(R.id.menu_recycler_view))
+                .perform(actionOnItemAtPosition(1, click()));
     }
 }

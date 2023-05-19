@@ -3,8 +3,10 @@ package com.example.pajelingo.utils;
 import static org.junit.Assert.assertEquals;
 
 import com.example.pajelingo.daos.BaseDao;
+import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
+import com.example.pajelingo.retrofit.LanguageSchoolAPI;
 import com.example.pajelingo.retrofit.LanguageSchoolAPIHelper;
 
 import org.junit.Assert;
@@ -67,5 +69,17 @@ public class RetrofitTools {
                 Assert.fail("Login endpoint did not return 400. It returned "+tokenResponse.code()+" instead.");
             }
         }
+    }
+
+    public static Page<User> getAccountsPage(String q, int page) throws IOException {
+        LanguageSchoolAPI languageSchoolAPI = LanguageSchoolAPIHelper.getApiObject();
+
+        Response<Page<User>> response = languageSchoolAPI.getAccounts(q, page).execute();
+
+        if (!response.isSuccessful()) {
+            Assert.fail("Failed to fetch accounts page.");
+        }
+
+        return response.body();
     }
 }
