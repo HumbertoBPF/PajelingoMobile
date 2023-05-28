@@ -9,6 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.getLabeledEditTextMatcher;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
+import static com.example.pajelingo.utils.RandomTools.getRandomBio;
 import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomInvalidPassword;
@@ -32,7 +33,8 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class SignupActivityTests extends FormUserActivityTests {
-    private final User newUser = new User("new-test-android@test.com", "new-test-android", "new-str0ng-p4ssw0rd", null);
+    private final User newUser =
+            new User("new-test-android@test.com", "new-test-android", "new-str0ng-p4ssw0rd", null, "bio signup");
 
     @Test
     public void testRenderingSignupActivity(){
@@ -69,122 +71,125 @@ public class SignupActivityTests extends FormUserActivityTests {
     public void testSuccessfulSignup() throws IOException {
         String email = newUser.getEmail();
         String username = newUser.getUsername();
+        String bio = newUser.getBio();
         String password = newUser.getPassword();
 
-        testSuccessfulSubmission(email, username, password);
+        testSuccessfulSubmission(email, username, bio, password);
         // The user must not be active since the account has not been activated yet
-        assertUserExistsInDjangoApp(email, username, password, false);
+        assertUserExistsInDjangoApp(newUser, false);
     }
 
     @Test
     public void testFailedSignupWithoutEmail() throws IOException {
-        testInvalidSubmission("", getRandomUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission("", getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupWithoutUsername() throws IOException {
-        testInvalidSubmission(getRandomEmail(), "", getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), "",  getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupWithoutPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(), "", true,
-                false, false, false, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(),  getRandomBio(), "",
+                true, false, false, false, false);
     }
 
     @Test
     public void testFailedSignupEmailWithSpace() throws IOException {
         testInvalidSubmission(getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomEmail(),
-                getRandomUsername(), getRandomValidPassword(), true, true, true, true, true);
+                getRandomUsername(),  getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupUsernameWithSpace() throws IOException {
         testInvalidSubmission(getRandomEmail(), getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomUsername(),
-                getRandomValidPassword(), true, true, true, true, true);
+                getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupNonAvailableEmail() throws IOException {
-        testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupNonAvailableUsername() throws IOException {
-        testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedSignupWith3CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(3, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(3, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupWith4CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(4, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(4, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupWith5CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(5, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(5, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupWith6CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(6, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(6, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupWith7CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(7, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(7, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupWith31CharactersPassword() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(31, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(31, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedSignupNoDigit() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true), true,
-                true, false, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true),
+                true, true, false, true, true);
     }
 
     @Test
     public void testFailedSignupNoSpecialCharacter() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false), true,
-                true, true, false, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false),
+                true, true, true, false, true);
     }
 
     @Test
     public void testFailedSignupNoLetter() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true), true,
-                false, true, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true),
+                true, false, true, true, true);
     }
 
     @Test
     public void testFailedSignupPasswordsDoNotMatch() throws IOException {
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomValidPassword(), false,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                false, true, true, true, true);
     }
 
     @Override

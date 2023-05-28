@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.CustomMatchers.getLabeledEditTextMatcher;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
+import static com.example.pajelingo.utils.RandomTools.getRandomBio;
 import static com.example.pajelingo.utils.RandomTools.getRandomEmail;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomInvalidPassword;
@@ -35,11 +36,16 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class UpdateAccountTests extends FormUserActivityTests {
-    private final User user0 = new User("update-test-android0@test.com", "update-test-android0", "upd4te-str0ng-p4ssw0rd0", null);
-    private final User user1 = new User("update-test-android1@test.com", "update-test-android1", "upd4te-str0ng-p4ssw0rd1", null);
-    private final User user2 = new User("update-test-android2@test.com", "update-test-android2", "upd4te-str0ng-p4ssw0rd2", null);
-    private final User user3 = new User("update-test-android3@test.com", "update-test-android3", "upd4te-str0ng-p4ssw0rd3", null);
-    private final User user4 = new User("update-test-android4@test.com", "update-test-android4", "upd4te-str0ng-p4ssw0rd4", null);
+    private final User user0 =
+            new User("update-test-android0@test.com", "update-test-android0", "upd4te-str0ng-p4ssw0rd0", null, "bio 0");
+    private final User user1 =
+            new User("update-test-android1@test.com", "update-test-android1", "upd4te-str0ng-p4ssw0rd1", null, "bio 1");
+    private final User user2 =
+            new User("update-test-android2@test.com", "update-test-android2", "upd4te-str0ng-p4ssw0rd2", null, "bio 2");
+    private final User user3 =
+            new User("update-test-android3@test.com", "update-test-android3", "upd4te-str0ng-p4ssw0rd3", null, "bio 3");
+    private final User user4 =
+            new User("update-test-android4@test.com", "update-test-android4", "upd4te-str0ng-p4ssw0rd4", null, "bio 4");
 
     @Override
     protected void browseToForm() {
@@ -89,157 +95,160 @@ public class UpdateAccountTests extends FormUserActivityTests {
     @Test
     public void testSuccessfulAccountUpdateWithOnlyRandomCredentials() throws IOException {
         authenticateUser(context, user0);
-        testSuccessfulAccountUpdate(getRandomEmail(), getRandomUsername(), getRandomValidPassword());
+        testSuccessfulAccountUpdate(getRandomEmail(), getRandomUsername(), user0.getBio(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameEmail() throws IOException {
         authenticateUser(context, user1);
-        testSuccessfulAccountUpdate(user1.getEmail(), getRandomUsername(), getRandomValidPassword());
+        testSuccessfulAccountUpdate(user1.getEmail(), getRandomUsername(), user1.getBio(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameUsername() throws IOException {
         authenticateUser(context, user2);
-        testSuccessfulAccountUpdate(getRandomEmail(), user2.getUsername(), getRandomValidPassword());
+        testSuccessfulAccountUpdate(getRandomEmail(), user2.getUsername(), user2.getBio(), getRandomValidPassword());
     }
 
     @Test
     public void testSuccessfulAccountUpdateWithTheSameEmailAndUsername() throws IOException {
         authenticateUser(context, user3);
-        testSuccessfulAccountUpdate(user3.getEmail(), user3.getUsername(), getRandomValidPassword());
+        testSuccessfulAccountUpdate(user3.getEmail(), user3.getUsername(), user3.getBio(), getRandomValidPassword());
     }
 
     @Test
     public void testFailedAccountUpdateWithoutEmail() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission("", getRandomUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission("", getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWithoutUsername() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), "", getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), "", getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWithoutPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(), "", true,
-                false, false, false, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(), "",
+                true, false, false, false, false);
     }
 
     @Test
     public void testFailedAccountUpdateEmailWithSpace() throws IOException {
         authenticateUser(context, user4);
         testInvalidSubmission(getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomEmail(), getRandomUsername(),
-                getRandomValidPassword(), true, true, true, true, true);
+                getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateUsernameWithSpace() throws IOException {
         authenticateUser(context, user4);
         testInvalidSubmission(getRandomEmail(), getRandomAlphabeticalString(getRandomInteger(1, 5)) + " " + getRandomUsername(),
-                getRandomValidPassword(), true, true, true, true, true);
+                getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateNonAvailableEmail() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(testUser.getEmail(), getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateNonAvailableUsername() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomValidPassword(), true,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), testUser.getUsername(), getRandomBio(), getRandomValidPassword(),
+                true, true, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateWith3CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(3, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(3, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateWith4CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(4, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(4, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateWith5CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(5, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(5, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateWith6CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(6, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(6, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateWith7CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(7, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(7, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateWith31CharactersPassword() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(31, true, true, true), true,
-                true, true, true, false);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(31, true, true, true),
+                true, true, true, true, false);
     }
 
     @Test
     public void testFailedAccountUpdateNoDigit() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true), true,
-                true, false, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), true, false, true),
+                true, true, false, true, true);
     }
 
     @Test
     public void testFailedAccountUpdateNoSpecialCharacter() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false), true,
-                true, true, false, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), true, true, false),
+                true, true, true, false, true);
     }
 
     @Test
     public void testFailedAccountUpdateNoLetter() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(),
-                getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true), true,
-                false, true, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(),
+                getRandomInvalidPassword(getRandomInteger(8, 30), false, true, true),
+                true, false, true, true, true);
     }
 
     @Test
     public void testFailedAccountUpdatePasswordsDoNotMatch() throws IOException {
         authenticateUser(context, user4);
-        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomValidPassword(), false,
-                true, true, true, true);
+        testInvalidSubmission(getRandomEmail(), getRandomUsername(), getRandomBio(), getRandomValidPassword(),
+                false, true, true, true, true);
     }
 
-    private void testSuccessfulAccountUpdate(String email, String username, String password) throws IOException {
-        testSuccessfulSubmission(email, username, password);
-        assertUserExistsInDjangoApp(email, username, password, true);
+    private void testSuccessfulAccountUpdate(String email, String username, String bio, String password) throws IOException {
+        testSuccessfulSubmission(email, username, bio, password);
+        User expectedUser = new User(email, username, password, null, bio);
+        assertUserExistsInDjangoApp(expectedUser, true);
     }
 }

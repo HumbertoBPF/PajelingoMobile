@@ -12,8 +12,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.RandomTools.getRandomInteger;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.getAccountsPage;
-
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
+
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -27,11 +29,15 @@ import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.Score;
 import com.example.pajelingo.models.User;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class ProfileActivityTests extends AccountActivityTests {
     @Test
@@ -43,8 +49,7 @@ public class ProfileActivityTests extends AccountActivityTests {
 
         String username = selectAccountOnSearchAccountActivity();
 
-        onView(withId(R.id.username_credential_text_view))
-                .check(matches(withText(context.getString(R.string.account_username, username))));
+        assertViewsProfileActivity(username);
 
         assertScoreHistory(username, defaultLanguage.getLanguageName());
     }
@@ -55,8 +60,7 @@ public class ProfileActivityTests extends AccountActivityTests {
 
         String username = selectAccountOnSearchAccountActivity();
 
-        onView(withId(R.id.username_credential_text_view))
-                .check(matches(withText(context.getString(R.string.account_username, username))));
+        assertViewsProfileActivity(username);
 
         onView(withId(R.id.language_spinner)).perform(click());
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
@@ -65,7 +69,7 @@ public class ProfileActivityTests extends AccountActivityTests {
     }
 
     @Test
-    public void testSelectAccountRankingActivityRendering() {
+    public void testSelectAccountRankingActivityRendering() throws IOException {
         LanguageDao languageDao = AppDatabase.getInstance(context).getLanguageDao();
 
         List<Language> languages = languageDao.getAllRecords();
@@ -73,20 +77,18 @@ public class ProfileActivityTests extends AccountActivityTests {
 
         String username = selectAccountOnRankingActivity();
 
-        onView(withId(R.id.username_credential_text_view))
-                .check(matches(withText(context.getString(R.string.account_username, username))));
+        assertViewsProfileActivity(username);
 
         assertScoreHistory(username, defaultLanguage.getLanguageName());
     }
 
     @Test
-    public void testSelectAccountRankingActivityFilterScoreByLanguage() {
+    public void testSelectAccountRankingActivityFilterScoreByLanguage() throws IOException {
         Language randomLanguage = getRandomLanguage(context);
 
         String username = selectAccountOnRankingActivity();
 
-        onView(withId(R.id.username_credential_text_view))
-                .check(matches(withText(context.getString(R.string.account_username, username))));
+        assertViewsProfileActivity(username);
 
         onView(withId(R.id.language_spinner)).perform(click());
         onData(is(randomLanguage)).inRoot(isPlatformPopup()).perform(click());
@@ -179,5 +181,31 @@ public class ProfileActivityTests extends AccountActivityTests {
                 .perform(click());
         onView(withId(R.id.menu_recycler_view))
                 .perform(actionOnItemAtPosition(1, click()));
+    }
+
+    private void assertViewsProfileActivity(String username) throws IOException {
+        Call<User> call = languageSchoolAPI.getAccount(username);
+
+        Response<User> response = call.execute();
+
+        if (!response.isSuccessful()) {
+            fail("Selected user was not found");
+        }
+
+        User user = response.body();
+
+        if (user == null) {
+            fail("Empty response body");
+        }
+
+        Matcher<View> usernameMatcher =
+                withText(context.getString(R.string.account_username, user.getUsername()));
+        onView(withId(R.id.username_text_view))
+                .check(matches(usernameMatcher));
+
+        Matcher<View> bioMatcher =
+                withText(context.getString(R.string.account_bio, user.getBio()));
+        onView(withId(R.id.bio_text_view))
+                .check(matches(bioMatcher));
     }
 }

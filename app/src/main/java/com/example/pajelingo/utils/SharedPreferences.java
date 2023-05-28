@@ -47,6 +47,7 @@ public class SharedPreferences {
         editor.putString(context.getString(R.string.username_sp), user.getUsername());
         editor.putString(context.getString(R.string.email_sp), user.getEmail());
         editor.putString(context.getString(R.string.picture_sp), user.getPicture());
+        editor.putString(context.getString(R.string.bio_sp), user.getBio());
         editor.apply();
     }
 
@@ -62,6 +63,7 @@ public class SharedPreferences {
         editor.remove(context.getString(R.string.username_sp));
         editor.remove(context.getString(R.string.email_sp));
         editor.remove(context.getString(R.string.picture_sp));
+        editor.remove(context.getString(R.string.bio_sp));
         editor.apply();
     }
 

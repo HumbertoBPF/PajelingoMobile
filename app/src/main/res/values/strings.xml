@@ -49,6 +49,7 @@
     <string name="email_sp">email</string>
     <string name="token_sp">token</string>
     <string name="picture_sp">picture</string>
+    <string name="bio_sp">bio</string>
     <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
@@ -185,7 +186,9 @@
     <string name="account_picture_content_description">Account picture</string>
     <string name="account_username">Username: %1$s</string>
     <string name="account_email">Email: %1$s</string>
+    <string name="account_bio">Bio: %1$s</string>
     <string name="game_image_view_content_description">Game</string>
     <string name="language_image_view_content_description">Language flag</string>
     <string name="icon_heart_content_description">Icon heart</string>
+    <string name="bio_label">Bio</string>
 </resources>

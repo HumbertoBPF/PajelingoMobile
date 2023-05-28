@@ -44,7 +44,7 @@ public class LoginCall extends IdlingResource{
     private void login(String username, String password){
         incrementIdlingResource();
 
-        Call<Token> tokenCall = languageSchoolAPI.getToken(new User("", username, password, null));
+        Call<Token> tokenCall = languageSchoolAPI.getToken(new User("", username, password, null, ""));
 
         tokenCall.enqueue(new Callback<Token>() {
             @Override

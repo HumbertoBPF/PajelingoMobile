@@ -11,10 +11,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignupCall extends IdlingResource{
-    public void execute(String email, String username, String password, HttpResponseInterface<User> httpResponseInterface) {
+    public void execute(User user, HttpResponseInterface<User> httpResponseInterface) {
         incrementIdlingResource();
 
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(new User(email, username, password, null));
+        Call<User> call = LanguageSchoolAPIHelper.getApiObject().signup(user);
 
         call.enqueue(new Callback<User>() {
             @Override

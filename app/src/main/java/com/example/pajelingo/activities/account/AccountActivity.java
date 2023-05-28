@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class AccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     protected TextView usernameCredentialTextView;
     protected TextView emailCredentialTextView;
+    protected TextView bioTextView;
     protected ImageView profilePictureImageView;
     protected MaterialButton editAccountButton;
     protected MaterialButton deleteAccountButton;
@@ -41,8 +42,9 @@ public class AccountActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        usernameCredentialTextView = findViewById(R.id.username_credential_text_view);
-        emailCredentialTextView = findViewById(R.id.email_credential_text_view);
+        usernameCredentialTextView = findViewById(R.id.username_text_view);
+        emailCredentialTextView = findViewById(R.id.email_text_view);
+        bioTextView = findViewById(R.id.bio_text_view);
         profilePictureImageView = findViewById(R.id.profile_picture_image_view);
         editAccountButton = findViewById(R.id.edit_account_button);
         deleteAccountButton = findViewById(R.id.delete_account_button);

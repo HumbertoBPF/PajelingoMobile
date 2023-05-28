@@ -16,6 +16,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import android.view.View;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.User;
 
 import org.hamcrest.Matcher;
 
@@ -28,9 +29,10 @@ public abstract class FormUserActivityTests extends UITests{
      * @param username username credential
      * @param password password credential
      */
-    protected void fillForm(String email, String username, String password, String passwordConfirmation) {
+    protected void fillForm(String email, String username, String bio, String password, String passwordConfirmation) {
         onView(withId(R.id.email_input)).perform(fillLabeledEditText(email));
         onView(withId(R.id.username_input)).perform(fillLabeledEditText(username));
+        onView(withId(R.id.bio_input)).perform(fillLabeledEditText(bio));
         onView(withId(R.id.password_input)).perform(fillLabeledEditText(password));
         onView(withId(R.id.password_confirmation_input)).perform(fillLabeledEditText(passwordConfirmation));
     }
@@ -67,12 +69,13 @@ public abstract class FormUserActivityTests extends UITests{
      * user in the Django API database.
      * @param email email input
      * @param username username input
+     * @param bio user's bio input
      * @param password password input
      */
-    protected void testSuccessfulSubmission(String email, String username, String password) {
+    protected void testSuccessfulSubmission(String email, String username, String bio, String password) {
         browseToForm();
 
-        fillForm(email, username, password, password);
+        fillForm(email, username, bio, password, password);
         assertPasswordRequirements(true, true, true, true);
 
         onView(withId(R.id.submit_button))
@@ -86,6 +89,7 @@ public abstract class FormUserActivityTests extends UITests{
      * Fills the user form and asserts that the input is invalid.
      * @param email email input
      * @param username username input
+     * @param bio user's bio input
      * @param password password input
      * @param passwordsMatch if the password and its confirmation match
      * @param hasLetter if the password contains a letter
@@ -94,18 +98,19 @@ public abstract class FormUserActivityTests extends UITests{
      * @param hasValidLength if the password has a valid length
      * @throws IOException thrown when some error related with HTTP communication occurs
      */
-    protected void testInvalidSubmission(String email, String username, String password, boolean passwordsMatch, boolean hasLetter,
+    protected void testInvalidSubmission(String email, String username, String bio, String password, boolean passwordsMatch, boolean hasLetter,
                                          boolean hasDigit, boolean hasSpecialCharacter, boolean hasValidLength) throws IOException {
         browseToForm();
 
         String passwordConfirmation = passwordsMatch?password:getRandomString(password.length(), true, true, true);
 
-        fillForm(email, username, password, passwordConfirmation);
+        fillForm(email, username, bio, password, passwordConfirmation);
         assertPasswordRequirements(hasLetter, hasDigit, hasSpecialCharacter, hasValidLength);
 
         onView(withId(R.id.submit_button))
                 .perform(click());
 
-        assertUserExistsInDjangoApp(email, username, password, false);
+        User expectedUser = new User(email, username, password, null, bio);
+        assertUserExistsInDjangoApp(expectedUser, false);
     }
 }

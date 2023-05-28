@@ -43,7 +43,7 @@ import java.util.Objects;
 
 public class MyProfileActivityTests extends AccountActivityTests {
     private final User userToDelete =
-            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null);
+            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null, "bio delete");
 
     @Test
     public void testRenderingMyProfileActivity() throws IOException {
@@ -143,7 +143,7 @@ public class MyProfileActivityTests extends AccountActivityTests {
                 .perform(click());
 
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
-        assertUserExistsInDjangoApp(userToDelete.getEmail(), userToDelete.getUsername(), userToDelete.getPassword(), false);
+        assertUserExistsInDjangoApp(userToDelete, false);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class MyProfileActivityTests extends AccountActivityTests {
         onView(withId(R.id.confirm_deletion_button))
                 .perform(click());
 
-        assertUserExistsInDjangoApp(testUser.getEmail(), testUser.getUsername(), testUser.getPassword(), true);
+        assertUserExistsInDjangoApp(testUser, true);
     }
 
     @Test
@@ -193,16 +193,21 @@ public class MyProfileActivityTests extends AccountActivityTests {
     }
 
     private void assertViewsMyProfileActivity() {
-        String usernameText = context.getString(R.string.username_label) + ": " + testUser.getUsername();
-        String emailText = context.getString(R.string.email_label) + ": " + testUser.getEmail();
+        String usernameText = context.getString(R.string.account_username, testUser.getUsername());
+        String emailText = context.getString(R.string.account_email, testUser.getEmail());
+        String bioText = context.getString(R.string.account_bio, testUser.getBio());
 
         Matcher<View> usernameMatcher = allOf(withText(usernameText), isDisplayed());
-        onView(withId(R.id.username_credential_text_view))
+        onView(withId(R.id.username_text_view))
                 .check(matches(usernameMatcher));
 
         Matcher<View> emailMatcher = allOf(withText(emailText), isDisplayed());
-        onView(withId(R.id.email_credential_text_view))
+        onView(withId(R.id.email_text_view))
                 .check(matches(emailMatcher));
+
+        Matcher<View> bioMatcher = allOf(withText(bioText), isDisplayed());
+        onView(withId(R.id.bio_text_view))
+                .check(matches(bioMatcher));
 
         Matcher<View> editAccountButtonMatcher = allOf(withText(R.string.update_account), isDisplayed());
         onView(withId(R.id.edit_account_button))

@@ -62,7 +62,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
             this.scoreTextView.setText(String.valueOf(score.getScore()));
 
             itemView.setOnClickListener(view -> {
-                User user = new User(null, score.getUser(), null, null);
+                User user = new User(null, score.getUser(), null, null, null);
                 Intent intent = new Intent(context, ProfileActivity.class);
                 intent.putExtra("account", user);
                 context.startActivity(intent);

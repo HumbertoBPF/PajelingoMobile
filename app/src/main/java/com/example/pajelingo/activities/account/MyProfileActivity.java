@@ -56,11 +56,13 @@ public class MyProfileActivity extends AccountActivity {
         String username = sp.getString(getString(R.string.username_sp),  "");
         String email = sp.getString(getString(R.string.email_sp), "");
         String picture = sp.getString(getString(R.string.picture_sp), null);
+        String bio = sp.getString(getString(R.string.bio_sp), null);
 
-        user = new User(email, username, null, picture);
+        user = new User(email, username, null, picture, bio);
 
         usernameCredentialTextView.setText(getString(R.string.account_username, username));
         emailCredentialTextView.setText(getString(R.string.account_email, email));
+        bioTextView.setText(getString(R.string.account_bio, bio));
 
         if (picture != null){
             profilePictureImageView.setImageBitmap(getPictureFromBase64String(picture));

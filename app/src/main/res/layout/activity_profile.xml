@@ -26,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/edit_account_button"
+                app:layout_constraintBottom_toTopOf="@id/bio_text_view"
                 android:layout_marginTop="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
                     app:layout_constraintEnd_toStartOf="@id/profile_picture_image_view">
 
                     <TextView
-                        android:id="@+id/username_credential_text_view"
+                        android:id="@+id/username_text_view"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         tools:text="Username"
@@ -49,14 +49,14 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <TextView
-                        android:id="@+id/email_credential_text_view"
+                        android:id="@+id/email_text_view"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         tools:text="Email"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/username_credential_text_view"/>
+                        app:layout_constraintTop_toBottomOf="@id/username_text_view"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,6 +73,17 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/bio_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Bio"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/personal_data"
+                android:layout_marginTop="16dp"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_account_button"
                 android:layout_width="wrap_content"
@@ -80,7 +91,7 @@
                 android:backgroundTint="@color/info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/personal_data"
+                app:layout_constraintTop_toBottomOf="@id/bio_text_view"
                 app:layout_constraintBottom_toTopOf="@id/delete_account_button"
                 android:layout_marginTop="16dp"
                 android:text="@string/update_account"

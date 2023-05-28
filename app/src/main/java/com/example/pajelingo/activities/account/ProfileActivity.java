@@ -58,6 +58,7 @@ public class ProfileActivity extends AccountActivity {
 
     private void setUserCredentials() {
         usernameCredentialTextView.setText(getString(R.string.account_username, user.getUsername()));
+        bioTextView.setText(getString(R.string.account_bio, user.getBio()));
 
         String base64Picture = user.getPicture();
 

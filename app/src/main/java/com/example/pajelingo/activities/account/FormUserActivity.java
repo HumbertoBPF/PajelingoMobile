@@ -36,6 +36,7 @@ public class FormUserActivity extends AppCompatActivity {
     private TextView loginLinkTextView;
     private LabeledEditText emailInput;
     private LabeledEditText usernameInput;
+    private LabeledEditText bioInput;
     private LabeledEditText passwordInput;
     private LabeledEditText passwordConfirmationInput;
     private LoadingButton submitButton;
@@ -52,6 +53,7 @@ public class FormUserActivity extends AppCompatActivity {
         loginLinkTextView = findViewById(R.id.login_link_text_view);
         emailInput = findViewById(R.id.email_input);
         usernameInput = findViewById(R.id.username_input);
+        bioInput = findViewById(R.id.bio_input);
         passwordInput = findViewById(R.id.password_input);
         passwordConfirmationInput = findViewById(R.id.password_confirmation_input);
         submitButton = findViewById(R.id.submit_button);
@@ -70,6 +72,7 @@ public class FormUserActivity extends AppCompatActivity {
 
             emailInput.getEditText().setText(authenticatedUser.getEmail());
             usernameInput.getEditText().setText(authenticatedUser.getUsername());
+            bioInput.getEditText().setText(authenticatedUser.getBio());
 
             loginLinkTextView.setVisibility(View.GONE);
 
@@ -92,6 +95,7 @@ public class FormUserActivity extends AppCompatActivity {
 
         String email = emailInput.getEditText().getText().toString();
         String username = usernameInput.getEditText().getText().toString();
+        String bio = bioInput.getEditText().getText().toString();
         String password = passwordInput.getEditText().getText().toString();
 
         if (!isInputValid()) {
@@ -99,16 +103,19 @@ public class FormUserActivity extends AppCompatActivity {
             return;
         }
 
+        User user = new User(email, username, password, null, bio);
+
         if (isSignup){
-            submitSignup(email, username, password);
+            submitSignup(user);
         }else{
-            submitUpdate(email, username, password);
+            submitUpdate(user);
         }
     }
 
-    private void submitSignup(String email, String username, String password) {
+    private void submitSignup(User user) {
         SignupCall call = new SignupCall();
-        call.execute(email, username, password, new HttpResponseInterface<User>() {
+
+        call.execute(user, new HttpResponseInterface<User>() {
             @Override
             public void onSuccess(User user) {
                 submitButton.setLoading(false);
@@ -129,15 +136,15 @@ public class FormUserActivity extends AppCompatActivity {
         });
     }
 
-    private void submitUpdate(String email, String username, String password) {
+    private void submitUpdate(User user) {
         UpdateProfileCall call = new UpdateProfileCall(this);
 
-        call.execute(email, username, password, new HttpResponseInterface<User>() {
+        call.execute(user, new HttpResponseInterface<User>() {
             @Override
             public void onSuccess(User user) {
                 submitButton.setLoading(false);
                 Toast.makeText(FormUserActivity.this, R.string.successful_update_message, Toast.LENGTH_SHORT).show();
-                user.setPassword(password);
+                user.setPassword(user.getPassword());
                 saveUserData(FormUserActivity.this, user);
                 finish();
             }

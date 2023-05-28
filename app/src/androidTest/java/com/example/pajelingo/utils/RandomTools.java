@@ -152,6 +152,10 @@ public class RandomTools {
         return getRandomAlphabeticalString(10);
     }
 
+    public static String getRandomBio(){
+        return getRandomString(getRandomInteger(1, 25), true, true, true);
+    }
+
     public static String getRandomValidPassword(){
         return getRandomString(getRandomInteger(5, 27), true, true, true) + "1@a";
     }

@@ -33,14 +33,11 @@ public class RetrofitTools {
 
     /**
      * Asserts the existence of a user in the Django App.
-     * @param email user email
-     * @param username username
-     * @param password user password
      * @param userExists boolean indicating if the assertion must check if the user exists or not
      * @throws IOException thrown when some error related with HTTP communication occurs
      */
-    public static void assertUserExistsInDjangoApp(String email, String username, String password, boolean userExists) throws IOException {
-        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", username, password, null));
+    public static void assertUserExistsInDjangoApp(User user, boolean userExists) throws IOException {
+        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", user.getUsername(), user.getPassword(), null, ""));
         Response<Token> tokenResponse = tokenCall.execute();
         Token token = tokenResponse.body();
 
@@ -62,8 +59,9 @@ public class RetrofitTools {
                 Assert.fail("No user object was returned.");
             }
 
-            assertEquals(responseUser.getEmail(), email);
-            assertEquals(responseUser.getUsername(), username);
+            assertEquals(responseUser.getEmail(), user.getEmail());
+            assertEquals(responseUser.getUsername(), user.getUsername());
+            assertEquals(responseUser.getBio(), user.getBio());
         }else{
             if (tokenResponse.code() != 400){
                 Assert.fail("Login endpoint did not return 400. It returned "+tokenResponse.code()+" instead.");

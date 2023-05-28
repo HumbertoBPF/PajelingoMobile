@@ -21,11 +21,10 @@ public class UpdateProfileCall extends IdlingResource{
         this.context = context;
     }
 
-    public void execute(String email, String username, String password, HttpResponseInterface<User> httpResponseInterface) {
+    public void execute(User user, HttpResponseInterface<User> httpResponseInterface) {
         incrementIdlingResource();
 
-        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(context),
-                new User(email, username, password, null));
+        Call<User> call = LanguageSchoolAPIHelper.getApiObject().updateAccount(getAuthToken(context), user);
 
         call.enqueue(new Callback<User>() {
             @Override
