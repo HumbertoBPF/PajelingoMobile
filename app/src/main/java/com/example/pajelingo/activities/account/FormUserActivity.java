@@ -103,7 +103,7 @@ public class FormUserActivity extends AppCompatActivity {
             return;
         }
 
-        User user = new User(email, username, password, null, bio);
+        User user = new User(email, username, password, bio);
 
         if (isSignup){
             submitSignup(user);

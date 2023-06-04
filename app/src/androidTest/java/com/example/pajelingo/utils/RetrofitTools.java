@@ -37,7 +37,7 @@ public class RetrofitTools {
      * @throws IOException thrown when some error related with HTTP communication occurs
      */
     public static void assertUserExistsInDjangoApp(User user, boolean userExists) throws IOException {
-        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", user.getUsername(), user.getPassword(), null, ""));
+        Call<Token> tokenCall = LanguageSchoolAPIHelper.getApiObject().getToken(new User("", user.getUsername(), user.getPassword(), ""));
         Response<Token> tokenResponse = tokenCall.execute();
         Token token = tokenResponse.body();
 

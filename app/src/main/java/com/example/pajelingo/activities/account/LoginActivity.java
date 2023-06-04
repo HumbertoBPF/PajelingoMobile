@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(Response<User> response) {
-                Toast.makeText(LoginActivity.this, R.string.warning_invalid_credientials, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.warning_invalid_credentials, Toast.LENGTH_SHORT).show();
                 loginButton.setLoading(false);
             }
 

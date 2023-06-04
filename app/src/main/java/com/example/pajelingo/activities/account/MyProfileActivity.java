@@ -6,11 +6,23 @@ import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.interfaces.HttpResponseInterface;
+import com.example.pajelingo.models.Badge;
 import com.example.pajelingo.models.User;
+import com.example.pajelingo.retrofit_calls.UserDataCall;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Response;
 
 public class MyProfileActivity extends AccountActivity {
     private SharedPreferences sp;
@@ -44,7 +56,8 @@ public class MyProfileActivity extends AccountActivity {
 
     @Override
     protected void onResume() {
-        updateUserCredentials();
+        updateUserData();
+        displayUserData();
         // Verifies if the user credentials were deleted while he was out from this activity
         if (!isUserAuthenticated(this)){
             finish();
@@ -52,13 +65,41 @@ public class MyProfileActivity extends AccountActivity {
         super.onResume();
     }
 
-    private void updateUserCredentials() {
+    private void updateUserData() {
+        UserDataCall userDataCall = new UserDataCall(this);
+        userDataCall.execute(new HttpResponseInterface<User>() {
+            @Override
+            public void onSuccess(User user) {
+                displayUserData();
+            }
+
+            @Override
+            public void onError(Response<User> response) {
+                Toast.makeText(MyProfileActivity.this, R.string.warning_outdated_data, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(MyProfileActivity.this, R.string.warning_outdated_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void displayUserData() {
         String username = sp.getString(getString(R.string.username_sp),  "");
         String email = sp.getString(getString(R.string.email_sp), "");
         String picture = sp.getString(getString(R.string.picture_sp), null);
         String bio = sp.getString(getString(R.string.bio_sp), null);
+        String badgesJson = sp.getString(getString(R.string.badges_sp), null);
 
-        user = new User(email, username, null, picture, bio);
+        List<Badge> badges = new ArrayList<>();
+
+        if (badgesJson != null) {
+            Type type = new TypeToken<ArrayList<Badge>>() {}.getType();
+            badges = new Gson().fromJson(badgesJson, type);
+        }
+
+        user = new User(email, username, null, picture, bio, badges);
 
         usernameCredentialTextView.setText(getString(R.string.account_username, username));
         emailCredentialTextView.setText(getString(R.string.account_email, email));
@@ -67,6 +108,8 @@ public class MyProfileActivity extends AccountActivity {
         if (picture != null){
             profilePictureImageView.setImageBitmap(getPictureFromBase64String(picture));
         }
+
+        displayBadges();
 
         editAccountButton.setOnClickListener(v -> {
             Intent intent = new Intent(MyProfileActivity.this, FormUserActivity.class);

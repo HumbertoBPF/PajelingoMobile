@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.adapters.BadgesAdapter;
 import com.example.pajelingo.adapters.ScoreAdapter;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
@@ -28,6 +29,7 @@ public class AccountActivity extends AppCompatActivity implements AdapterView.On
     protected ImageView profilePictureImageView;
     protected MaterialButton editAccountButton;
     protected MaterialButton deleteAccountButton;
+    protected RecyclerView badgesRecyclerView;
     protected Spinner languageSpinner;
     protected RecyclerView scoreRecyclerView;
     protected FloatingActionButton favoriteButton;
@@ -48,6 +50,7 @@ public class AccountActivity extends AppCompatActivity implements AdapterView.On
         profilePictureImageView = findViewById(R.id.profile_picture_image_view);
         editAccountButton = findViewById(R.id.edit_account_button);
         deleteAccountButton = findViewById(R.id.delete_account_button);
+        badgesRecyclerView = findViewById(R.id.badges_recycler_view);
         languageSpinner = findViewById(R.id.language_spinner);
         scoreRecyclerView = findViewById(R.id.score_recycler_view);
         favoriteButton = findViewById(R.id.favorite_button);
@@ -77,6 +80,13 @@ public class AccountActivity extends AppCompatActivity implements AdapterView.On
             String selectedLanguage = languageSpinner.getSelectedItem().toString();
             scoreDao.getScoresByUserAndByLanguage(user.getUsername(), selectedLanguage,
                     result -> scoreRecyclerView.setAdapter(new ScoreAdapter(result)));
+        }
+    }
+
+    protected void displayBadges() {
+        if (user != null){
+            BadgesAdapter badgesAdapter = new BadgesAdapter(this, user.getBadges());
+            badgesRecyclerView.setAdapter(badgesAdapter);
         }
     }
 

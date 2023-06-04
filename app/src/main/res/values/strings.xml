@@ -50,6 +50,7 @@
     <string name="token_sp">token</string>
     <string name="picture_sp">picture</string>
     <string name="bio_sp">bio</string>
+    <string name="badges_sp">badges</string>
     <string name="is_first_access">is_first_access</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
@@ -61,7 +62,7 @@
     <string name="all_languages_spinner_option">All languages</string>
     <string name="login_dialog_title">Please, wait</string>
     <string name="login_dialog_message">Verifying credentials…</string>
-    <string name="warning_invalid_credientials">Invalid username or password</string>
+    <string name="warning_invalid_credentials">Invalid username or password</string>
     <string name="warning_connection_error">Connexion error, please verify your internet connection</string>
     <string name="warning_request_error">An error happened processing your request, please verify your internet connexion and try again</string>
     <string name="update_ranking_success_message">Rankings updated</string>
@@ -159,7 +160,8 @@
     <string name="warning_email_format_required">Input needs to be an email</string>
     <string name="update_account_dialog_message">Updating your account…</string>
     <string name="creating_account_dialog_message">Creating account…</string>
-    <string name="score_header_text">Your performance in our games:</string>
+    <string name="badges_header_text">Badges:</string>
+    <string name="score_header_text">Performance in our games:</string>
     <string name="remove_from_favorite_words">Remove from favorites</string>
     <string name="add_to_favorite_words">Add to favorites</string>
     <string name="error_removing_word_from_favorites">Error when trying to remove word from favorites.</string>
@@ -191,4 +193,7 @@
     <string name="language_image_view_content_description">Language flag</string>
     <string name="icon_heart_content_description">Icon heart</string>
     <string name="bio_label">Bio</string>
+
+    <string name="warning_outdated_data">An attempt of update displayed data failed. Consequently, this page may be outdated.</string>
+    <string name="badge_details_confirm_button_text">OK</string>
 </resources>

@@ -43,7 +43,7 @@ import java.util.Objects;
 
 public class MyProfileActivityTests extends AccountActivityTests {
     private final User userToDelete =
-            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", null, "bio delete");
+            new User("test-android-delete@test.com", "test-android-delete", "str0ng-p4ssw0rd", "bio delete");
 
     @Test
     public void testRenderingMyProfileActivity() throws IOException {

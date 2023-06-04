@@ -42,6 +42,7 @@ public class ProfileActivity extends AccountActivity {
             public void onSuccess(User responseUser) {
                 user = responseUser;
                 setUserCredentials();
+                displayBadges();
             }
 
             @Override

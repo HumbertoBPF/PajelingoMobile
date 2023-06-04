@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
     tools:context=".activities.account.MyProfileActivity">
 
     <ScrollView
@@ -27,6 +26,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/bio_text_view"
+                android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +82,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/personal_data"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="8dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_account_button"
@@ -94,6 +95,7 @@
                 app:layout_constraintTop_toBottomOf="@id/bio_text_view"
                 app:layout_constraintBottom_toTopOf="@id/delete_account_button"
                 android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="8dp"
                 android:text="@string/update_account"
                 app:icon="@drawable/ic_edit"/>
 
@@ -105,21 +107,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_account_button"
-                app:layout_constraintBottom_toTopOf="@id/score_header_text_view"
+                app:layout_constraintBottom_toTopOf="@id/badges_header_text_view"
+                android:layout_marginHorizontal="8dp"
                 android:text="@string/delete_account"
                 app:icon="@drawable/ic_delete"/>
 
             <TextView
-                android:id="@+id/score_header_text_view"
+                android:id="@+id/badges_header_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/delete_account_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/language_spinner"
+                app:layout_constraintBottom_toTopOf="@id/badges_recycler_view"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp"
+                android:text="@string/badges_header_text"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/badges_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/badges_header_text_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/score_header_text_view"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                app:spanCount="2"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"/>
+
+            <TextView
+                android:id="@+id/score_header_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/badges_recycler_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/language_spinner"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="8dp"
                 android:text="@string/score_header_text"/>
 
             <Spinner
@@ -132,6 +164,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/score_header_text_view"
                 app:layout_constraintBottom_toTopOf="@id/score_recycler_view"
+                android:layout_marginHorizontal="8dp"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -142,7 +175,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/language_spinner"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="8dp"
+                android:layout_margin="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -159,8 +192,8 @@
         android:src="@drawable/ic_favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/favorite_button_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

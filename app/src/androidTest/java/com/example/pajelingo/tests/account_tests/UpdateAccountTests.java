@@ -37,15 +37,15 @@ import java.io.IOException;
 
 public class UpdateAccountTests extends FormUserActivityTests {
     private final User user0 =
-            new User("update-test-android0@test.com", "update-test-android0", "upd4te-str0ng-p4ssw0rd0", null, "bio 0");
+            new User("update-test-android0@test.com", "update-test-android0", "upd4te-str0ng-p4ssw0rd0", "bio 0");
     private final User user1 =
-            new User("update-test-android1@test.com", "update-test-android1", "upd4te-str0ng-p4ssw0rd1", null, "bio 1");
+            new User("update-test-android1@test.com", "update-test-android1", "upd4te-str0ng-p4ssw0rd1", "bio 1");
     private final User user2 =
-            new User("update-test-android2@test.com", "update-test-android2", "upd4te-str0ng-p4ssw0rd2", null, "bio 2");
+            new User("update-test-android2@test.com", "update-test-android2", "upd4te-str0ng-p4ssw0rd2", "bio 2");
     private final User user3 =
-            new User("update-test-android3@test.com", "update-test-android3", "upd4te-str0ng-p4ssw0rd3", null, "bio 3");
+            new User("update-test-android3@test.com", "update-test-android3", "upd4te-str0ng-p4ssw0rd3", "bio 3");
     private final User user4 =
-            new User("update-test-android4@test.com", "update-test-android4", "upd4te-str0ng-p4ssw0rd4", null, "bio 4");
+            new User("update-test-android4@test.com", "update-test-android4", "upd4te-str0ng-p4ssw0rd4", "bio 4");
 
     @Override
     protected void browseToForm() {
@@ -248,7 +248,7 @@ public class UpdateAccountTests extends FormUserActivityTests {
 
     private void testSuccessfulAccountUpdate(String email, String username, String bio, String password) throws IOException {
         testSuccessfulSubmission(email, username, bio, password);
-        User expectedUser = new User(email, username, password, null, bio);
+        User expectedUser = new User(email, username, password, bio);
         assertUserExistsInDjangoApp(expectedUser, true);
     }
 }

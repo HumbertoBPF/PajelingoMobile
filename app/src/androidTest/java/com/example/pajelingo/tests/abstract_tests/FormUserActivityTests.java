@@ -110,7 +110,7 @@ public abstract class FormUserActivityTests extends UITests{
         onView(withId(R.id.submit_button))
                 .perform(click());
 
-        User expectedUser = new User(email, username, password, null, bio);
+        User expectedUser = new User(email, username, password, bio);
         assertUserExistsInDjangoApp(expectedUser, false);
     }
 }

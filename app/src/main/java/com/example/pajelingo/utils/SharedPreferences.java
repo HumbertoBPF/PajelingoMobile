@@ -7,6 +7,7 @@ import android.content.Context;
 import com.example.pajelingo.R;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
+import com.google.gson.Gson;
 
 public class SharedPreferences {
     /**
@@ -48,6 +49,7 @@ public class SharedPreferences {
         editor.putString(context.getString(R.string.email_sp), user.getEmail());
         editor.putString(context.getString(R.string.picture_sp), user.getPicture());
         editor.putString(context.getString(R.string.bio_sp), user.getBio());
+        editor.putString(context.getString(R.string.badges_sp), new Gson().toJson(user.getBadges()));
         editor.apply();
     }
 
