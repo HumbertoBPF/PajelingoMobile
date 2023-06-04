@@ -12,11 +12,15 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.Badge;
+
+import java.util.List;
 
 public class Notifications {
     public static final String CHANNEL_ID = "notification channel id";
     public static final int PROGRESS_MAX = 100;
     public static final int SYNC_NOTIFICATION_ID = 1;
+    public static final int BADGE_NOTIFICATION_ID = 2;
 
     public static void updateProgressBarNotification(Context context, NotificationCompat.Builder builder, int percentage) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
@@ -49,6 +53,35 @@ public class Notifications {
             showNotification(context, builder, SYNC_NOTIFICATION_ID);
         }
     }
+
+
+    public static void showBadgeNotification(Context context, List<Badge> badges) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            String titleNotification = context.getString(R.string.badges_notification_title);
+            String textNotification = context.getString(R.string.badges_notification_text, badges.toString());
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setContentTitle(titleNotification)
+                    .setContentText(textNotification)
+                    .setSmallIcon(R.drawable.ic_badge);
+            showNotification(context, builder, BADGE_NOTIFICATION_ID);
+        }
+    }
+
+
+    public static void showBadgeNotification(Context context, Badge badge) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            String titleNotification = context.getString(R.string.badge_notification_title, badge.getName());
+            String textNotification = badge.getDescription();
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setContentTitle(titleNotification)
+                    .setContentText(textNotification)
+                    .setSmallIcon(R.drawable.ic_badge);
+            showNotification(context, builder, BADGE_NOTIFICATION_ID);
+        }
+    }
+
 
     public static void createNotificationChannel(Context context) {
         // Create the NotificationChannel, but only on API 26+ because

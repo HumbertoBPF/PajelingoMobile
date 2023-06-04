@@ -23,6 +23,10 @@
     <string name="sync_notification_concluded_title">Synchronization concluded</string>
     <string name="sync_notification_concluded_text">Pajelingo is up to date now!</string>
 
+    <string name="badge_notification_title">New badge conquered: %1$s</string>
+    <string name="badges_notification_title">New badges conquered</string>
+    <string name="badges_notification_text">You conquered the following badges: %1$s</string>
+
     <string name="play_button_text">Play</string>
     <string name="check_button_text">Check</string>
 
@@ -194,6 +198,6 @@
     <string name="icon_heart_content_description">Icon heart</string>
     <string name="bio_label">Bio</string>
 
-    <string name="warning_outdated_data">An attempt of update displayed data failed. Consequently, this page may be outdated.</string>
+    <string name="warning_outdated_data">A data update attempt failed, so this page may be outdated.</string>
     <string name="badge_details_confirm_button_text">OK</string>
 </resources>

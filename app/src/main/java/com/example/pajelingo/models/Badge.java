@@ -1,5 +1,7 @@
 package com.example.pajelingo.models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Badge implements Serializable {
@@ -29,5 +31,11 @@ public class Badge implements Serializable {
 
     public String getImage() {
         return image;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
