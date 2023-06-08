@@ -1,6 +1,7 @@
 package com.example.pajelingo.activities.account;
 
 import static com.example.pajelingo.utils.Files.getPictureFromBase64String;
+import static com.example.pajelingo.utils.SharedPreferences.getBadgesFromSharedPreferences;
 import static com.example.pajelingo.utils.SharedPreferences.isUserAuthenticated;
 
 import android.content.Intent;
@@ -15,11 +16,7 @@ import com.example.pajelingo.interfaces.HttpResponseInterface;
 import com.example.pajelingo.models.Badge;
 import com.example.pajelingo.models.User;
 import com.example.pajelingo.retrofit_calls.UserDataCall;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
@@ -90,14 +87,7 @@ public class MyProfileActivity extends AccountActivity {
         String email = sp.getString(getString(R.string.email_sp), "");
         String picture = sp.getString(getString(R.string.picture_sp), null);
         String bio = sp.getString(getString(R.string.bio_sp), null);
-        String badgesJson = sp.getString(getString(R.string.badges_sp), null);
-
-        List<Badge> badges = new ArrayList<>();
-
-        if (badgesJson != null) {
-            Type type = new TypeToken<ArrayList<Badge>>() {}.getType();
-            badges = new Gson().fromJson(badgesJson, type);
-        }
+        List<Badge> badges = getBadgesFromSharedPreferences(this, sp);
 
         user = new User(email, username, null, picture, bio, badges);
 

@@ -24,6 +24,7 @@ import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.daos.ScoreDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Badge;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.Page;
 import com.example.pajelingo.models.Score;
@@ -207,5 +208,11 @@ public class ProfileActivityTests extends AccountActivityTests {
                 withText(context.getString(R.string.account_bio, user.getBio()));
         onView(withId(R.id.bio_text_view))
                 .check(matches(bioMatcher));
+
+        List<Badge> badges = user.getBadges();
+
+        if (badges.size() > 0) {
+            assertBadges(user.getBadges());
+        }
     }
 }

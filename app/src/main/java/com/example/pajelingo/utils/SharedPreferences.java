@@ -5,9 +5,15 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 
 import com.example.pajelingo.R;
+import com.example.pajelingo.models.Badge;
 import com.example.pajelingo.models.Token;
 import com.example.pajelingo.models.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPreferences {
     /**
@@ -66,6 +72,7 @@ public class SharedPreferences {
         editor.remove(context.getString(R.string.email_sp));
         editor.remove(context.getString(R.string.picture_sp));
         editor.remove(context.getString(R.string.bio_sp));
+        editor.remove(context.getString(R.string.badges_sp));
         editor.apply();
     }
 
@@ -77,5 +84,16 @@ public class SharedPreferences {
         android.content.SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), MODE_PRIVATE);
         String token = sp.getString(context.getString(R.string.token_sp), "");
         return "Token " + token;
+    }
+
+    public static List<Badge> getBadgesFromSharedPreferences(Context context, android.content.SharedPreferences sp) {
+        String badgesJson = sp.getString(context.getString(R.string.badges_sp), null);
+
+        if (badgesJson != null) {
+            Type type = new TypeToken<ArrayList<Badge>>() {}.getType();
+            return new Gson().fromJson(badgesJson, type);
+        }
+
+        return new ArrayList<>();
     }
 }

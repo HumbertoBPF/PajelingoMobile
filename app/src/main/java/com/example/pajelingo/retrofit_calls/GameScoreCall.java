@@ -40,7 +40,7 @@ public class GameScoreCall extends IdlingResource{
                     if (newBadges != null) {
                         if (newBadges.size() == 1) {
                             showBadgeNotification(context, newBadges.get(0));
-                        } else {
+                        } else if (newBadges.size() > 1) {
                             showBadgeNotification(context, newBadges);
                         }
                     }

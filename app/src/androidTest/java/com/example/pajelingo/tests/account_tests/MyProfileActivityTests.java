@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.pajelingo.utils.RandomTools.getRandomAlphabeticalString;
 import static com.example.pajelingo.utils.RandomTools.getRandomLanguage;
 import static com.example.pajelingo.utils.RetrofitTools.assertUserExistsInDjangoApp;
+import static com.example.pajelingo.utils.SharedPreferences.getBadgesFromSharedPreferences;
 import static com.example.pajelingo.utils.TestTools.authenticateUser;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -31,6 +32,7 @@ import com.example.pajelingo.R;
 import com.example.pajelingo.activities.MainActivity;
 import com.example.pajelingo.daos.LanguageDao;
 import com.example.pajelingo.database.settings.AppDatabase;
+import com.example.pajelingo.models.Badge;
 import com.example.pajelingo.models.Language;
 import com.example.pajelingo.models.User;
 
@@ -216,5 +218,10 @@ public class MyProfileActivityTests extends AccountActivityTests {
         Matcher<View> deleteAccountButtonMatcher = allOf(withText(R.string.delete_account), isDisplayed());
         onView(withId(R.id.delete_account_button))
                 .check(matches(deleteAccountButtonMatcher));
+
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_file_name), Context.MODE_PRIVATE);
+        List<Badge> badges = getBadgesFromSharedPreferences(context, sp);
+
+        assertBadges(badges);
     }
 }
